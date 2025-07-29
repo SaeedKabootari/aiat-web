@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import SignIn from "./pages/Login";
@@ -14,7 +15,7 @@ import DiscoveringContradiction from "./pages/DiscoveringContradiction";
 const resources = {
   en: {
     translation: {
-      "Aiat system": "Aiat system",
+      "Aiat system": "AiAt system",
       "home": "Home",
       "test": "Test",
       "login": "Login",
@@ -72,22 +73,24 @@ function App() {
   };
 
   return (
-    <div className={`min-h-screen ${i18n.language === 'fa' ? 'font-vazir text-right' : 'text-left'}`}>
+    <div className={`min-h-screen w-full ${i18n.language === 'fa' ? 'font-vazir text-right' : 'text-left'}`}>
       <BrowserRouter>
-        <div className="p-4">
+        <div className="">
           {/* Language Toggle Button */}
           <button 
             onClick={toggleLanguage}
             className={`fixed top-4  bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md ${i18n.language === 'fa' ? 'left-4' : 'right-4'}`}
             title={t('toggle_language')}
           >
-            {i18n.language === 'en' ? 'فارسی' : 'English'}
+            {i18n.language === 'en' ? 'FA' : 'EN'}
           </button>
 
-          <h1 className="text-4xl font-bold mb-6">{t('Aiat system')}</h1>
+          {/* <h1 className="text-4xl font-bold mb-6">{t('Aiat system')}</h1> */}
           
           <Routes>
             <Route path="/" element={<SignIn />} />
+            {/* <Route element={false? <LayoutMenu /> : <Navigate to='dsds' />}> */}
+
             <Route element={<LayoutMenu />}>
               <Route path="/home" element={<Home />} />
               <Route path="/test" element={<Test />} />

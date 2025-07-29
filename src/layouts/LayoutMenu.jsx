@@ -9,9 +9,9 @@ const LayoutMenu = (props) => {
       {/* <div>layout menu:</div>
       <Outlet /> */}
 
-      <div className={`flex flex-col h-screen bg-gray-100 `}>
+      <div className={`flex flex-col h-[90vh] bg-gray-100 `}>
         {/* Header (Full width) */}
-        <header className="bg-white shadow-sm py-4 px-6"></header>
+        <header className="bg-[#242752] shadow-sm  py-6 px-6 text-3xl text-white font-semibold" >{t('Aiat system')}</header>
 
         {/* Main Content Area with Sidebar */}
         <div
