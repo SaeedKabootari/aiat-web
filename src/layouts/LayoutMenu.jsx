@@ -1,18 +1,40 @@
 import { useTranslation } from "react-i18next";
-import { Outlet, NavLink } from "react-router-dom";
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useEffect } from "react";
 
 const LayoutMenu = (props) => {
+  const navigate = useNavigate();
   const { i18n, t } = useTranslation();
-  console.log(i18n.language);
+  const { logout } = useAuth();
+
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+    const token = localStorage.getItem("token");
+
+    if (!isLoggedIn || !token) {
+      // If not logged in or no token, redirect to '/'
+      navigate("/");
+    }
+  }, [navigate]);
+
+  const logoutHandler = () => {
+    logout();
+    navigate("/");
+  };
+
   return (
     <>
-      {/* <div>layout menu:</div>
-      <Outlet /> */}
-
       <div className={`flex flex-col h-[90vh] bg-gray-100 `}>
         {/* Header (Full width) */}
-        <header className="bg-[#242752] shadow-sm  py-6 px-6 text-3xl text-white font-semibold" >{t('Aiat system')}</header>
-
+        <header className="bg-[#242752] shadow-sm  py-6 px-6">
+          <span className="text-3xl text-white font-semibold">
+            {t("Aiat system")}
+          </span>
+          <button onClick={logoutHandler} className="text-red-500">
+            logout
+          </button>
+        </header>
         {/* Main Content Area with Sidebar */}
         <div
           className={`flex flex-1 overflow-hidden ${
@@ -21,7 +43,6 @@ const LayoutMenu = (props) => {
         >
           {/* Sidebar (Right) */}
           <aside className="w-64 bg-white border-l border-gray-200 p-4 overflow-y-auto">
-            {/* <h2 className="text-lg font-semibold mb-4 text-gray-700">Menu</h2> */}
             <nav>
               <ul className="space-y-2">
                 <li>
@@ -81,7 +102,6 @@ const LayoutMenu = (props) => {
               </ul>
             </nav>
           </aside>
-
           {/* Main Content (Left) */}
           <main className="flex-1 overflow-y-auto p-6">
             <Outlet />

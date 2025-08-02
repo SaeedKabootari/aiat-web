@@ -1,15 +1,35 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import loginBg from "../assets/bg.png";
+import { useNavigate } from "react-router-dom";
+import { useWebSocket } from "../context/WebSocketContext";
+import { useAuth } from "../context/AuthContext";
+import { postActionAx } from "../api";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { i18n } = useTranslation();
-  const isRTL = i18n.language === "fa";
+
+  const navigate = useNavigate();
+
+  const { connect } = useWebSocket();
+  const { login } = useAuth();
 
   const loginHandler = async (event) => {
     event.preventDefault();
+
+    await postActionAx("/api/login", {
+      username: username,
+      password: password,
+    })
+      .then((res) => {
+        console.log(res.data.access_token);
+        connect();
+        login(res.data.access_token);
+        navigate("/discovering-contradiction");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -20,9 +40,11 @@ const Login = () => {
       <div className="w-full max-w-md p-8  rounded-lg shadow-lg border border-[#A0A0A0] mx-4 backdrop-blur-lg bg-white/20">
         <form className="space-y-6" onSubmit={loginHandler}>
           <div className="flex justify-center">
-            <h1 className="text-3xl text-[#fff] font-semiboldold">Welcome To AiAt</h1>
+            <h1 className="text-3xl text-[#fff] font-semiboldold">
+              Welcome To Diar
+            </h1>
           </div>
-          
+
           <div>
             <label
               htmlFor="username"
