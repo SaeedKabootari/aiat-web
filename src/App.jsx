@@ -26,6 +26,11 @@ const resources = {
       toggle_language: "Toggle Language",
       "Discovering a contradiction": "Discovering contradiction",
       "List of resolutions": "Resolutions list",
+      login: 'login',
+      welcome_to_diar: 'Welcome To Diar',
+      username: 'Username',
+      password :'Password',
+      enter_your_username : 'Enter your username'
     },
   },
   fa: {
@@ -40,6 +45,11 @@ const resources = {
       toggle_language: "تغییر زبان",
       "Discovering a contradiction": "کشف تناقض",
       "List of resolutions": "لیست مصوبه ها",
+      login: 'ورود',
+      welcome_to_diar : 'به سامانه دیار خوش آمدید',
+      username: 'نام کاربری',
+      password:'رمز عبور',
+      enter_your_username : 'نام کاربری خود را وارد کنید'
     },
   },
 };

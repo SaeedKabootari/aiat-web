@@ -4,12 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { useWebSocket } from "../context/WebSocketContext";
 import { useAuth } from "../context/AuthContext";
 import { postActionAx } from "../api";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
   const { connect } = useWebSocket();
   const { login } = useAuth();
@@ -41,7 +43,7 @@ const Login = () => {
         <form className="space-y-6" onSubmit={loginHandler}>
           <div className="flex justify-center">
             <h1 className="text-3xl text-[#fff] font-semiboldold">
-              Welcome To Diar
+              {t("welcome_to_diar")}
             </h1>
           </div>
 
@@ -50,7 +52,7 @@ const Login = () => {
               htmlFor="username"
               className="block text-sm font-medium text-[#E0E0E0] mb-1"
             >
-              Username
+               {t("username")}
             </label>
             <input
               type="text"
@@ -58,7 +60,7 @@ const Login = () => {
               value={username}
               onChange={(event) => setUsername(event.target.value)}
               className="w-full px-4 py-2 border border-[#E0E0E0] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-[#fff]"
-              placeholder="Enter your username"
+              placeholder={t("enter_your_username")}
               required
             />
           </div>
@@ -67,7 +69,7 @@ const Login = () => {
               htmlFor="password"
               className="block text-sm font-medium text-[#fff] mb-1"
             >
-              Password
+              {t("password")}
             </label>
             <input
               type="password"
@@ -88,7 +90,7 @@ const Login = () => {
             shadow-md hover:shadow-lg active:scale-[0.98]
             relative overflow-hidden group cursor-pointer"
             >
-              Login
+             {t("login")}
             </button>
           </div>
         </form>
