@@ -27,11 +27,11 @@ const LayoutMenu = (props) => {
     <>
       <div className={`flex flex-col h-[90vh] bg-gray-100 `}>
         {/* Header (Full width) */}
-        <header className="bg-[#242752] shadow-sm  py-6 px-6">
+        <header className="bg-[#242752] shadow-sm  py-6 px-6 flex justify-between items-center">
           <span className="text-3xl text-white font-semibold">
             {t("Aiat system")}
           </span>
-          <button onClick={logoutHandler} className="text-red-500">
+          <button  onClick={logoutHandler} className="bg-red-500 rounded p-1 text-white">
             logout
           </button>
         </header>

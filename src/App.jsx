@@ -90,8 +90,8 @@ function App() {
             {/* Language Toggle Button */}
             <button
               onClick={toggleLanguage}
-              className={`fixed top-4  bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md ${
-                i18n.language === "fa" ? "left-4" : "right-4"
+              className={`fixed top-[26px]  bg-blue-500 text-white px-2 py-1 rounded shadow-md ${
+                i18n.language === "fa" ? "left-22" : "right-22"
               }`}
               title={t("toggle_language")}
             >
