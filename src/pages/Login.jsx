@@ -42,7 +42,7 @@ const Login = () => {
       <div className="w-full max-w-md p-8  rounded-lg shadow-lg border border-[#A0A0A0] mx-4 backdrop-blur-lg bg-white/20">
         <form className="space-y-6" onSubmit={loginHandler}>
           <div className="flex justify-center">
-            <h1 className="text-3xl text-[#fff] font-semiboldold">
+            <h1 className="text-3xl text-[#fff]">
               {t("welcome_to_diar")}
             </h1>
           </div>

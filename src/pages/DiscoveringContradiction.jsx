@@ -122,12 +122,12 @@ const DiscoveringContradiction = (props) => {
   return (
     <>
       {/* row 1 */}
-      <div className="grid grid-cols-12 gap-2">
+      <div className="grid grid-cols-12 gap-2 h-80">
         {/* Right box */}
         <div className="col-span-6">
           <div className="flex p-1 bg-gray-200 rounded-full mb-5">
             <button
-              className={`px-4 py-1 text-sm font-medium rounded-full focus:outline-none ${
+              className={` px-4 py-1 text-sm font-medium rounded-full focus:outline-none ${
                 newRule === true
                   ? "bg-[#1f1f43] text-white"
                   : "text-gray-600 hover:text-[#1f1f43]"
@@ -197,10 +197,10 @@ const DiscoveringContradiction = (props) => {
         </div>
       </div>
       {/* row 2 */}
-      <div className="flex justify-end">
+      <div className="flex ">
         <button
           onClick={discoveringContradictionHandler}
-          className=" bg-[#242752] text-white font-semibold py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300"
+          className=" bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300"
         >
           کشف تناقض
         </button>

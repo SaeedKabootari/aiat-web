@@ -91,7 +91,7 @@ function App() {
   return (
     <div
       className={`min-h-screen w-full ${
-        i18n.language === "fa" ? "font-vazir text-right" : "text-left"
+        i18n.language === "fa" ? "text-right" : "text-left"
       }`}
     >
       <WebSocketProvider enabled={false}>

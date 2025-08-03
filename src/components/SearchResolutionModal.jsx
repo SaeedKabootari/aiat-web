@@ -64,7 +64,7 @@ const SearchResolutionModal = (props) => {
             ref={searchTermRef}
           />
           <button
-            className="bg-[#242752] text-white font-semibold py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300"
+            className="bg-[#242752] text-white  py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300"
             onClick={searchHandler}
           >
             جستجو

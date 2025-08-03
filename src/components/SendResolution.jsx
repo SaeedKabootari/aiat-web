@@ -9,7 +9,7 @@ const SendResolution = (props) => {
     <>
       <div>
         <button
-          className="bg-[#242752] text-white font-semibold py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300 w-[200px]"
+          className="bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300 w-[200px]"
           onClick={() => setModalOpen(true)}
         >
           انتخاب مصوبه برای کشف تناقض
@@ -23,7 +23,7 @@ const SendResolution = (props) => {
         )}
         {selectedResolution && (
           <div className="mt-2 p-2">
-            <div className="text-[#242752] font-semibold ">
+            <div className="text-[#242752]  ">
               <div>{selectedResolution?.law?.caption}</div>
             </div>
             <div className="flex flex-col gap-4 mt-2 max-h-60 overflow-y-auto">
