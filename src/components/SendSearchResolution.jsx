@@ -7,7 +7,7 @@ const SendSearchResolution = (props) => {
   return (
     <div>
       <button
-        className="bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300 w-[200px]"
+        className="bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300 w-[200px] cursor-pointer"
         onClick={() => setModalOpen(true)}
       >
         جستجو مصوبه

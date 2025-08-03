@@ -122,12 +122,12 @@ const DiscoveringContradiction = (props) => {
   return (
     <>
       {/* row 1 */}
-      <div className="grid grid-cols-12 gap-2 h-80">
+      <div className="grid grid-cols-12 gap-2 h-[53%]">
         {/* Right box */}
         <div className="col-span-6">
-          <div className="flex p-1 bg-gray-200 rounded-full mb-5">
+          <div className="flex p-1 bg-gray-200 rounded-md mb-5">
             <button
-              className={` px-4 py-1 text-sm font-medium rounded-full focus:outline-none ${
+              className={` px-4 py-1 text-sm font-medium rounded-t-md focus:outline-none cursor-pointer ${
                 newRule === true
                   ? "bg-[#1f1f43] text-white"
                   : "text-gray-600 hover:text-[#1f1f43]"
@@ -137,7 +137,7 @@ const DiscoveringContradiction = (props) => {
               نوشتن مصوبه جدید
             </button>
             <button
-              className={`px-4 py-1 text-sm font-medium rounded-full focus:outline-none ${
+              className={`px-4 py-1 text-sm font-medium rounded-t-md focus:outline-none cursor-pointer ${
                 newRule === false
                   ? "bg-[#1f1f43] text-white"
                   : "text-gray-600 hover:text-[#1f1f43]"
@@ -152,7 +152,7 @@ const DiscoveringContradiction = (props) => {
             <SearchResolution setDiscoveringObj={setDiscoveringObj} />
           ) : (
             <div>
-              <h1 className="text-[#242752] font-bold text-xl mb-3">
+              <h1 className="text-[#242752] text-xl mb-3">
                 مصوبه جدید را بنویسید:
               </h1>
               <div className="mt-2 p-3">
@@ -167,9 +167,9 @@ const DiscoveringContradiction = (props) => {
         </div>
         {/* Left box */}
         <div className="col-span-6">
-          <div className="flex p-1 bg-gray-200 rounded-full mb-5">
+          <div className="flex p-1 bg-gray-200 rounded-md mb-5">
             <button
-              className={`px-4 py-1 text-sm font-medium rounded-full focus:outline-none ${
+              className={`px-4 py-1 text-sm font-medium rounded-t-md focus:outline-none cursor-pointer ${
                 compareWithAll === false
                   ? "bg-[#1f1f43] text-white"
                   : "text-gray-600 hover:text-[#1f1f43]"
@@ -179,7 +179,7 @@ const DiscoveringContradiction = (props) => {
               کشف تناقض با یک قانون
             </button>
             <button
-              className={`px-4 py-1 text-sm font-medium rounded-full focus:outline-none ${
+              className={`px-4 py-1 text-sm font-medium rounded-t-md focus:outline-none cursor-pointer ${
                 compareWithAll === true
                   ? "bg-[#1f1f43] text-white"
                   : "text-gray-600 hover:text-[#1f1f43]"
@@ -188,7 +188,6 @@ const DiscoveringContradiction = (props) => {
             >
               کشف تناقض با همه
             </button>
-            
           </div>
 
           {!compareWithAll && (
@@ -200,22 +199,92 @@ const DiscoveringContradiction = (props) => {
       <div className="flex ">
         <button
           onClick={discoveringContradictionHandler}
-          className=" bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300"
+          className=" bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300 cursor-pointer"
         >
           کشف تناقض
         </button>
+      </div>
+      {/* row 3 */}
+      <div className="bg-[#8d8da8] mt-2 text-white h-[40%]">
+        <h3 className="mb-2 bg-[#242752] text-white p-2">
+          تناقض های یافت شده:
+        </h3>
+        <div className="h-70 overflow-y-auto p-4">
+          {messages.length === 0 ? (
+            <div>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+              <p className="text-white">هنوز تناقضی یافت نشده.</p>
+            </div>
+          ) : (
+            <ul className="space-y-2">
+              {messages.map((msg, index) => (
+                <li key={index} className="p-2 bg-gray-100 rounded">
+                  <span className="text-xs text-white">[{msg.timestamp}]</span>
+                  <pre className="mt-1">{JSON.stringify(msg, null, 2)}</pre>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
       {/* Web Socket */}
       {/* Message Display Area */}
       {/* <div className="mt-4 p-4 bg-white rounded-lg shadow-md h-64 overflow-y-auto">
         <h3 className="font-bold mb-2">WebSocket Messages:</h3>
         {messages.length === 0 ? (
-          <p className="text-gray-500">No messages received yet</p>
+          <p className="text-white">No messages received yet</p>
         ) : (
           <ul className="space-y-2">
             {messages.map((msg, index) => (
               <li key={index} className="p-2 bg-gray-100 rounded">
-                <span className="text-xs text-gray-500">[{msg.timestamp}]</span>
+                <span className="text-xs text-white">[{msg.timestamp}]</span>
                 <pre className="mt-1">{JSON.stringify(msg, null, 2)}</pre>
               </li>
             ))}

@@ -25,7 +25,7 @@ const LayoutMenu = (props) => {
 
   return (
     <>
-      <div className={`flex flex-col h-[90vh] bg-gray-100 `}>
+      <div className={`flex flex-col h-[100vh] bg-gray-100 `}>
         {/* Header (Full width) */}
         <header className="bg-[#242752] shadow-sm  py-6 px-6 flex justify-between items-center">
           <span className="text-3xl text-white font-semibold">

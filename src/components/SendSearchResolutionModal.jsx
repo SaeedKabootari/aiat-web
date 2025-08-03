@@ -49,7 +49,7 @@ const SendSearchResolutionModal = (props) => {
       <div className="bg-white p-4 rounded shadow-lg relative max-w-4xl w-full">
         {/* Close button */}
         <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 cursor-pointer"
           onClick={props.onClose}
         >
           ✖
@@ -62,7 +62,7 @@ const SendSearchResolutionModal = (props) => {
             ref={searchTermRef}
           />
           <button
-            className="bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300"
+            className="bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300 cursor-pointer"
             onClick={searchHandler}
           >
             جستجو
