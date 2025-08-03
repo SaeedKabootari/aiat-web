@@ -22,16 +22,21 @@ const DiscoveringContradiction = (props) => {
     section_no: null,
     check_law_id: null,
   });
-  const [compareWithAll, setCompareWithAll] = useState(true);
+  const [compareWithAll, setCompareWithAll] = useState(false);
   const [newRule, setnNewRule] = useState(true);
-  const [newRuleValue, setnNewRuleValue] = useState(true);
+  const [newRuleValue, setnNewRuleValue] = useState(null);
 
   useEffect(() => {
     console.log("discoveringObj", discoveringObj);
   }, [discoveringObj]);
 
+  useEffect(() => {
+    console.log("newRule", newRule);
+    console.log("compareWithAll", compareWithAll);
+  }, [newRule, compareWithAll]);
+
   const discoveringContradictionHandler = async () => {
-    if (!compareWithAll) {
+    if (!newRule && !compareWithAll) {
       await postActionAxToken(
         `/api/analyze_rules`,
         localStorage.getItem("token"),
@@ -43,11 +48,33 @@ const DiscoveringContradiction = (props) => {
         .catch((err) => {
           console.log(err);
         });
-    } else {
-      // Must have new api for handle:
+    } else if (!newRule && compareWithAll) {
+      await postActionAxToken(
+        `/api/analyze_rules`,
+        localStorage.getItem("token"),
+        { ...discoveringObj, check_law_id: "*" }
+      )
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (newRule && !compareWithAll) {
       await postActionAxToken(`/api/analyze`, localStorage.getItem("token"), {
-        // prompt: newResolutionRef.current.value,
-        discoveringObj,
+        prompt: newRuleValue,
+        check_law_id: discoveringObj.check_law_id,
+      })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else if (newRule && compareWithAll) {
+      await postActionAxToken(`/api/analyze`, localStorage.getItem("token"), {
+        prompt: newRuleValue,
+        check_law_id: "*",
       })
         .then((res) => {
           console.log(res);
@@ -143,16 +170,6 @@ const DiscoveringContradiction = (props) => {
           <div className="flex p-1 bg-gray-200 rounded-full mb-5">
             <button
               className={`px-4 py-1 text-sm font-medium rounded-full focus:outline-none ${
-                compareWithAll === true
-                  ? "bg-[#1f1f43] text-white"
-                  : "text-gray-600 hover:text-[#1f1f43]"
-              }`}
-              onClick={() => setCompareWithAll(true)}
-            >
-              کشف تناقض با همه
-            </button>
-            <button
-              className={`px-4 py-1 text-sm font-medium rounded-full focus:outline-none ${
                 compareWithAll === false
                   ? "bg-[#1f1f43] text-white"
                   : "text-gray-600 hover:text-[#1f1f43]"
@@ -161,6 +178,17 @@ const DiscoveringContradiction = (props) => {
             >
               کشف تناقض با یک قانون
             </button>
+            <button
+              className={`px-4 py-1 text-sm font-medium rounded-full focus:outline-none ${
+                compareWithAll === true
+                  ? "bg-[#1f1f43] text-white"
+                  : "text-gray-600 hover:text-[#1f1f43]"
+              }`}
+              onClick={() => setCompareWithAll(true)}
+            >
+              کشف تناقض با همه
+            </button>
+            
           </div>
 
           {!compareWithAll && (
