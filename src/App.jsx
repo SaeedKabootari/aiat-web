@@ -10,7 +10,7 @@ import { useTranslation, initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import ResolutionsList from "./pages/ResolutionsList";
 import DiscoveringContradiction from "./pages/DiscoveringContradiction";
-import { useAuth } from "./context/AuthContext";
+import { useSelector } from "react-redux";
 
 // Translation resources
 const resources = {
@@ -70,8 +70,11 @@ i18n
   });
 
 function App() {
-  const { isLoggedIn, isInitialized, logout } = useAuth();
+  
   const { t, i18n } = useTranslation();
+
+
+  const loggedIn = useSelector((state) => state.todo.loggedIn);
 
   // Set document direction and language
   useEffect(() => {
@@ -84,9 +87,6 @@ function App() {
     i18n.changeLanguage(newLang);
   };
 
-  if (!isInitialized) {
-    return <div>Loading...</div>; // Show a spinner while checking auth
-  }
 
   return (
     <div
@@ -110,7 +110,7 @@ function App() {
             <Routes>
               <Route path="/" element={<SignIn />} />
               {/* Protected Routes - ONLY show when logged in */}
-              {isLoggedIn ? (
+              {loggedIn ? (
                 <Route element={<LayoutMenu />}>
                   <Route path="/home" element={<Home />} />
                   <Route path="/test" element={<Test />} />

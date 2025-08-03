@@ -1,25 +1,27 @@
 import { useTranslation } from "react-i18next";
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { todoActions } from "../shop/todoSlice";
 
 const LayoutMenu = (props) => {
   const navigate = useNavigate();
   const { i18n, t } = useTranslation();
-  const { logout } = useAuth();
+  const dispatch = useDispatch();
 
-  useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-    const token = localStorage.getItem("token");
+  // useEffect(() => {
+  //   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  //   const token = localStorage.getItem("token");
 
-    if (!isLoggedIn || !token) {
-      // If not logged in or no token, redirect to '/'
-      navigate("/");
-    }
-  }, [navigate]);
+  //   if (!isLoggedIn || !token) {
+  //     // If not logged in or no token, redirect to '/'
+  //     navigate("/");
+  //   }
+  // }, [navigate]);
 
   const logoutHandler = () => {
-    logout();
+    localStorage.removeItem("loggedIn");
+    dispatch(todoActions.changeloggedInState(false));
     navigate("/");
   };
 
@@ -37,7 +39,10 @@ const LayoutMenu = (props) => {
           >
             logout
           </button> */}
-          <button onClick={logoutHandler} className=" text-red-500 cursor-pointer">
+          <button
+            onClick={logoutHandler}
+            className=" text-red-500 cursor-pointer"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

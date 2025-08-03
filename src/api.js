@@ -3,8 +3,7 @@ import axios from "axios";
 // export const BASE_URL = "http://192.168.2.159:8080";
 // export const WEB_SOCKET_URL = "ws://192.168.2.159:8080/ws";
 export const BASE_URL = "http://192.168.2.211:8000";
-export const WEB_SOCKET_URL = "ws://192.168.2.211:5000/ws";
-
+export const WEB_SOCKET_URL = "ws://192.168.2.211:8001/ws";
 
 // export const BASE_URL = "";
 // export const WEB_SOCKET_URL = "";
@@ -160,8 +159,6 @@ export const delActionAx = function (url) {
   return handleMethod();
 };
 
-
-
 // ======================= patch axios ========================
 export const patchActionAx = function (url, body) {
   let handleMethod = async function () {
@@ -182,8 +179,6 @@ export const patchActionAx = function (url, body) {
   return handleMethod();
 };
 
-
-
 // =============== post data ====================
 
 // export const postDataAction = function (url, body) {
@@ -203,7 +198,6 @@ export const patchActionAx = function (url, body) {
 //   return handleMethod();
 // };
 
-
 export const postDataAction = function (url, body) {
   let handleMethod = async function () {
     try {
@@ -217,9 +211,6 @@ export const postDataAction = function (url, body) {
   };
   return handleMethod();
 };
-
-
-
 
 // ================= get axios =================
 export const getActionAxTest = function (url) {
@@ -241,19 +232,19 @@ export const getActionAxTest = function (url) {
   return handleMethod();
 };
 
-
-
 // ================= get axios =================
-export const getActionAxToken = function (url ,authToken) {
+export const getActionAxToken = function (url,cookie) {
   let handleMethod = async function () {
     try {
       return await axios
         .get(BASE_URL + url, {
           withCredentials: true,
           credentials: "include",
-           headers: {
-            Authorization: `Bearer ${authToken}`
-          }
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            'Cookie': cookie
+          },
         })
         .then((res) => {
           console.log(res, "in api res");
@@ -266,18 +257,17 @@ export const getActionAxToken = function (url ,authToken) {
   return handleMethod();
 };
 
-
 // ================ post axios ============================
-export const postActionAxToken = function (url,authToken, body) {
+export const postActionAxToken = function (url, authToken, body) {
   let handleMethod = async function () {
     try {
       return await axios
         .post(BASE_URL + url, body, {
           withCredentials: true,
           credentials: "include",
-           headers: {
-            Authorization: `Bearer ${authToken}`
-          }
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
         })
         .then((res) => {
           console.log(res, "in api res");

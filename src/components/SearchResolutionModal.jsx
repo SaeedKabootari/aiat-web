@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { getActionAxToken } from "../api";
+import { getActionAx } from "../api";
 
 const SearchResolutionModal = (props) => {
   const [resolutions, setResolutions] = useState([]);
@@ -10,10 +10,7 @@ const SearchResolutionModal = (props) => {
       law_id: parseInt(resolutionId, 10),
     }));
     console.log("law_id", parseInt(resolutionId, 10));
-    await getActionAxToken(
-      `/api/laws/${parseInt(resolutionId, 10)}/sections`,
-      localStorage.getItem("token")
-    )
+    await getActionAx(`/api/laws/${parseInt(resolutionId, 10)}/sections`)
       .then((res) => {
         console.log("SHOW", res.data);
         props.setSelectedResolution(res.data);
@@ -30,16 +27,18 @@ const SearchResolutionModal = (props) => {
   const searchHandler = async () => {
     console.log(searchTermRef.current.value);
     console.log(localStorage.getItem("token"));
+    console.log(document.cookie);
 
-    await getActionAxToken(
-      `/api/laws/search?q=${searchTermRef.current.value}&limit=${10}`,
-      localStorage.getItem("token")
+    await getActionAx(
+      `/api/laws/search?q=${searchTermRef.current.value}&limit=${10}`
     )
       .then((res) => {
+        console.log("ZZZZZZZZZZZZZZZZZZZZ", res);
         console.log(res.data);
         setResolutions(res.data);
       })
       .catch((err) => {
+        console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
         console.log(err);
       });
   };
@@ -51,7 +50,7 @@ const SearchResolutionModal = (props) => {
       <div className="bg-white p-4 rounded shadow-lg relative max-w-4xl w-full">
         {/* Close button */}
         <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 cursor-pointer" 
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 cursor-pointer"
           onClick={props.onClose}
         >
           ✖

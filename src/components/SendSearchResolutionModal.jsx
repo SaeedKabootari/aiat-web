@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { getActionAxToken } from "../api";
+import { getActionAx } from "../api";
 
 const SendSearchResolutionModal = (props) => {
   const [resolutions, setResolutions] = useState([]);
@@ -9,9 +9,8 @@ const SendSearchResolutionModal = (props) => {
       ...prevState,
       check_law_id: parseInt(resolutionId, 10),
     }));
-    await getActionAxToken(
-      `/api/laws/${parseInt(resolutionId, 10)}/sections`,
-      localStorage.getItem("token")
+    await getActionAx(
+      `/api/laws/${parseInt(resolutionId, 10)}/sections`
     )
       .then((res) => {
         console.log("SHOW", res.data);
@@ -29,9 +28,8 @@ const SendSearchResolutionModal = (props) => {
     console.log(searchTermRef.current.value);
     console.log(localStorage.getItem("token"));
 
-    await getActionAxToken(
-      `/api/laws/search?q=${searchTermRef.current.value}&limit=${10}`,
-      localStorage.getItem("token")
+    await getActionAx(
+      `/api/laws/search?q=${searchTermRef.current.value}&limit=${10}`
     )
       .then((res) => {
         console.log(res.data);

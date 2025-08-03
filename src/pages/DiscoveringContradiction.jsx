@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useWebSocket } from "../context/WebSocketContext";
 import SendResolution from "../components/SendResolution";
 import SearchResolution from "../components/SearchResolution";
-import { postActionAxToken } from "../api";
+import { postActionAx } from "../api";
 
 const DiscoveringContradiction = (props) => {
   // WebSocket:
@@ -37,11 +37,7 @@ const DiscoveringContradiction = (props) => {
 
   const discoveringContradictionHandler = async () => {
     if (!newRule && !compareWithAll) {
-      await postActionAxToken(
-        `/api/analyze_rules`,
-        localStorage.getItem("token"),
-        discoveringObj
-      )
+      await postActionAx(`/api/analyze_rules`, discoveringObj)
         .then((res) => {
           console.log(res);
         })
@@ -49,9 +45,8 @@ const DiscoveringContradiction = (props) => {
           console.log(err);
         });
     } else if (!newRule && compareWithAll) {
-      await postActionAxToken(
+      await postActionAx(
         `/api/analyze_rules`,
-        localStorage.getItem("token"),
         { ...discoveringObj, check_law_id: "*" }
       )
         .then((res) => {
@@ -61,7 +56,7 @@ const DiscoveringContradiction = (props) => {
           console.log(err);
         });
     } else if (newRule && !compareWithAll) {
-      await postActionAxToken(`/api/analyze`, localStorage.getItem("token"), {
+      await postActionAx(`/api/analyze`,  {
         prompt: newRuleValue,
         check_law_id: discoveringObj.check_law_id,
       })
@@ -72,7 +67,7 @@ const DiscoveringContradiction = (props) => {
           console.log(err);
         });
     } else if (newRule && compareWithAll) {
-      await postActionAxToken(`/api/analyze`, localStorage.getItem("token"), {
+      await postActionAx(`/api/analyze`, {
         prompt: newRuleValue,
         check_law_id: "*",
       })

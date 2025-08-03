@@ -2,19 +2,21 @@ import { useState } from "react";
 import loginBg from "../assets/bg.png";
 import { useNavigate } from "react-router-dom";
 import { useWebSocket } from "../context/WebSocketContext";
-import { useAuth } from "../context/AuthContext";
 import { postActionAx } from "../api";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import { todoActions } from "../shop/todoSlice";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch =useDispatch()
 
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
   const { connect } = useWebSocket();
-  const { login } = useAuth();
+  
 
   const loginHandler = async (event) => {
     event.preventDefault();
@@ -24,9 +26,14 @@ const Login = () => {
       password: password,
     })
       .then((res) => {
-        console.log(res.data.access_token);
+        // console.log(res.data.access_token);
+
+ dispatch(todoActions.changeloggedInState(true));
+        localStorage.setItem("loggedIn", true);
+
+
         connect();
-        login(res.data.access_token);
+
         navigate("/discovering-contradiction");
       })
       .catch((err) => {
