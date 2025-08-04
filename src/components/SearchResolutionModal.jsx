@@ -26,11 +26,11 @@ const SearchResolutionModal = (props) => {
   const searchTermRef = useRef(null);
 
   const searchHandler = async () => {
-    console.log(searchTermRef.current.value);
-    console.log(localStorage.getItem("token"));
-    console.log(document.cookie);
+    // console.log(searchTermRef.current.value);
+    // console.log(localStorage.getItem("token"));
+    // console.log(document.cookie);
 
-    // fetch('http://192.168.2.211:8000/api/protected', {
+    // fetch('http://localhost:7000/api/protected', {
     //   method: 'GET',
     //   credentials: 'include', // This is the key for sending cookies
     //   headers: {

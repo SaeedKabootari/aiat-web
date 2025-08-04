@@ -6,14 +6,14 @@ import { getActionAx, postActionAx } from "../api";
 
 const DiscoveringContradiction = (props) => {
   // WebSocket:
-  const {
-    isConnected,
-    connectionStatus,
-    lastMessage,
-    sendMessage,
-    connect,
-    disconnect,
-  } = useWebSocket();
+  // const {
+  //   isConnected,
+  //   connectionStatus,
+  //   lastMessage,
+  //   sendMessage,
+  //   connect,
+  //   disconnect,
+  // } = useWebSocket();
   // const [messages, setMessages] = useState([]);
   // const [inputMessage, setInputMessage] = useState("");
 
@@ -36,26 +36,93 @@ const DiscoveringContradiction = (props) => {
   }, [newRule, compareWithAll]);
 
   const [taskId, setTaskId] = useState(null);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    {
+      contradiction: false,
+      finish_time: 1754311951,
+      first_law_id: 86601,
+      first_section_id: 795977,
+      id: 5,
+      response: "test_response",
+      second_law_id: null,
+      second_section_id: null,
+    },
+    {
+      contradiction: true,
+      finish_time: 1754311953,
+      first_law_id: 86601,
+      first_section_id: 795978,
+      id: 6,
+      response: "test_response",
+      second_law_id: null,
+      second_section_id: null,
+    },
+    {
+      contradiction: false,
+      finish_time: 1754311955,
+      first_law_id: 86601,
+      first_section_id: 795979,
+      id: 7,
+      response: "test_response",
+      second_law_id: null,
+      second_section_id: null,
+    },
+    {
+      contradiction: true,
+      finish_time: 1754311957,
+      first_law_id: 86601,
+      first_section_id: 795980,
+      id: 8,
+      response: "test_response",
+      second_law_id: null,
+      second_section_id: null,
+    },
+  ]);
+
+  const [selectedContradiction, setSelectedContradiction] = useState(null);
   const [fetchAgain, setFetchAgain] = useState(true);
   const intervalRef = useRef(null);
 
-  const getMessages = async () => {
-    let getUrl = `/api/task/${taskId}`;
-    await getActionAx(getUrl)
-      .then((res) => {
-        console.log(res);
-        setMessages(res.data.result);
-        if (res.data.status === "pending" || res.data.status === "processing") {
-          setFetchAgain((prevState) => !prevState);
-        } else if (res.data.status === "fnished") {
-          console.log("finish");
-        }
-      })
-      .catch((err) => {});
-  };
+  useEffect(() => {
+    console.log("MESSAGES", messages);
+  }, [messages]);
+
+  // const [since, setSince] = useState(null);
+  const sinceRef = useRef(null); // Add this ref
 
   useEffect(() => {
+    const getMessages = async () => {
+      let getUrl;
+      if (sinceRef.current === null) {
+        getUrl = `/api/task/${taskId}`;
+      } else {
+        getUrl = `/api/task/${taskId}?since=${sinceRef.current}`;
+      }
+
+      await getActionAx(getUrl)
+        .then((res) => {
+          console.log(res);
+          console.log(res.data.results);
+          setMessages((prevMessages) => [...prevMessages, ...res.data.results]);
+          console.log(res.data.latest_timestamp);
+          // setSince(res.data.latest_timestamp);
+          sinceRef.current = res.data.latest_timestamp;
+          if (
+            res.data.status === "pending" ||
+            res.data.status === "processing"
+          ) {
+            setFetchAgain((prevState) => !prevState);
+          } else if (res.data.status === "completed") {
+            console.log("finish");
+            if (intervalRef.current) {
+              clearInterval(intervalRef.current);
+              intervalRef.current = null;
+            }
+          }
+        })
+        .catch((err) => {});
+    };
+
     console.log("++++");
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -65,7 +132,7 @@ const DiscoveringContradiction = (props) => {
     if (taskId) {
       intervalRef.current = setInterval(() => {
         getMessages();
-      }, 10000);
+      }, 1000);
     }
 
     return () => {
@@ -123,6 +190,29 @@ const DiscoveringContradiction = (props) => {
           console.log(err);
         });
     }
+  };
+
+  function toPersianTime(timestamp) {
+    return new Date(timestamp * 1000).toLocaleTimeString("fa-IR");
+  }
+
+  const selectContradictionHandler = async (item) => {
+    console.log(item);
+
+    // this line for test:
+    setSelectedContradiction(item);
+    // await getActionAx(
+    //   `/api/laws/${item.first_law_id}/sections/${item.first_section_id}`
+    // )
+    //   .then((res) => {
+    //     console.log("ZZZZZZZZZZZZZZZZZZZZ", res);
+    //     console.log(res.data);
+    //     setSelectedContradiction(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
+    //     console.log(err);
+    //   });
   };
 
   // //WebSocket:
@@ -246,68 +336,97 @@ const DiscoveringContradiction = (props) => {
       </div>
       {/* row 3 */}
       <div className="bg-[#8d8da8] mt-2 text-white h-[40%]">
-        <h3 className="mb-2 bg-[#242752] text-white p-2">
-          تناقض های یافت شده:
-        </h3>
+        <h3 className="mb-2 bg-[#242752] text-white p-2">نتایج یافت شده:</h3>
+
         <div className="overflow-hidden">
-          <div className="h-70 overflow-y-auto p-4">
-            {messages?.length === 0 ? (
-              <div className="">
-                {/* <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p>
-                <p className="text-white">هنوز تناقضی یافت نشده.</p> */}
-              </div>
+          <div className="h-70 p-4">
+            {messages.length === 0 ? (
+              <div className="">تناقضی موجود نیست.</div>
             ) : (
-              <div>  
-       {messages}
+              <div className="grid grid-cols-12 gap-3">
+                <div className="col-span-6">
+                  <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
+                    <div
+                      className="overflow-auto"
+                      style={{ maxHeight: "270px" }}
+                    >
+                      <table className="min-w-full">
+                        {/* Fixed Header */}
+                        <thead className="sticky top-0 z-10">
+                          <tr className="bg-[#242752] text-white">
+                            <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              ردیف
+                            </th>
+                            <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              تناقض
+                            </th>
+                            <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              زمان پایان
+                            </th>
+                            <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              پاسخ
+                            </th>
+                          </tr>
+                        </thead>
+                        {/* Scrollable Body */}
+                        <tbody className="bg-white divide-y divide-gray-200">
+                          {messages.map((item, index) => (
+                            <tr
+                              key={item.id}
+                              className="hover:bg-gray-50 cursor-pointer"
+                              onClick={() => selectContradictionHandler(item)}
+                            >
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[25%]">
+                                {index + 1}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[25%]">
+                                {item.contradiction ? "دارد" : "ندارد"}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-[25%]">
+                                {toPersianTime(item.finish_time)}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[25%]">
+                                {item.response}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
-            
+                <div className="col-span-6">
+                  {selectedContradiction !== null && (
+                    <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm h-full">
+                      <div
+                        className="overflow-auto bg-white"
+                        style={{ maxHeight: "270px" }}
+                      >
+                        {/* Left content goes here */}
+                        <div className="p-4 space-y-4">
+                        
+                         
+                          {/* Add more items as needed */}
+
+                          <div key={selectedContradiction.id}>
+                            <h3 className="font-medium text-[#242752]">
+                              {selectedContradiction.response}
+                            </h3>
+                            <p className="text-sm text-gray-600">
+                              {String(selectedContradiction.contradiction)}
+                            </p>
+                            <p>
+                              {toPersianTime(selectedContradiction.finish_time)}
+                            </p>
+                          </div>
+
+                        
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
             )}
           </div>
         </div>
