@@ -14,6 +14,7 @@ const SearchResolutionModal = (props) => {
       .then((res) => {
         console.log("SHOW", res.data);
         props.setSelectedResolution(res.data);
+        console.log("SSSSSSSSSSSS", res.data);
         props.onClose();
       })
       .catch((err) => {
@@ -28,6 +29,18 @@ const SearchResolutionModal = (props) => {
     console.log(searchTermRef.current.value);
     console.log(localStorage.getItem("token"));
     console.log(document.cookie);
+
+    // fetch('http://192.168.2.211:8000/api/protected', {
+    //   method: 'GET',
+    //   credentials: 'include', // This is the key for sending cookies
+    //   headers: {
+    //     // 'Content-Type': 'application/json',
+    //     'Accept': 'application/json'
+    //   }
+    // })
+    // .then(response => response.json())
+    // .then(data => console.log(data))
+    // .catch(error => console.error('Error:', error));
 
     await getActionAx(
       `/api/laws/search?q=${searchTermRef.current.value}&limit=${10}`

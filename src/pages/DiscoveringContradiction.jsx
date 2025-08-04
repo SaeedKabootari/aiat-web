@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useWebSocket } from "../context/WebSocketContext";
 import SendResolution from "../components/SendResolution";
 import SearchResolution from "../components/SearchResolution";
-import { postActionAx } from "../api";
+import { getActionAx, postActionAx } from "../api";
 
 const DiscoveringContradiction = (props) => {
   // WebSocket:
@@ -14,8 +14,8 @@ const DiscoveringContradiction = (props) => {
     connect,
     disconnect,
   } = useWebSocket();
-  const [messages, setMessages] = useState([]);
-  const [inputMessage, setInputMessage] = useState("");
+  // const [messages, setMessages] = useState([]);
+  // const [inputMessage, setInputMessage] = useState("");
 
   const [discoveringObj, setDiscoveringObj] = useState({
     law_id: null,
@@ -35,33 +35,77 @@ const DiscoveringContradiction = (props) => {
     console.log("compareWithAll", compareWithAll);
   }, [newRule, compareWithAll]);
 
+  const [taskId, setTaskId] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [fetchAgain, setFetchAgain] = useState(true);
+  const intervalRef = useRef(null);
+
+  const getMessages = async () => {
+    let getUrl = `/api/task/${taskId}`;
+    await getActionAx(getUrl)
+      .then((res) => {
+        console.log(res);
+        setMessages(res.data.result);
+        if (res.data.status === "pending" || res.data.status === "processing") {
+          setFetchAgain((prevState) => !prevState);
+        } else if (res.data.status === "fnished") {
+          console.log("finish");
+        }
+      })
+      .catch((err) => {});
+  };
+
+  useEffect(() => {
+    console.log("++++");
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+
+    if (taskId) {
+      intervalRef.current = setInterval(() => {
+        getMessages();
+      }, 10000);
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [taskId, fetchAgain]);
+
   const discoveringContradictionHandler = async () => {
     if (!newRule && !compareWithAll) {
       await postActionAx(`/api/analyze_rules`, discoveringObj)
         .then((res) => {
           console.log(res);
+          console.log(res.data.task_id);
+          setTaskId(res.data.task_id);
         })
         .catch((err) => {
           console.log(err);
         });
     } else if (!newRule && compareWithAll) {
-      await postActionAx(
-        `/api/analyze_rules`,
-        { ...discoveringObj, check_law_id: "*" }
-      )
+      await postActionAx(`/api/analyze_rules`, {
+        ...discoveringObj,
+        check_law_id: "*",
+      })
         .then((res) => {
           console.log(res);
+          setTaskId(res.data.task_id);
         })
         .catch((err) => {
           console.log(err);
         });
     } else if (newRule && !compareWithAll) {
-      await postActionAx(`/api/analyze`,  {
+      await postActionAx(`/api/analyze`, {
         prompt: newRuleValue,
         check_law_id: discoveringObj.check_law_id,
       })
         .then((res) => {
           console.log(res);
+          setTaskId(res.data.task_id);
         })
         .catch((err) => {
           console.log(err);
@@ -73,6 +117,7 @@ const DiscoveringContradiction = (props) => {
       })
         .then((res) => {
           console.log(res);
+          setTaskId(res.data.task_id);
         })
         .catch((err) => {
           console.log(err);
@@ -80,39 +125,39 @@ const DiscoveringContradiction = (props) => {
     }
   };
 
-  //WebSocket:
-  // Handle incoming messages
-  useEffect(() => {
-    if (lastMessage) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          ...lastMessage,
-          timestamp: new Date().toLocaleTimeString(),
-        },
-      ]);
-    }
-  }, [lastMessage]);
+  // //WebSocket:
+  // // Handle incoming messages
+  // useEffect(() => {
+  //   if (lastMessage) {
+  //     setMessages((prev) => [
+  //       ...prev,
+  //       {
+  //         ...lastMessage,
+  //         timestamp: new Date().toLocaleTimeString(),
+  //       },
+  //     ]);
+  //   }
+  // }, [lastMessage]);
 
-  // Ensure connection when component mounts
-  useEffect(() => {
-    connect();
-    return () => {
-      // Optional: disconnect when component unmounts
-      // disconnect();
-    };
-  }, [connect]);
+  // // Ensure connection when component mounts
+  // useEffect(() => {
+  //   connect();
+  //   return () => {
+  //     // Optional: disconnect when component unmounts
+  //     // disconnect();
+  //   };
+  // }, [connect]);
 
-  const handleSendMessage = () => {
-    if (inputMessage.trim()) {
-      sendMessage({
-        type: "user_message",
-        content: inputMessage,
-        timestamp: new Date().toISOString(),
-      });
-      setInputMessage("");
-    }
-  };
+  // const handleSendMessage = () => {
+  //   if (inputMessage.trim()) {
+  //     sendMessage({
+  //       type: "user_message",
+  //       content: inputMessage,
+  //       timestamp: new Date().toISOString(),
+  //     });
+  //     setInputMessage("");
+  //   }
+  // };
 
   return (
     <>
@@ -204,69 +249,67 @@ const DiscoveringContradiction = (props) => {
         <h3 className="mb-2 bg-[#242752] text-white p-2">
           تناقض های یافت شده:
         </h3>
-        <div className="h-70 overflow-y-auto p-4">
-          {messages.length === 0 ? (
-            <div>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-              <p className="text-white">هنوز تناقضی یافت نشده.</p>
-            </div>
-          ) : (
-            <ul className="space-y-2">
-              {messages.map((msg, index) => (
-                <li key={index} className="p-2 bg-gray-100 rounded">
-                  <span className="text-xs text-white">[{msg.timestamp}]</span>
-                  <pre className="mt-1">{JSON.stringify(msg, null, 2)}</pre>
-                </li>
-              ))}
-            </ul>
-          )}
+        <div className="overflow-hidden">
+          <div className="h-70 overflow-y-auto p-4">
+            {messages?.length === 0 ? (
+              <div className="">
+                {/* <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p>
+                <p className="text-white">هنوز تناقضی یافت نشده.</p> */}
+              </div>
+            ) : (
+              <div>  
+       {messages}
+                </div>
+            
+            )}
+          </div>
         </div>
       </div>
       {/* Web Socket */}
