@@ -11,6 +11,7 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import ResolutionsList from "./pages/ResolutionsList";
 import DiscoveringContradiction from "./pages/DiscoveringContradiction";
 import { useSelector } from "react-redux";
+import FunctionsHistory from "./pages/FunctionsHistory";
 
 // Translation resources
 const resources = {
@@ -122,7 +123,13 @@ function App() {
                     path="/discovering-contradiction"
                     element={<DiscoveringContradiction />}
                   />
+
+                  <Route
+                    path="/functions-history"
+                    element={<FunctionsHistory />}
+                  />
                 </Route>
+                
               ) : (
                 <Route path="*" element={<Navigate to="/" replace />} />
               )}

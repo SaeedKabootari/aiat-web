@@ -81,7 +81,7 @@ const DiscoveringContradiction = (props) => {
             res.data.status === "processing"
           ) {
             setFetchAgain((prevState) => !prevState);
-          } else if (res.data.status === "completed") {
+          } else if (res.data.status === "completed" || res.data.status === "failed") {
             console.log("finish");
             if (intervalRef.current) {
               clearInterval(intervalRef.current);
