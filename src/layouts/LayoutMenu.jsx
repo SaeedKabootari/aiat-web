@@ -3,6 +3,7 @@ import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { todoActions } from "../shop/todoSlice";
+import { Bounce, ToastContainer } from "react-toastify";
 
 const LayoutMenu = (props) => {
   const navigate = useNavigate();
@@ -28,6 +29,19 @@ const LayoutMenu = (props) => {
   return (
     <>
       <div className={`flex flex-col h-[100vh] bg-gray-100 `}>
+        <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
         {/* Header (Full width) */}
         <header className="bg-[#242752] shadow-sm  py-6 px-6 flex justify-between items-center">
           <span className="text-3xl text-white font-semibold">

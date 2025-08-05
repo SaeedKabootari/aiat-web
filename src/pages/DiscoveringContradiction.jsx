@@ -3,6 +3,7 @@ import { useWebSocket } from "../context/WebSocketContext";
 import SendResolution from "../components/SendResolution";
 import SearchResolution from "../components/SearchResolution";
 import { getActionAx, postActionAx } from "../api";
+import { toast } from "react-toastify";
 
 const DiscoveringContradiction = (props) => {
   // WebSocket:
@@ -75,13 +76,21 @@ const DiscoveringContradiction = (props) => {
               sinceRef.current = res.data.latest_timestamp;
             }
           }
+
           // sinceRef.current = res.data.latest_timestamp;
           if (
             res.data.status === "pending" ||
             res.data.status === "processing"
           ) {
             setFetchAgain((prevState) => !prevState);
-          } else if (res.data.status === "completed" || res.data.status === "failed") {
+          } else if (
+            res.data.status === "completed" ||
+            res.data.status === "failed"
+          ) {
+            res.data.status === "completed" &&
+              toast.success("کشف تناقض پایان یافت.");
+            res.data.status === "failed" &&
+              toast.success("کشف تناقض شکست خورد.");
             console.log("finish");
             if (intervalRef.current) {
               clearInterval(intervalRef.current);
@@ -113,6 +122,7 @@ const DiscoveringContradiction = (props) => {
 
   const discoveringContradictionHandler = async () => {
     if (!newRule && !compareWithAll) {
+      toast.info("کشف تناقض شروع شد.");
       await postActionAx(`/api/analyze_rules`, discoveringObj)
         .then((res) => {
           setTaskId(res.data.task_id);
@@ -121,6 +131,7 @@ const DiscoveringContradiction = (props) => {
           console.log(err);
         });
     } else if (!newRule && compareWithAll) {
+      toast.info("کشف تناقض شروع شد.");
       await postActionAx(`/api/analyze_rules`, {
         ...discoveringObj,
         check_law_id: "*",
@@ -132,6 +143,7 @@ const DiscoveringContradiction = (props) => {
           console.log(err);
         });
     } else if (newRule && !compareWithAll) {
+      toast.info("کشف تناقض شروع شد.");
       await postActionAx(`/api/analyze`, {
         prompt: newRuleValue,
         system_prompt: systemPromptRef.current.value,
@@ -145,6 +157,7 @@ const DiscoveringContradiction = (props) => {
           console.log(err);
         });
     } else if (newRule && compareWithAll) {
+      toast.info("کشف تناقض شروع شد.");
       await postActionAx(`/api/analyze`, {
         prompt: newRuleValue,
         system_prompt: systemPromptRef.current.value,
