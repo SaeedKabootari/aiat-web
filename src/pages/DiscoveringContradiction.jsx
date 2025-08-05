@@ -36,55 +36,17 @@ const DiscoveringContradiction = (props) => {
   }, [newRule, compareWithAll]);
 
   const [taskId, setTaskId] = useState(null);
-  const [messages, setMessages] = useState([
-    {
-      contradiction: false,
-      finish_time: 1754311951,
-      first_law_id: 86601,
-      first_section_id: 795977,
-      id: 5,
-      response: "test_response",
-      second_law_id: null,
-      second_section_id: null,
-    },
-    {
-      contradiction: true,
-      finish_time: 1754311953,
-      first_law_id: 86601,
-      first_section_id: 795978,
-      id: 6,
-      response: "test_response",
-      second_law_id: null,
-      second_section_id: null,
-    },
-    {
-      contradiction: false,
-      finish_time: 1754311955,
-      first_law_id: 86601,
-      first_section_id: 795979,
-      id: 7,
-      response: "test_response",
-      second_law_id: null,
-      second_section_id: null,
-    },
-    {
-      contradiction: true,
-      finish_time: 1754311957,
-      first_law_id: 86601,
-      first_section_id: 795980,
-      id: 8,
-      response: "test_response",
-      second_law_id: null,
-      second_section_id: null,
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
 
   const [selectedContradiction, setSelectedContradiction] = useState(null);
   const [fetchAgain, setFetchAgain] = useState(true);
   const intervalRef = useRef(null);
 
+  const systemPromptRef = useRef(null);
+  const titlePromptRef = useRef(null);
+
   useEffect(() => {
-    console.log("MESSAGES", messages);
+    console.log("MESSAGES ==========>>>>>>>>>>>>>>>", messages);
   }, [messages]);
 
   // const [since, setSince] = useState(null);
@@ -106,7 +68,14 @@ const DiscoveringContradiction = (props) => {
           setMessages((prevMessages) => [...prevMessages, ...res.data.results]);
           console.log(res.data.latest_timestamp);
           // setSince(res.data.latest_timestamp);
-          sinceRef.current = res.data.latest_timestamp;
+          if (sinceRef.current === null) {
+            sinceRef.current = res.data.latest_timestamp;
+          } else if (sinceRef.current !== null) {
+            if (+sinceRef.current < +res.data.latest_timestamp) {
+              sinceRef.current = res.data.latest_timestamp;
+            }
+          }
+          // sinceRef.current = res.data.latest_timestamp;
           if (
             res.data.status === "pending" ||
             res.data.status === "processing"
@@ -146,8 +115,6 @@ const DiscoveringContradiction = (props) => {
     if (!newRule && !compareWithAll) {
       await postActionAx(`/api/analyze_rules`, discoveringObj)
         .then((res) => {
-          console.log(res);
-          console.log(res.data.task_id);
           setTaskId(res.data.task_id);
         })
         .catch((err) => {
@@ -159,7 +126,6 @@ const DiscoveringContradiction = (props) => {
         check_law_id: "*",
       })
         .then((res) => {
-          console.log(res);
           setTaskId(res.data.task_id);
         })
         .catch((err) => {
@@ -168,10 +134,11 @@ const DiscoveringContradiction = (props) => {
     } else if (newRule && !compareWithAll) {
       await postActionAx(`/api/analyze`, {
         prompt: newRuleValue,
+        system_prompt: systemPromptRef.current.value,
+        prompt_title: titlePromptRef.current.value,
         check_law_id: discoveringObj.check_law_id,
       })
         .then((res) => {
-          console.log(res);
           setTaskId(res.data.task_id);
         })
         .catch((err) => {
@@ -180,10 +147,11 @@ const DiscoveringContradiction = (props) => {
     } else if (newRule && compareWithAll) {
       await postActionAx(`/api/analyze`, {
         prompt: newRuleValue,
+        system_prompt: systemPromptRef.current.value,
+        prompt_title: titlePromptRef.current.value,
         check_law_id: "*",
       })
         .then((res) => {
-          console.log(res);
           setTaskId(res.data.task_id);
         })
         .catch((err) => {
@@ -199,20 +167,50 @@ const DiscoveringContradiction = (props) => {
   const selectContradictionHandler = async (item) => {
     console.log(item);
 
+    let showObj = {
+      first_law_caption: item.first_law_caption,
+      first_section_caption: item.first_section_caption,
+      second_law_caption: item.second_law_caption,
+      second_section_caption: item.second_section_caption,
+      response: item.response,
+    };
+
     // this line for test:
-    setSelectedContradiction(item);
-    // await getActionAx(
-    //   `/api/laws/${item.first_law_id}/sections/${item.first_section_id}`
-    // )
-    //   .then((res) => {
-    //     console.log("ZZZZZZZZZZZZZZZZZZZZ", res);
-    //     console.log(res.data);
-    //     setSelectedContradiction(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
-    //     console.log(err);
-    //   });
+    if (item.first_section_id !== null) {
+      // await getActionAx(`/api/sections/${2446350}`)
+      await getActionAx(`/api/sections/${item.first_section_id}`)
+        .then((res) => {
+          console.log("first_______________________", res);
+          console.log(res.data);
+          showObj.first_section_full_path = res.data.full_path;
+          showObj.first_section_text = res.data.text;
+          showObj.first_section_status_caption = res.data.status_caption;
+          showObj.first_section_topics = res.data.topics;
+        })
+        .catch((err) => {
+          console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
+          console.log(err);
+        });
+    }
+    if (item.second_section_id !== null) {
+      // await getActionAx(`/api/sections/${2446350}`)
+      await getActionAx(`/api/sections/${item.second_section_id}`)
+        .then((res) => {
+          console.log("second_______________________", res);
+          console.log(res.data);
+          showObj.second_section_full_path = res.data.full_path;
+          showObj.second_section_text = res.data.text;
+          showObj.second_section_status_caption = res.data.status_caption;
+          showObj.second_section_topics = res.data.topics;
+        })
+        .catch((err) => {
+          console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
+          console.log(err);
+        });
+    }
+    console.log(showObj);
+
+    setSelectedContradiction(showObj);
   };
 
   // //WebSocket:
@@ -282,14 +280,27 @@ const DiscoveringContradiction = (props) => {
             <SearchResolution setDiscoveringObj={setDiscoveringObj} />
           ) : (
             <div>
-              <h1 className="text-[#242752] text-xl mb-3">
-                مصوبه جدید را بنویسید:
-              </h1>
-              <div className="mt-2 p-3">
+              <h1 className="text-[#242752]">عنوان:</h1>
+              <div className="mt-1 p-3">
                 <textarea
-                  // ref={newResolutionRef}
+                  ref={titlePromptRef}
+                  className="w-full h-10 resize-none p-2 bg-white border-[1px] border-black"
+                />
+              </div>
+
+              <h1 className="text-[#242752]">مصوبه جدید را بنویسید:</h1>
+              <div className="mt-1 p-3">
+                <textarea
                   onChange={(event) => setnNewRuleValue(event.target.value)}
-                  className="w-full h-40 resize-none p-2 bg-white border-[1px] border-black"
+                  className="w-full h-20 resize-none p-2 bg-white border-[1px] border-black"
+                />
+              </div>
+
+              <h1 className="text-[#242752]">پرامپت سیستم:</h1>
+              <div className="mt-1 p-3">
+                <textarea
+                  ref={systemPromptRef}
+                  className="w-full h-10 resize-none p-2 bg-white border-[1px] border-black"
                 />
               </div>
             </div>
@@ -344,7 +355,7 @@ const DiscoveringContradiction = (props) => {
               <div className="">تناقضی موجود نیست.</div>
             ) : (
               <div className="grid grid-cols-12 gap-3">
-                <div className="col-span-6">
+                <div className="col-span-8">
                   <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
                     <div
                       className="overflow-auto"
@@ -364,6 +375,18 @@ const DiscoveringContradiction = (props) => {
                               زمان پایان
                             </th>
                             <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              قانون اول
+                            </th>
+                            <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              ماده قانون اول
+                            </th>
+                            <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              قانون دوم
+                            </th>
+                            <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              ماده قانون دوم
+                            </th>
+                            <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                               پاسخ
                             </th>
                           </tr>
@@ -376,17 +399,35 @@ const DiscoveringContradiction = (props) => {
                               className="hover:bg-gray-50 cursor-pointer"
                               onClick={() => selectContradictionHandler(item)}
                             >
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[25%]">
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
                                 {index + 1}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[25%]">
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
                                 {item.contradiction ? "دارد" : "ندارد"}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-[25%]">
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-[5%]">
                                 {toPersianTime(item.finish_time)}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[25%]">
-                                {item.response}
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                                {/* {item.first_law_caption} */}
+                                {item.first_law_caption.substring(0, 20)}...
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                                {item.first_section_caption}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                                {/* {item.second_law_caption} */}
+                                {item.second_law_caption?.substring(0, 20)}...
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                                {item.second_section_section}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[65%]">
+                                <div className="relative group">
+                                  <div className="truncate max-w-[400px]">
+                                    {item.response.substring(0, 100)}...
+                                  </div>
+                                </div>
                               </td>
                             </tr>
                           ))}
@@ -395,7 +436,7 @@ const DiscoveringContradiction = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className="col-span-6">
+                <div className="col-span-4">
                   {selectedContradiction !== null && (
                     <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm h-full">
                       <div
@@ -404,23 +445,95 @@ const DiscoveringContradiction = (props) => {
                       >
                         {/* Left content goes here */}
                         <div className="p-4 space-y-4">
-                        
-                         
                           {/* Add more items as needed */}
-
-                          <div key={selectedContradiction.id}>
-                            <h3 className="font-medium text-[#242752]">
-                              {selectedContradiction.response}
-                            </h3>
-                            <p className="text-sm text-gray-600">
-                              {String(selectedContradiction.contradiction)}
-                            </p>
-                            <p>
-                              {toPersianTime(selectedContradiction.finish_time)}
-                            </p>
+                          {/* RESPONSE */}
+                          <div className="text-black">
+                            <div className="font-bold">تناقض:</div>
+                            <div className="pr-1">
+                              {selectedContradiction?.response}
+                            </div>
+                          </div>
+                          {/*  LAW 1 */}
+                          <div className="text-black">
+                            <div className="font-bold">قانون اول:</div>
+                            <div className="pr-1">
+                              {selectedContradiction?.first_law_caption}
+                            </div>
+                          </div>
+                          <div className="text-black">
+                            <div className="font-bold">عنوان ماده</div>
+                            <div className="pr-1">
+                              {selectedContradiction?.first_section_caption}
+                            </div>
+                          </div>
+                          <div className="text-black">
+                            <div className="font-bold">وضعیت ماده:</div>
+                            <div className="pr-1">
+                              {
+                                selectedContradiction?.first_section_status_caption
+                              }
+                            </div>
                           </div>
 
-                        
+                          <div className="text-black">
+                            <div className="font-bold">موضوعات ماده:</div>
+                            {selectedContradiction?.first_section_topics?.map(
+                              (item, index) => {
+                                return <div className="pr-1">{item}</div>;
+                              }
+                            )}
+                          </div>
+
+                          <div className="text-black">
+                            <div className="font-bold">محتوای ماده:</div>
+                            <div className="pr-1">
+                              {selectedContradiction?.first_section_text}
+                            </div>
+                          </div>
+
+                          {/* {newRuleValue !== null && (
+                            <div className="text-black">
+                              <div className="font-bold">قانون جدید:</div>
+                              <div className="pr-1">{newRuleValue}</div>
+                            </div>
+                          )} */}
+                          {/*  LAW 2 */}
+                          <div className="text-black">
+                            <div className="font-bold">قانون دوم:</div>
+                            <div className="pr-1">
+                              {selectedContradiction?.second_law_caption}
+                            </div>
+                          </div>
+                          <div className="text-black">
+                            <div className="font-bold">عنوان ماده:</div>
+                            <div className="pr-1">
+                              {selectedContradiction?.second_section_caption}
+                            </div>
+                          </div>
+                          <div className="text-black">
+                            <div className="font-bold">وضعیت ماده:</div>
+                            <div className="pr-1">
+                              {
+                                selectedContradiction?.second_section_status_caption
+                              }
+                            </div>
+                          </div>
+
+                          <div className="text-black">
+                            <div className="font-bold">موضوعات ماده:</div>
+                            {selectedContradiction?.second_section_topics?.map(
+                              (item, index) => {
+                                return <div className="pr-1">{item}</div>;
+                              }
+                            )}
+                          </div>
+
+                          <div className="text-black">
+                            <div className="font-bold">محتوای ماده:</div>
+                            <div className="pr-1">
+                              {selectedContradiction?.second_section_text}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
