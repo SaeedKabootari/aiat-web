@@ -1,18 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { getActionAx } from "../api";
-  import { formatText, toPersianTime } from "../utils/utils";
+import { formatText, toPersianTime } from "../utils/utils";
+
+// const testItems = Array.from({ length: 20 }, (_, index) => ({
+//   contradiction: false,
+//   finish_time: 1754479574,
+//   first_law_caption:
+//     "قانون وصول برخي از درآمدهاي دولت و مصرف آن در موارد معيّن",
+//   first_law_id: 21,
+//   first_section_caption: "ماده 8>بند هـ",
+//   first_section_id: 117356,
+//   id: 5128 + index, // Unieke ID voor elk item
+//   response:
+//     "ماده 24 قانون معادن به دستگاه‌های اجرایی و متوليان قانونی مربوطه دستور می‌دهد که حداکثر ظرف دو ماه به استعلام وزارت صنعت، معدن و تجارت برای صدور پروانه اکتشاف پاسخ دهند. در حالی که متن دوم که مربوط به مالیات بر درآمد مستغلات است، هیچ ارتباطی با موضوع اکتشاف معادن ندارد.",
+//   second_law_caption: null,
+//   second_law_id: null,
+//   second_section_caption: null,
+//   second_section_id: null,
+// }));
 
 const FunctionsHistory = () => {
   const [tasks, setTasks] = useState([]);
+  // const [messages, setMessages] = useState([...testItems]);
   const [messages, setMessages] = useState([]);
+
   const [selectedContradiction, setSelectedContradiction] = useState(null);
-
-
-
-
-
-
-
 
   useEffect(() => {
     const getMessages = async () => {
@@ -34,61 +46,59 @@ const FunctionsHistory = () => {
 
     await getActionAx(getUrl)
       .then((res) => {
-        setMessages( res.data.results);
+        setMessages(res.data.results);
       })
       .catch((err) => {});
   };
 
-
-
   const selectContradictionHandler = async (item) => {
-      console.log(item);
+    console.log(item);
 
-      let showObj = {
-        first_law_caption: item.first_law_caption,
-        first_section_caption: item.first_section_caption,
-        second_law_caption: item.second_law_caption,
-        second_section_caption: item.second_section_caption,
-        response: item.response,
-      };
-
-      // this line for test:
-      if (item.first_section_id !== null) {
-        // await getActionAx(`/api/sections/${2446350}`)
-        await getActionAx(`/api/sections/${item.first_section_id}`)
-          .then((res) => {
-            console.log("first_______________________", res);
-            console.log(res.data);
-            showObj.first_section_full_path = res.data.full_path;
-            showObj.first_section_text = res.data.text;
-            showObj.first_section_status_caption = res.data.status_caption;
-            showObj.first_section_topics = res.data.topics;
-          })
-          .catch((err) => {
-            console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
-            console.log(err);
-          });
-      }
-      if (item.second_section_id !== null) {
-        // await getActionAx(`/api/sections/${2446350}`)
-        await getActionAx(`/api/sections/${item.second_section_id}`)
-          .then((res) => {
-            console.log("second_______________________", res);
-            console.log(res.data);
-            showObj.second_section_full_path = res.data.full_path;
-            showObj.second_section_text = res.data.text;
-            showObj.second_section_status_caption = res.data.status_caption;
-            showObj.second_section_topics = res.data.topics;
-          })
-          .catch((err) => {
-            console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
-            console.log(err);
-          });
-      }
-      console.log(showObj);
-
-      setSelectedContradiction(showObj);
+    let showObj = {
+      first_law_caption: item.first_law_caption,
+      first_section_caption: item.first_section_caption,
+      second_law_caption: item.second_law_caption,
+      second_section_caption: item.second_section_caption,
+      response: item.response,
     };
+
+    // this line for test:
+    if (item.first_section_id !== null) {
+      // await getActionAx(`/api/sections/${2446350}`)
+      await getActionAx(`/api/sections/${item.first_section_id}`)
+        .then((res) => {
+          console.log("first_______________________", res);
+          console.log(res.data);
+          showObj.first_section_full_path = res.data.full_path;
+          showObj.first_section_text = res.data.text;
+          showObj.first_section_status_caption = res.data.status_caption;
+          showObj.first_section_topics = res.data.topics;
+        })
+        .catch((err) => {
+          console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
+          console.log(err);
+        });
+    }
+    if (item.second_section_id !== null) {
+      // await getActionAx(`/api/sections/${2446350}`)
+      await getActionAx(`/api/sections/${item.second_section_id}`)
+        .then((res) => {
+          console.log("second_______________________", res);
+          console.log(res.data);
+          showObj.second_section_full_path = res.data.full_path;
+          showObj.second_section_text = res.data.text;
+          showObj.second_section_status_caption = res.data.status_caption;
+          showObj.second_section_topics = res.data.topics;
+        })
+        .catch((err) => {
+          console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
+          console.log(err);
+        });
+    }
+    console.log(showObj);
+
+    setSelectedContradiction(showObj);
+  };
 
   // function toPersianTime(timestamp) {
   //   return new Date(timestamp * 1000).toLocaleTimeString("fa-IR");
@@ -98,33 +108,36 @@ const FunctionsHistory = () => {
     <div>
       {/* first row */}
       <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
-        <div className="overflow-auto" style={{ maxHeight: "380px" }}>
+        <div
+          className="overflow-auto max-h-[40vh]"
+          // style={{ maxHeight: "380px" }}
+        >
           <table className="min-w-full">
             {/* Fixed Header */}
             <thead className="sticky top-0 z-10">
               <tr className="bg-[#242752] text-white">
-                <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                   ردیف
                 </th>
-                <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                   نوع مصوبه
                 </th>
-                <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                   مقایسه با
                 </th>
-                <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                   وضعیت
                 </th>
-                <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                   زمان شروع
                 </th>
-                <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                   زمان پایان
                 </th>
-                <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                   نتیجه
                 </th>
-                <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                   عنوان
                 </th>
               </tr>
@@ -137,33 +150,29 @@ const FunctionsHistory = () => {
                   className="hover:bg-gray-50 cursor-pointer"
                   onClick={() => selectTaskHandler(item.task_id)}
                 >
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
                     {index + 1}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
-                    {item?.type === "custom" ? "جدید" : "قدیمی"}
+                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                    {item?.type === "custom" ? "مصوبه جدید" : "مصوبه قدیمی"}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-[5%]">
+                  <td className="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-[5%]">
                     {item?.compare_all ? "همه قوانین" : "یک قانون"}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
                     {item?.status}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
                     {toPersianTime(item?.created_at)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
                     {toPersianTime(item?.finished_at)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
-                    {item?.result?.substring(0, 20)}...
+                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[30%]">
+                    {formatText(item?.result)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[12.5%]">
-                    <div className="relative group">
-                      {/* <div className="truncate max-w-[400px]"> */}
-                      {item?.title?.substring(0, 20)}...
-                      {/* </div> */}
-                    </div>
+                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[30%]">
+                    {formatText(item?.title)}
                   </td>
                 </tr>
               ))}
@@ -176,7 +185,7 @@ const FunctionsHistory = () => {
         <h3 className="mb-2 bg-[#242752] text-white p-2">نمایش نتایج:</h3>
 
         <div className="overflow-hidden">
-          <div className=" p-4">
+          <div className=" bg-red-200 p-4">
             {messages.length === 0 ? (
               <div className="">نتیجه ای موجود نیست.</div>
             ) : (
@@ -184,8 +193,8 @@ const FunctionsHistory = () => {
                 <div className="col-span-8">
                   <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
                     <div
-                      className="overflow-auto"
-                      style={{ maxHeight: "270px" }}
+                      className="overflow-auto max-h-[40vh]"
+                      // style={{ maxHeight: "270px" }}
                     >
                       <table className="min-w-full">
                         {/* Fixed Header */}
@@ -238,17 +247,13 @@ const FunctionsHistory = () => {
                                 {formatText(item?.first_law_caption)}
                               </td>
                               <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
-                                {item?.first_section_caption?.substring(0, 20)}...
+                                {formatText(item?.first_section_caption)}
                               </td>
                               <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
-                               
                                 {formatText(item?.second_law_caption)}
-
-                               
                               </td>
                               <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
                                 {formatText(item?.second_section_section)}
-                            
                               </td>
                               <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[40%]">
                                 {formatText(item?.response)}
@@ -264,8 +269,8 @@ const FunctionsHistory = () => {
                   {selectedContradiction !== null && (
                     <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm h-full">
                       <div
-                        className="overflow-auto bg-white"
-                        style={{ maxHeight: "270px" }}
+                        className="overflow-auto max-h-[40vh] bg-white"
+                        // style={{ maxHeight: "270px" }}
                       >
                         {/* Left content goes here */}
                         <div className="p-4 space-y-4">

@@ -289,7 +289,7 @@ const DiscoveringContradiction = (props) => {
           نتیجه{" "}
         </button>
       </div>
-
+      {/* requestTab: */}
       {tab === "requestTab" && (
         <div>
           {/* row 1 */}
@@ -390,56 +390,53 @@ const DiscoveringContradiction = (props) => {
           </div>
         </div>
       )}
+      {/* resultTab: */}
       {tab === "resultTab" && (
         <div>
           {/* row 3 */}
-          <div className="bg-[#8d8da8] mt-2 text-white h-[40%]">
-            <h3 className="mb-2 bg-[#242752] text-white p-2">
-              نتایج یافت شده:
-            </h3>
-
-            <div className="overflow-hidden">
-              <div className="h-70 p-4">
+          <div className="bg-[#8d8da8] mt-2 text-white">
+            <div className="">
+              <div className="bg-red-200 p-4">
                 {messages.length === 0 ? (
                   <div className="">تناقضی موجود نیست.</div>
                 ) : (
-                  <div className="grid grid-cols-12 gap-3">
-                    <div className="col-span-8">
+                  <div className="">
+                    <div className="">
                       <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
                         <div
-                          className="overflow-auto"
-                          style={{ maxHeight: "270px" }}
+                          className="overflow-auto max-h-[40vh]"
+                          // style={{ maxHeight: "270px" }}
                         >
                           <table className="min-w-full">
                             {/* Fixed Header */}
                             <thead className="sticky top-0 z-10">
-                          <tr className="bg-[#242752] text-white">
-                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              ردیف
-                            </th>
-                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              تناقض
-                            </th>
-                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              زمان پایان
-                            </th>
-                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              قانون اول
-                            </th>
-                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              ماده
-                            </th>
-                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              قانون دوم
-                            </th>
-                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              ماده
-                            </th>
-                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              پاسخ
-                            </th>
-                          </tr>
-                        </thead>
+                              <tr className="bg-[#242752] text-white">
+                                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                  ردیف
+                                </th>
+                                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                  تناقض
+                                </th>
+                                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                  زمان پایان
+                                </th>
+                                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                  قانون اول
+                                </th>
+                                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                  ماده
+                                </th>
+                                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                  قانون دوم
+                                </th>
+                                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                  ماده
+                                </th>
+                                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                  پاسخ
+                                </th>
+                              </tr>
+                            </thead>
                             {/* Scrollable Body */}
                             <tbody className="bg-white divide-y divide-gray-200">
                               {messages.map((item, index) => (
@@ -485,12 +482,12 @@ const DiscoveringContradiction = (props) => {
                         </div>
                       </div>
                     </div>
-                    <div className="col-span-4">
+                    <div className="mt-3">
                       {selectedContradiction !== null && (
                         <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm h-full">
                           <div
-                            className="overflow-auto bg-white"
-                            style={{ maxHeight: "270px" }}
+                            className="overflow-auto bg-white max-h-[30vh]"
+                            // style={{ maxHeight: "270px" }}
                           >
                             {/* Left content goes here */}
                             <div className="p-4 space-y-4">
