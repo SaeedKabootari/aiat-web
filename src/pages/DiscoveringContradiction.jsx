@@ -3,6 +3,24 @@ import SendResolution from "../components/SendResolution";
 import SearchResolution from "../components/SearchResolution";
 import { getActionAx, postActionAx } from "../api";
 import { toast } from "react-toastify";
+import { formatText, toPersianTime } from "../utils/utils";
+
+const testItems = Array.from({ length: 20 }, (_, index) => ({
+  contradiction: false,
+  finish_time: 1754479574,
+  first_law_caption:
+    "قانون وصول برخي از درآمدهاي دولت و مصرف آن در موارد معيّن",
+  first_law_id: 21,
+  first_section_caption: "ماده 8>بند هـ",
+  first_section_id: 117356,
+  id: 5128 + index, // Unieke ID voor elk item
+  response:
+    "ماده 24 قانون معادن به دستگاه‌های اجرایی و متوليان قانونی مربوطه دستور می‌دهد که حداکثر ظرف دو ماه به استعلام وزارت صنعت، معدن و تجارت برای صدور پروانه اکتشاف پاسخ دهند. در حالی که متن دوم که مربوط به مالیات بر درآمد مستغلات است، هیچ ارتباطی با موضوع اکتشاف معادن ندارد.",
+  second_law_caption: null,
+  second_law_id: null,
+  second_section_caption: null,
+  second_section_id: null,
+}));
 
 const DiscoveringContradiction = (props) => {
   const [tab, setTab] = useState("requestTab");
@@ -26,7 +44,7 @@ const DiscoveringContradiction = (props) => {
   }, [newRule, compareWithAll]);
 
   const [taskId, setTaskId] = useState(null);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([...testItems]);
 
   const [selectedContradiction, setSelectedContradiction] = useState(null);
   const [fetchAgain, setFetchAgain] = useState(true);
@@ -110,7 +128,7 @@ const DiscoveringContradiction = (props) => {
   }, [taskId, fetchAgain]);
 
   const discoveringContradictionHandler = async () => {
-    setTab('resultTab')
+    // setTab('resultTab')
     if (!newRule && !compareWithAll) {
       toast.info("کشف تناقض شروع شد.");
       await postActionAx(`/api/analyze_rules`, discoveringObj)
@@ -162,10 +180,6 @@ const DiscoveringContradiction = (props) => {
         });
     }
   };
-
-  function toPersianTime(timestamp) {
-    return new Date(timestamp * 1000).toLocaleTimeString("fa-IR");
-  }
 
   const selectContradictionHandler = async (item) => {
     console.log(item);
@@ -399,73 +413,70 @@ const DiscoveringContradiction = (props) => {
                           <table className="min-w-full">
                             {/* Fixed Header */}
                             <thead className="sticky top-0 z-10">
-                              <tr className="bg-[#242752] text-white">
-                                <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                                  ردیف
-                                </th>
-                                <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                                  تناقض
-                                </th>
-                                <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                                  زمان پایان
-                                </th>
-                                <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                                  قانون اول
-                                </th>
-                                <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                                  ماده قانون اول
-                                </th>
-                                <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                                  قانون دوم
-                                </th>
-                                <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                                  ماده قانون دوم
-                                </th>
-                                <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                                  پاسخ
-                                </th>
-                              </tr>
-                            </thead>
+                          <tr className="bg-[#242752] text-white">
+                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              ردیف
+                            </th>
+                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              تناقض
+                            </th>
+                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              زمان پایان
+                            </th>
+                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              قانون اول
+                            </th>
+                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              ماده
+                            </th>
+                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              قانون دوم
+                            </th>
+                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              ماده
+                            </th>
+                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              پاسخ
+                            </th>
+                          </tr>
+                        </thead>
                             {/* Scrollable Body */}
                             <tbody className="bg-white divide-y divide-gray-200">
                               {messages.map((item, index) => (
                                 <tr
-                                  key={item.id}
+                                  key={index}
                                   className="hover:bg-gray-50 cursor-pointer"
                                   onClick={() =>
                                     selectContradictionHandler(item)
                                   }
                                 >
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
                                     {index + 1}
                                   </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
-                                    {item.contradiction ? "دارد" : "ندارد"}
+                                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                                    {item?.contradiction ? "دارد" : "ندارد"}
                                   </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-[5%]">
-                                    {toPersianTime(item.finish_time)}
+                                  <td className="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-[10%]">
+                                    {toPersianTime(item?.finish_time)}
                                   </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
-                                    {/* {item.first_law_caption} */}
-                                    {item.first_law_caption.substring(0, 20)}...
+                                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
+                                    {formatText(item?.first_law_caption)}
                                   </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
-                                    {item.first_section_caption}
-                                  </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
-                                    {/* {item.second_law_caption} */}
-                                    {item.second_law_caption?.substring(0, 20)}
+                                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
+                                    {item?.first_section_caption?.substring(
+                                      0,
+                                      20
+                                    )}
                                     ...
                                   </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
-                                    {item.second_section_section}
+                                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
+                                    {formatText(item?.second_law_caption)}
                                   </td>
-                                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[65%]">
-                                    <div className="relative group">
-                                      <div className="truncate max-w-[400px]">
-                                        {item.response.substring(0, 100)}...
-                                      </div>
-                                    </div>
+                                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
+                                    {formatText(item?.second_section_section)}
+                                  </td>
+                                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[40%]">
+                                    {formatText(item?.response)}
                                   </td>
                                 </tr>
                               ))}
@@ -567,7 +578,6 @@ const DiscoveringContradiction = (props) => {
                                   }
                                 )}
                               </div>
-
                               <div className="text-black">
                                 <div className="font-bold">محتوای ماده:</div>
                                 <div className="pr-1">

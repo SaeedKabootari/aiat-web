@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { getActionAx } from "../api";
-  import { toPersianTime } from "../utils/utils";
+  import { formatText, toPersianTime } from "../utils/utils";
+
 const FunctionsHistory = () => {
   const [tasks, setTasks] = useState([]);
   const [messages, setMessages] = useState([]);
   const [selectedContradiction, setSelectedContradiction] = useState(null);
+
+
+
+
+
+
 
 
   useEffect(() => {
@@ -33,7 +40,6 @@ const FunctionsHistory = () => {
   };
 
 
-const formatText = (text) => text ? text.substring(0, 20) + '...' : '______';
 
   const selectContradictionHandler = async (item) => {
       console.log(item);
