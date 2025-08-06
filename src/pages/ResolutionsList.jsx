@@ -21,7 +21,8 @@ const ResolutionsList = (props) => {
 
   return (
     <>
-      <div className="mt-3 p-3 flex justify-center items-center gap-4">
+    test
+      {/* <div className="mt-3 p-3 flex justify-center items-center gap-4">
         <input
           className="bg-[rgba(36,39,82,0.5)] h-10 px-4 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
           type="text"
@@ -33,7 +34,7 @@ const ResolutionsList = (props) => {
         >
           جستجو
         </button>
-      </div>
+      </div> */}
     </>
   );
 };

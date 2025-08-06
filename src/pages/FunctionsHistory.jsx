@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { getActionAx } from "../api";
-
+  import { toPersianTime } from "../utils/utils";
 const FunctionsHistory = () => {
   const [tasks, setTasks] = useState([]);
   const [messages, setMessages] = useState([]);
   const [selectedContradiction, setSelectedContradiction] = useState(null);
+
 
   useEffect(() => {
     const getMessages = async () => {
@@ -30,6 +31,9 @@ const FunctionsHistory = () => {
       })
       .catch((err) => {});
   };
+
+
+const formatText = (text) => text ? text.substring(0, 20) + '...' : '______';
 
   const selectContradictionHandler = async (item) => {
       console.log(item);
@@ -80,9 +84,9 @@ const FunctionsHistory = () => {
       setSelectedContradiction(showObj);
     };
 
-  function toPersianTime(timestamp) {
-    return new Date(timestamp * 1000).toLocaleTimeString("fa-IR");
-  }
+  // function toPersianTime(timestamp) {
+  //   return new Date(timestamp * 1000).toLocaleTimeString("fa-IR");
+  // }
 
   return (
     <div>
@@ -181,28 +185,28 @@ const FunctionsHistory = () => {
                         {/* Fixed Header */}
                         <thead className="sticky top-0 z-10">
                           <tr className="bg-[#242752] text-white">
-                            <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                               ردیف
                             </th>
-                            <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                               تناقض
                             </th>
-                            <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                               زمان پایان
                             </th>
-                            <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                               قانون اول
                             </th>
-                            <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              ماده قانون اول
+                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              ماده
                             </th>
-                            <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                               قانون دوم
                             </th>
-                            <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              ماده قانون دوم
+                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                              ماده
                             </th>
-                            <th className="px-6 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                               پاسخ
                             </th>
                           </tr>
@@ -215,35 +219,33 @@ const FunctionsHistory = () => {
                               className="hover:bg-gray-50 cursor-pointer"
                               onClick={() => selectContradictionHandler(item)}
                             >
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                              <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
                                 {index + 1}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
-                                {item.contradiction ? "دارد" : "ندارد"}
+                              <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                                {item?.contradiction ? "دارد" : "ندارد"}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-[5%]">
-                                {toPersianTime(item.finish_time)}
+                              <td className="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-[10%]">
+                                {toPersianTime(item?.finish_time)}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
-                                {/* {item.first_law_caption} */}
-                                {item.first_law_caption.substring(0, 20)}...
+                              <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
+                                {formatText(item?.first_law_caption)}
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
-                                {item.first_section_caption}
+                              <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
+                                {item?.first_section_caption?.substring(0, 20)}...
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
-                                {/* {item.second_law_caption} */}
-                                {item.second_law_caption?.substring(0, 20)}...
+                              <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
+                               
+                                {formatText(item?.second_law_caption)}
+
+                               
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
-                                {item.second_section_section}
+                              <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
+                                {formatText(item?.second_section_section)}
+                            
                               </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 w-[65%]">
-                                <div className="relative group">
-                                  <div className="truncate max-w-[400px]">
-                                    {item.response.substring(0, 100)}...
-                                  </div>
-                                </div>
+                              <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[40%]">
+                                {formatText(item?.response)}
                               </td>
                             </tr>
                           ))}
