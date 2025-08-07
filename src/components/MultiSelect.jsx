@@ -155,12 +155,12 @@ useEffect(() => {
     <div >
       
 
-      <div className="tree border border-gray-300 rounded-lg p-4 bg-white shadow-sm h-[300px] overflow-y-auto">
+      <div className="tree border border-gray-300 rounded-lg p-4 bg-white shadow-sm h-[240px] overflow-y-auto">
         {renderTree(treeData)}
       </div>
 
 
-      <h1 className="text-2xl font-bold my-4">انتخاب شده ها:</h1>
+      <div className="text-xl font-bold my-4">گروه های انتخاب شده:</div>
       <div className="mb-4 p-2 bg-gray-50 rounded h-[100px] overflow-y-auto">
         <div id="selected-chips" className="flex flex-wrap">
           {chips}

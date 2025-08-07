@@ -1,27 +1,9 @@
 import { useRef, useState } from "react";
 import MultiSelect from "../components/MultiSelect";
 import { getActionAx } from "../api";
+import { transformKeys } from "../utils/utils";
 
-const transformKeys = (data) => {
-  return data.map((item) => {
-    // Transform the main keys
-    const transformedItem = {
-      id: item.ID,
-      label: item.CAPTION,
-      // Recursively transform children if they exist
-      children: item.children ? transformKeys(item.children) : [],
-    };
 
-    // Preserve other properties
-    Object.keys(item).forEach((key) => {
-      if (key !== "ID" && key !== "CAPTION" && key !== "children") {
-        transformedItem[key] = item[key];
-      }
-    });
-
-    return transformedItem;
-  });
-};
 
 const ResolutionsList = (props) => {
   const [topics, setTopics] = useState([]);

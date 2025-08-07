@@ -1,8 +1,39 @@
-import { useRef, useState } from "react";
-import { getActionAx } from "../api";
+import { useEffect, useRef, useState } from "react";
+import { getActionAx, postActionAx } from "../api";
+import MultiSelect from "./MultiSelect";
+import { transformKeys } from "../utils/utils";
+
+
+
 
 const SearchResolutionModal = (props) => {
-  const [resolutions, setResolutions] = useState([]);
+  const [resolutions, setResolutions] = useState(null);
+
+  const [topics, setTopics] = useState([]);
+  const [selectedTopicsId, setSelectedTopicsId] = useState([]);
+
+  const selectionIdsHandler = (selectedArray) => {
+    setSelectedTopicsId(selectedArray);
+    console.log("Selected IDs in parent:", selectedArray);
+  };
+
+  useEffect(() => {
+    const getTopics = async () => {
+      await getActionAx(`/api/topics`)
+        .then((res) => {
+          console.log("ZZZZZZZZZZZZZZZZZZZZ", res);
+          console.log(transformKeys(res.data));
+          console.log(res.data);
+          setTopics(transformKeys(res.data));
+        })
+        .catch((err) => {
+          console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
+          console.log(err);
+        });
+    };
+
+    getTopics();
+  }, []);
 
   const selectResolutionHandler = async (resolutionId) => {
     props.setDiscoveringObj((prevState) => ({
@@ -42,16 +73,29 @@ const SearchResolutionModal = (props) => {
     // .then(data => console.log(data))
     // .catch(error => console.error('Error:', error));
 
-    await getActionAx(
-      `/api/laws/search?q=${searchTermRef.current.value}&limit=${10}`
-    )
+    // await getActionAx(
+    //   `/api/laws/search?q=${searchTermRef.current.value}&limit=${10}`
+    // )
+    //   .then((res) => {
+    //     console.log("ZZZZZZZZZZZZZZZZZZZZ", res);
+    //     console.log(res.data);
+    //     setResolutions(res.data);
+    //   })
+    //   .catch((err) => {
+    //     console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
+    //     console.log(err);
+    //   });
+
+    await postActionAx(`/api/laws/search`, {
+      q: searchTermRef.current.value,
+      limit: 10,
+      topic_ids: selectedTopicsId,
+    })
       .then((res) => {
-        console.log("ZZZZZZZZZZZZZZZZZZZZ", res);
         console.log(res.data);
         setResolutions(res.data);
       })
       .catch((err) => {
-        console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
         console.log(err);
       });
   };
@@ -81,10 +125,25 @@ const SearchResolutionModal = (props) => {
           >
             جستجو
           </button>
+          <button
+            className="bg-blue-400 text-white font- py-2 px-4 rounded transition duration-300 cursor-pointer"
+            onClick={() => setResolutions(null)}
+          >
+            ✖
+          </button>
         </div>
+        {resolutions === null && (
+          <div>
+            <MultiSelect
+              treeData={topics}
+              onSelectionChange={selectionIdsHandler}
+            />
+          </div>
+        )}
+
         <div>
           <div className="overflow-y-auto max-h-[60vh]  mt-2">
-            {resolutions.map((item, index) => {
+            {resolutions?.map((item, index) => {
               return (
                 <div
                   onClick={() => selectResolutionHandler(item.id)}
