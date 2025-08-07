@@ -27,7 +27,11 @@ const ResolutionsList = (props) => {
   const [topics, setTopics] = useState([]);
 
 
-  const searchHandler = async () => {
+
+
+
+  
+  const fetchHandler = async () => {
     await getActionAx(`/api/topics`)
       .then((res) => {
         console.log("ZZZZZZZZZZZZZZZZZZZZ", res);

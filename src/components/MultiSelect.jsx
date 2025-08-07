@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 
 const MultiSelect = (props) => {
-    const{treeData}=props
+  const { treeData } = props;
   const [selected, setSelected] = useState(new Set());
   const [expandedNodes, setExpandedNodes] = useState(new Set());
   const [chips, setChips] = useState([]);
 
   useEffect(() => {
-    const myArray= Array.from(selected)
+    const myArray = Array.from(selected);
     console.log(myArray);
   }, [selected]);
 
@@ -73,7 +73,7 @@ const MultiSelect = (props) => {
   const renderTree = (nodes, level = 0) => {
     return (
       <ul
-        className={`list-none ${level === 0 ? "pl-0" : "pl-4"}`}
+        className={`list-none ${level === 0 ? "pl-2" : "pr-10"}`}
         style={{ display: "block" }}
       >
         {nodes.map((node) => {
@@ -85,9 +85,11 @@ const MultiSelect = (props) => {
               <div className="flex items-center">
                 {hasChildren && (
                   <span
-                    className="toggle inline-block w-4 cursor-pointer mr-1"
+                    // className="toggle inline-block w-4 cursor-pointer mr-1"
+                    className="toggle inline-block w-4 cursor-pointer text-[#242752]"
                     onClick={(e) => toggleExpand(node.id, e)}
                   >
+                    {/* {isExpanded ? "▼" : "◀"} */}
                     {isExpanded ? "▼" : "◀"}
                   </span>
                 )}
@@ -95,7 +97,8 @@ const MultiSelect = (props) => {
                 <input
                   type="checkbox"
                   data-id={node.id}
-                  className="mr-2"
+                  //   className="mr-2"
+                  className="ml-2"
                   checked={selected.has(node.id)}
                   onChange={(e) => updateSelection(node, e.target.checked)}
                 />
