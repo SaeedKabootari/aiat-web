@@ -3,24 +3,25 @@ import SendResolution from "../components/SendResolution";
 import SearchResolution from "../components/SearchResolution";
 import { getActionAx, postActionAx } from "../api";
 import { toast } from "react-toastify";
-import { formatText, toPersianTime } from "../utils/utils";
+import { formatText, toPersianTime, transformKeys } from "../utils/utils";
+import MultiSelect from "../components/MultiSelect";
 
-const testItems = Array.from({ length: 20 }, (_, index) => ({
-  contradiction: false,
-  finish_time: 1754479574,
-  first_law_caption:
-    "قانون وصول برخي از درآمدهاي دولت و مصرف آن در موارد معيّن",
-  first_law_id: 21,
-  first_section_caption: "ماده 8>بند هـ",
-  first_section_id: 117356,
-  id: 5128 + index, // Unieke ID voor elk item
-  response:
-    "ماده 24 قانون معادن به دستگاه‌های اجرایی و متوليان قانونی مربوطه دستور می‌دهد که حداکثر ظرف دو ماه به استعلام وزارت صنعت، معدن و تجارت برای صدور پروانه اکتشاف پاسخ دهند. در حالی که متن دوم که مربوط به مالیات بر درآمد مستغلات است، هیچ ارتباطی با موضوع اکتشاف معادن ندارد.",
-  second_law_caption: null,
-  second_law_id: null,
-  second_section_caption: null,
-  second_section_id: null,
-}));
+// const testItems = Array.from({ length: 20 }, (_, index) => ({
+//   contradiction: false,
+//   finish_time: 1754479574,
+//   first_law_caption:
+//     "قانون وصول برخي از درآمدهاي دولت و مصرف آن در موارد معيّن",
+//   first_law_id: 21,
+//   first_section_caption: "ماده 8>بند هـ",
+//   first_section_id: 117356,
+//   id: 5128 + index, // Unieke ID voor elk item
+//   response:
+//     "ماده 24 قانون معادن به دستگاه‌های اجرایی و متوليان قانونی مربوطه دستور می‌دهد که حداکثر ظرف دو ماه به استعلام وزارت صنعت، معدن و تجارت برای صدور پروانه اکتشاف پاسخ دهند. در حالی که متن دوم که مربوط به مالیات بر درآمد مستغلات است، هیچ ارتباطی با موضوع اکتشاف معادن ندارد.",
+//   second_law_caption: null,
+//   second_law_id: null,
+//   second_section_caption: null,
+//   second_section_id: null,
+// }));
 
 const DiscoveringContradiction = (props) => {
   const [tab, setTab] = useState("requestTab");
@@ -44,7 +45,7 @@ const DiscoveringContradiction = (props) => {
   }, [newRule, compareWithAll]);
 
   const [taskId, setTaskId] = useState(null);
-  const [messages, setMessages] = useState([...testItems]);
+  const [messages, setMessages] = useState([]);
 
   const [selectedContradiction, setSelectedContradiction] = useState(null);
   const [fetchAgain, setFetchAgain] = useState(true);
@@ -52,6 +53,32 @@ const DiscoveringContradiction = (props) => {
 
   const systemPromptRef = useRef(null);
   const titlePromptRef = useRef(null);
+
+  const [topics, setTopics] = useState([]);
+  const [selectedTopicsId, setSelectedTopicsId] = useState([]);
+
+  const selectionIdsHandler = (selectedArray) => {
+    setSelectedTopicsId(selectedArray);
+    console.log("Selected IDs in parent:", selectedArray);
+  };
+
+  useEffect(() => {
+    const getTopics = async () => {
+      await getActionAx(`/api/topics`)
+        .then((res) => {
+          console.log("ZZZZZZZZZZZZZZZZZZZZ", res);
+          console.log(transformKeys(res.data));
+          console.log(res.data);
+          setTopics(transformKeys(res.data));
+        })
+        .catch((err) => {
+          console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
+          console.log(err);
+        });
+    };
+
+    getTopics();
+  }, []);
 
   useEffect(() => {
     console.log("MESSAGES ==========>>>>>>>>>>>>>>>", messages);
@@ -143,6 +170,7 @@ const DiscoveringContradiction = (props) => {
       await postActionAx(`/api/analyze_rules`, {
         ...discoveringObj,
         check_law_id: "*",
+        topic_ids: selectedTopicsId,
       })
         .then((res) => {
           setTaskId(res.data.task_id);
@@ -171,6 +199,7 @@ const DiscoveringContradiction = (props) => {
         system_prompt: systemPromptRef.current.value,
         prompt_title: titlePromptRef.current.value,
         check_law_id: "*",
+        topic_ids: selectedTopicsId,
       })
         .then((res) => {
           setTaskId(res.data.task_id);
@@ -374,9 +403,16 @@ const DiscoveringContradiction = (props) => {
                 </button>
               </div>
 
-              {!compareWithAll && (
+             
+
+              {!compareWithAll ? (
                 <SendResolution setDiscoveringObj={setDiscoveringObj} />
-              )}
+              ): (<div>
+                <MultiSelect
+                  treeData={topics}
+                  onSelectionChange={selectionIdsHandler}
+                />
+              </div>)}
             </div>
           </div>
           {/* row 2 */}
