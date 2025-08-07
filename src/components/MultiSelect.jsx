@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 const MultiSelect = (props) => {
-  const { treeData } = props;
+  const { treeData ,onSelectionChange } = props;
   const [selected, setSelected] = useState(new Set());
   const [expandedNodes, setExpandedNodes] = useState(new Set());
   const [chips, setChips] = useState([]);
@@ -10,6 +10,16 @@ const MultiSelect = (props) => {
     const myArray = Array.from(selected);
     console.log(myArray);
   }, [selected]);
+
+
+useEffect(() => {
+    // Send current selected IDs array to parent if callback provided
+    if (onSelectionChange) {
+      onSelectionChange(Array.from(selected));
+    }
+  }, [selected]);
+
+
 
   // Find node by ID (DFS)
   const findNodeById = (nodes, id) => {
@@ -142,17 +152,19 @@ const MultiSelect = (props) => {
   }, [selected]);
 
   return (
-    <div className="p-4 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Dynamic Checkbox Tree</h1>
+    <div >
+      
 
-      <div className="mb-4 p-2 bg-gray-50 rounded min-h-[40px]">
+      <div className="tree border border-gray-300 rounded-lg p-4 bg-white shadow-sm h-[300px] overflow-y-auto">
+        {renderTree(treeData)}
+      </div>
+
+
+      <h1 className="text-2xl font-bold my-4">انتخاب شده ها:</h1>
+      <div className="mb-4 p-2 bg-gray-50 rounded h-[100px] overflow-y-auto">
         <div id="selected-chips" className="flex flex-wrap">
           {chips}
         </div>
-      </div>
-
-      <div className="tree border border-gray-300 rounded-lg p-4 bg-white shadow-sm">
-        {renderTree(treeData)}
       </div>
     </div>
   );
