@@ -26,6 +26,15 @@ const FunctionsHistory = () => {
 
   const [selectedContradiction, setSelectedContradiction] = useState(null);
 
+  const [haveContradiction, setHaveContradiction] = useState(false);
+
+useEffect(()=>{
+
+  console.log(haveContradiction)
+},[haveContradiction])
+
+
+
   useEffect(() => {
     const getMessages = async () => {
       let getUrl = "/api/tasks";
@@ -42,7 +51,21 @@ const FunctionsHistory = () => {
   }, []);
 
   const selectTaskHandler = async (taskId) => {
+    // let getUrl;
+    // if (haveContradiction === null) {
+    //   getUrl = `/api/task/${taskId}`;
+    // } else if (haveContradiction !== null) {
+    //   getUrl = `/api/task/${taskId}?contradiction=${haveContradiction}`;
+    // }
+
     let getUrl = `/api/task/${taskId}`;
+    const params = new URLSearchParams();
+    if (haveContradiction !== null) {
+      params.append("contradiction", haveContradiction);
+    }
+    if (params.toString()) {
+      getUrl += `?${params.toString()}`;
+    }
 
     await getActionAx(getUrl)
       .then((res) => {
@@ -106,6 +129,18 @@ const FunctionsHistory = () => {
 
   return (
     <div>
+      {/* filters */}
+      <div className="flex align-items gap-2">
+        <span>تناقض:</span>
+        <input
+          type="checkbox"
+          // data-id={node.id}
+          //   className="mr-2"
+          // className="ml-2"
+          checked={haveContradiction}
+          onChange={(e) => e.target.checked ? setHaveContradiction(true) :setHaveContradiction(null) }
+        />
+      </div>
       {/* first row */}
       <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
         <div
