@@ -1,17 +1,39 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import MultiSelect from "../components/MultiSelect";
+import { getActionAx } from "../api";
+
+const transformKeys = (data) => {
+  return data.map((item) => {
+    // Transform the main keys
+    const transformedItem = {
+      id: item.ID,
+      label: item.CAPTION,
+      // Recursively transform children if they exist
+      children: item.children ? transformKeys(item.children) : [],
+    };
+
+    // Preserve other properties
+    Object.keys(item).forEach((key) => {
+      if (key !== "ID" && key !== "CAPTION" && key !== "children") {
+        transformedItem[key] = item[key];
+      }
+    });
+
+    return transformedItem;
+  });
+};
 
 const ResolutionsList = (props) => {
+  const [topics, setTopics] = useState([]);
 
-  const searchTermRef = useRef(null);
 
   const searchHandler = async () => {
-    await getActionAx(
-      `/api/laws/search?q=${searchTermRef.current.value}&limit=${10}`
-    )
+    await getActionAx(`/api/topics`)
       .then((res) => {
         console.log("ZZZZZZZZZZZZZZZZZZZZ", res);
+        console.log(transformKeys(res.data));
         console.log(res.data);
-        setResolutions(res.data);
+        setTopics(transformKeys(res.data));
       })
       .catch((err) => {
         console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
@@ -21,20 +43,11 @@ const ResolutionsList = (props) => {
 
   return (
     <>
-    test
-      {/* <div className="mt-3 p-3 flex justify-center items-center gap-4">
-        <input
-          className="bg-[rgba(36,39,82,0.5)] h-10 px-4 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          type="text"
-          ref={searchTermRef}
-        />
-        <button
-          className="bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300 cursor-pointer"
-          onClick={searchHandler}
-        >
-          جستجو
-        </button>
-      </div> */}
+      <MultiSelect treeData={topics} />
+      <button
+        className="bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300 cursor-pointer"
+        onClick={fetchHandler}
+      >fetch</button>
     </>
   );
 };
