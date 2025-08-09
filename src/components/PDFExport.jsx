@@ -43,8 +43,8 @@ const PDFExport = ({ tableJSX }) => {
               }
               
               th {
-                background-color: #f3f4f6;
-                text-align: left;
+                background-color: #242752;
+                color: white;
                 font-weight: bold;
                 padding: 10px;
                 border: 1px solid #d1d5db;
@@ -53,6 +53,7 @@ const PDFExport = ({ tableJSX }) => {
               td {
                 padding: 10px;
                 border: 1px solid #d1d5db;
+                background-color: #f3f4f6;
               }
               
               /* Ensure text is selectable */

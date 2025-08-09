@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getActionAx } from "../api";
 import { formatText, toPersianTime } from "../utils/utils";
+import PDFExport from "../components/PDFExport";
+import ContradictionTablePdf from "../components/ContradictionTablePdf";
 
 // const testItems = Array.from({ length: 20 }, (_, index) => ({
 //   contradiction: false,
@@ -299,6 +301,8 @@ useEffect(()=>{
                       </table>
                     </div>
                   </div>
+                  <PDFExport tableJSX={<ContradictionTablePdf data={messages}/>} />
+       
                 </div>
                 <div className="col-span-4">
                   {selectedContradiction !== null && (

@@ -3,6 +3,7 @@ import MultiSelect from "../components/MultiSelect";
 import { getActionAx } from "../api";
 import { transformKeys } from "../utils/utils";
 import PDFExport from "../components/PDFExport";
+import MyTable from "../components/ContradictionTablePdf";
 
 const ResolutionsList = (props) => {
   const [topics, setTopics] = useState([]);
@@ -45,6 +46,18 @@ const ResolutionsList = (props) => {
   };
   return (
     <>
+    <table className="border-collapse border border-gray-400">
+  <tbody>
+    <tr>
+      <td rowSpan="2" className="border border-gray-400 p-2">پراپرتی مشترک (ادغام شده در ردیف‌ها)</td>
+      <td className="border border-gray-400 p-2">مقدار ۱</td>
+    </tr>
+    <tr>
+      <td className="border border-gray-400 p-2">مقدار ۲</td>
+    </tr>
+  </tbody>
+</table>
+<MyTable />
       <PDFExport
         tableJSX={
           <div>
