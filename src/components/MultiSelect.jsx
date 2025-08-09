@@ -1,4 +1,4 @@
-// When select parent also show children in selected box:
+// When select parent also show its children in selected box:
 
 // import { useState, useEffect } from "react";
 
@@ -178,7 +178,7 @@
 
 
 
-// When select parent doesnt show children in selected box: 
+// When select parent doesnt show its children in selected show box: 
 
 import { useState, useEffect } from "react";
 
