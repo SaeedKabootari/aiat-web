@@ -118,41 +118,51 @@ const groupBySecondLawId = (data) => {
 
 const ContradictionTablePdf = ({ data }) => {
   const groupedData = groupBySecondLawId(data);
+  console.log(groupedData);
 
   return (
-    <table className="border-collapse border border-gray-400 w-full" dir='rtl'>
-      <thead className="bg-blue-300">
-        <tr>
-          <th className="border border-gray-400 p-2">قانون / مقرره</th>
-          <th className="border border-gray-400 p-2">ماده / تبصره</th>
-          <th className="border border-gray-400 p-2">نتیجه</th>
-        </tr>
-      </thead>
-      <tbody>
-        {groupedData.map((group, index) => {
-          const rowSpan = group.length;
-          return group.map((item, idx) => (
-            <tr key={item.id}>
-              {idx === 0 && (
-                <td rowSpan={rowSpan} className="border border-gray-400 p-2">
-                  {/* {item.second_law_caption} */}
-                  {item.first_law_caption}
+  <>
+      {groupedData.map((item, index) => {
+        return (
+          <table
+            className="border-collapse border border-gray-400 w-full"
+            dir="rtl"
+          >
+            <thead lassName="bg-blue-300">
+              <tr>
+                <th colSpan="2" className="border border-gray-400 p-2">قانون / مقرره</th>
+              </tr>
+              <tr>
+                <td  colSpan="2" className="border border-gray-400 p-2">
+                  {item[0].first_law_caption}
                 </td>
-              )}
-              <td className="border border-gray-400 p-2">
-                {/* {item.second_section_caption ? item.second_section_caption : '-'} */}
-                {item.first_section_caption ? item.first_section_caption : "-"}
-              </td>
-              <td className="border border-gray-400 p-2">{item.response}</td>
-            </tr>
-          ));
-        })}
-      </tbody>
-    </table>
+              </tr>
+            </thead>
+            <tbody>
+              {item.map((item, index) => {
+                return (
+                  <>
+                 {index === 0 && <tr>
+                    <th className="border border-gray-400 p-2">ماده / تبصره</th>
+                    <th className="border border-gray-400 p-2">نتیجه</th>
+                  </tr>} 
+                  <tr>
+                    <td className="border border-gray-400 p-2">{item.first_section_caption}</td>
+                    <td className="border border-gray-400 p-2">{item.response}</td>
+                  </tr></>
+                );
+              })}
+            </tbody>
+          </table>
+        );
+      })}</>
+
+   
+   
   );
 };
 
-export default ContradictionTablePdf
+export default ContradictionTablePdf;
 
 // const groupBySecondLawId = (data) => {
 //   const groups = {};
