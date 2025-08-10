@@ -105,7 +105,7 @@ import React from "react";
 
 const groupBySecondLawId = (data) => {
   const groups = {};
-  data.forEach((item) => {
+  data?.forEach((item) => {
     // const key = item.second_law_id;
     const key = item.first_law_id;
     if (!groups[key]) {
@@ -121,7 +121,7 @@ const ContradictionTablePdf = ({ data }) => {
   console.log(groupedData);
 
   return (
-  <>
+    <>
       {groupedData.map((item, index) => {
         return (
           <table
@@ -130,10 +130,12 @@ const ContradictionTablePdf = ({ data }) => {
           >
             <thead lassName="bg-blue-300">
               <tr>
-                <th colSpan="2" className="border border-gray-400 p-2">قانون / مقرره</th>
+                <th colSpan="2" className="border border-gray-400 p-2">
+                  قانون / مقرره
+                </th>
               </tr>
               <tr>
-                <td  colSpan="2" className="border border-gray-400 p-2">
+                <td colSpan="2" className="border border-gray-400 p-2">
                   {item[0].first_law_caption}
                 </td>
               </tr>
@@ -142,23 +144,30 @@ const ContradictionTablePdf = ({ data }) => {
               {item.map((item, index) => {
                 return (
                   <>
-                 {index === 0 && <tr>
-                    <th className="border border-gray-400 p-2">ماده / تبصره</th>
-                    <th className="border border-gray-400 p-2">نتیجه</th>
-                  </tr>} 
-                  <tr>
-                    <td className="border border-gray-400 p-2">{item.first_section_caption}</td>
-                    <td className="border border-gray-400 p-2">{item.response}</td>
-                  </tr></>
+                    {index === 0 && (
+                      <tr>
+                        <th className="border border-gray-400 p-2">
+                          ماده / تبصره
+                        </th>
+                        <th className="border border-gray-400 p-2">نتیجه</th>
+                      </tr>
+                    )}
+                    <tr>
+                      <td className="border border-gray-400 p-2">
+                        {item.first_section_caption}
+                      </td>
+                      <td className="border border-gray-400 p-2">
+                        {item.response}
+                      </td>
+                    </tr>
+                  </>
                 );
               })}
             </tbody>
           </table>
         );
-      })}</>
-
-   
-   
+      })}
+    </>
   );
 };
 

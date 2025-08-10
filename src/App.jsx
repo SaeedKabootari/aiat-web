@@ -12,6 +12,7 @@ import ResolutionsList from "./pages/ResolutionsList";
 import DiscoveringContradiction from "./pages/DiscoveringContradiction";
 import { useSelector } from "react-redux";
 import FunctionsHistory from "./pages/FunctionsHistory";
+import Chat from "./pages/Chat";
 
 // Translation resources
 const resources = {
@@ -116,18 +117,22 @@ function App() {
                   <Route path="/home" element={<Home />} />
                   <Route path="/test" element={<Test />} />
                   <Route
-                    path="/resolutions-list"
-                    element={<ResolutionsList />}
-                  />
-                  <Route
                     path="/discovering-contradiction"
                     element={<DiscoveringContradiction />}
                   />
-
                   <Route
                     path="/functions-history"
                     element={<FunctionsHistory />}
                   />
+                  <Route
+                    path="/chat"
+                    element={<Chat />}
+                  />
+                  <Route
+                    path="/resolutions-list"
+                    element={<ResolutionsList />}
+                  />
+                  
                 </Route>
                 
               ) : (
