@@ -432,7 +432,7 @@ const DiscoveringContradiction = (props) => {
           {/* row 3 */}
           <div className="bg-[#8d8da8] mt-2 text-white">
             <div className="">
-              <div className="bg-red-200 p-4">
+              <div className="p-4">
                 {messages.length === 0 ? (
                   <div className="">تناقضی موجود نیست.</div>
                 ) : (

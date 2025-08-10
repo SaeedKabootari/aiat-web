@@ -46,6 +46,7 @@ const ResolutionsList = (props) => {
   };
   return (
     <>
+    <div>resolutions-list</div>
     {/* <table className="border-collapse border border-gray-400">
   <tbody>
     <tr>

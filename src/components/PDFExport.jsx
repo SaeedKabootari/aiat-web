@@ -102,13 +102,20 @@ const PDFExport = ({ tableJSX }) => {
       <button
         onClick={generatePDF}
         disabled={loading}
-        className={`px-4 py-2 rounded font-medium ${
+        // className={`px-4 py-2 rounded font-medium ${
+        //   loading 
+        //     ? 'bg-gray-400 cursor-not-allowed' 
+        //     : 'bg-blue-600 hover:bg-blue-700 text-white'
+        // }`}
+          className={`px-4 py-2 rounded font-medium cursor-pointer mt-2 ${
           loading 
             ? 'bg-gray-400 cursor-not-allowed' 
-            : 'bg-blue-600 hover:bg-blue-700 text-white'
+            : 'bg-[#242752] hover:bg-[#1e2b4a] text-white'
         }`}
       >
-        {loading ? 'Generating PDF...' : 'Export to PDF'}
+        {/* {loading ? 'Generating PDF...' : 'Export to PDF'} */}
+        {loading ? 'تولید PDF...' : 'خروجی PDF'}
+
       </button>
 
       {/* Hidden content for PDF generation */}

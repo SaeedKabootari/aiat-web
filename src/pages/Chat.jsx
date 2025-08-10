@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { postActionAx } from "../api";
 
 const ChatPage = () => {
   //   const [messages, setMessages] = useState([
@@ -12,7 +13,15 @@ const ChatPage = () => {
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef(null);
 
-  const handleSend = (e) => {
+  const resetChatHandler = () => {
+    setInputValue("");
+    setMessages([
+      { id: 1, text: "سلام.چه کمکی از دستم برمیاد؟", sender: "other" },
+    ]);
+    console.log("ZZZZZZZZZZZ");
+  };
+
+  const handleSend = async (e) => {
     e.preventDefault();
     if (inputValue.trim() === "") return;
 
@@ -25,36 +34,28 @@ const ChatPage = () => {
     setMessages([...messages, newMessage]);
     setInputValue("");
 
+    let botMsg;
+    await postActionAx(`/api/chat`, {
+      msg: inputValue,
+    })
+      .then((res) => {
+        console.log(res.data.message);
+        botMsg = res.data.message;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     // Simulate reply after 1 second
     setTimeout(() => {
-      if (inputValue === "خوبی؟") {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: prev.length + 1,
-            text: "نه",
-            sender: "other",
-          },
-        ]);
-      } else if (inputValue === "چرا؟") {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: prev.length + 1,
-            text: "چون دوس دارم!",
-            sender: "other",
-          },
-        ]);
-      } else {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: prev.length + 1,
-            text: "مرسی بابت پیام",
-            sender: "other",
-          },
-        ]);
-      }
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: prev.length + 1,
+          text: botMsg,
+          sender: "other",
+        },
+      ]);
     }, 1000);
   };
 
@@ -66,11 +67,19 @@ const ChatPage = () => {
   return (
     <div className="flex flex-col h-[85vh] bg-[#1a1c3f] rounded-xl overflow-hidden">
       {/* Header */}
-      <header className="bg-[#242752] p-4 text-white shadow-md">
+      <header className="bg-[#242752] p-4 text-white shadow-md flex justify-between items-center">
+        {/* Left Child */}
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 bg-green-400 rounded-full mr-2"></div>
           <h1 className="text-xl font-semibold">چت</h1>
         </div>
+        {/* Right Child */}
+        <button
+          onClick={resetChatHandler}
+          className="px-4 py-1 text-sm font-medium rounded-md focus:outline-none cursor-pointer text-white bg-[#4f46e5]"
+        >
+          ریست چت
+        </button>
       </header>
 
       {/* Chat Messages */}

@@ -30,12 +30,9 @@ const FunctionsHistory = () => {
 
   const [haveContradiction, setHaveContradiction] = useState(false);
 
-useEffect(()=>{
-
-  console.log(haveContradiction)
-},[haveContradiction])
-
-
+  useEffect(() => {
+    console.log(haveContradiction);
+  }, [haveContradiction]);
 
   useEffect(() => {
     const getMessages = async () => {
@@ -46,7 +43,9 @@ useEffect(()=>{
           console.log(res.data);
           setTasks(res.data);
         })
-        .catch((err) => {});
+        .catch((err) => {
+          console.log(err);
+        });
     };
 
     getMessages();
@@ -132,7 +131,7 @@ useEffect(()=>{
   return (
     <div>
       {/* filters */}
-      <div className="flex align-items gap-2">
+      <div className="w-full flex justify-center mb-2"><div className="flex align-items gap-2">
         <span>تناقض:</span>
         <input
           type="checkbox"
@@ -140,9 +139,14 @@ useEffect(()=>{
           //   className="mr-2"
           // className="ml-2"
           checked={haveContradiction}
-          onChange={(e) => e.target.checked ? setHaveContradiction(true) :setHaveContradiction(null) }
+          onChange={(e) =>
+            e.target.checked
+              ? setHaveContradiction(true)
+              : setHaveContradiction(null)
+          }
         />
-      </div>
+      </div></div>
+      
       {/* first row */}
       <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
         <div
@@ -222,7 +226,7 @@ useEffect(()=>{
         <h3 className="mb-2 bg-[#242752] text-white p-2">نمایش نتایج:</h3>
 
         <div className="overflow-hidden">
-          <div className=" bg-red-200 p-4">
+          <div className=" p-4">
             {messages.length === 0 ? (
               <div className="">نتیجه ای موجود نیست.</div>
             ) : (
@@ -301,12 +305,13 @@ useEffect(()=>{
                       </table>
                     </div>
                   </div>
-                  <PDFExport tableJSX={<ContradictionTablePdf data={messages}/>} />
-       
+                  <PDFExport
+                    tableJSX={<ContradictionTablePdf data={messages} />}
+                  />
                 </div>
                 <div className="col-span-4">
                   {selectedContradiction !== null && (
-                    <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm h-full">
+                    <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
                       <div
                         className="overflow-auto max-h-[40vh] bg-white"
                         // style={{ maxHeight: "270px" }}
