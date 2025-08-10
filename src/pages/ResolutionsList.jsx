@@ -46,7 +46,7 @@ const ResolutionsList = (props) => {
   };
   return (
     <>
-    <table className="border-collapse border border-gray-400">
+    {/* <table className="border-collapse border border-gray-400">
   <tbody>
     <tr>
       <td rowSpan="2" className="border border-gray-400 p-2">پراپرتی مشترک (ادغام شده در ردیف‌ها)</td>
@@ -85,7 +85,7 @@ const ResolutionsList = (props) => {
         onClick={fetchHandler}
       >
         fetch
-      </button>
+      </button> */}
     </>
   );
 };
