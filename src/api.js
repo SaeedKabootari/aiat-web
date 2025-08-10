@@ -3,8 +3,7 @@ import axios from "axios";
 // export const BASE_URL = "http://192.168.2.159:8080";
 // export const WEB_SOCKET_URL = "ws://192.168.2.159:8080/ws";
 
-// export const BASE_URL = "http://localhost:7000";
-// export const WEB_SOCKET_URL = "ws://localhost:7001/ws";
+
 
 // export const BASE_URL = "http://localhost:6000";
 // export const WEB_SOCKET_URL = "ws://localhost:6001/ws";
@@ -14,6 +13,11 @@ import axios from "axios";
 // export const WEB_SOCKET_URL = "ws://localhost:5001/ws";
 
 // export const BASE_URL = "http://192.168.2.211:8000";
+
+
+
+// export const BASE_URL = "http://localhost:7000";
+// export const WEB_SOCKET_URL = "ws://localhost:7001/ws";
 
 
 export const BASE_URL = "";

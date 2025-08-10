@@ -124,7 +124,7 @@ const DiscoveringContradiction = (props) => {
             res.data.status === "completed" &&
               toast.success("کشف تناقض پایان یافت.");
             res.data.status === "failed" &&
-              toast.success("کشف تناقض شکست خورد.");
+              toast.success("کشف تناقض با شکست مواجه شد.");
             console.log("finish");
             if (intervalRef.current) {
               clearInterval(intervalRef.current);
@@ -155,7 +155,7 @@ const DiscoveringContradiction = (props) => {
   }, [taskId, fetchAgain]);
 
   const discoveringContradictionHandler = async () => {
-    // setTab('resultTab')
+    setTab("resultTab");
     if (!newRule && !compareWithAll) {
       toast.info("کشف تناقض شروع شد.");
       await postActionAx(`/api/analyze_rules`, discoveringObj)
@@ -303,7 +303,11 @@ const DiscoveringContradiction = (props) => {
               ? "bg-[#1f1f43] text-white"
               : "text-gray-600 hover:text-[#1f1f43]"
           }`}
-          onClick={() => setTab("requestTab")}
+          onClick={() => {
+            setTab("requestTab");
+            setMessages([])
+            setSelectedContradiction(null)
+          }}
         >
           درخواست{" "}
         </button>
@@ -403,16 +407,16 @@ const DiscoveringContradiction = (props) => {
                 </button>
               </div>
 
-             
-
               {!compareWithAll ? (
                 <SendResolution setDiscoveringObj={setDiscoveringObj} />
-              ): (<div>
-                <MultiSelect
-                  treeData={topics}
-                  onSelectionChange={selectionIdsHandler}
-                />
-              </div>)}
+              ) : (
+                <div>
+                  <MultiSelect
+                    treeData={topics}
+                    onSelectionChange={selectionIdsHandler}
+                  />
+                </div>
+              )}
             </div>
           </div>
           {/* row 2 */}
@@ -486,7 +490,11 @@ const DiscoveringContradiction = (props) => {
                                   <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
                                     {index + 1}
                                   </td>
-                                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                                  <td
+                                    className={`px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]  ${
+                                      item?.contradiction ? "text-red-500" : ""
+                                    }`}
+                                  >
                                     {item?.contradiction ? "دارد" : "ندارد"}
                                   </td>
                                   <td className="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-[10%]">

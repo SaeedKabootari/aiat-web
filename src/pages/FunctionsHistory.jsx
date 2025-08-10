@@ -3,6 +3,7 @@ import { getActionAx } from "../api";
 import { formatText, toPersianTime } from "../utils/utils";
 import PDFExport from "../components/PDFExport";
 import ContradictionTablePdf from "../components/ContradictionTablePdf";
+import useErrorHandler from "../hooks/useErrorHandler";
 
 // const testItems = Array.from({ length: 20 }, (_, index) => ({
 //   contradiction: false,
@@ -131,22 +132,24 @@ const FunctionsHistory = () => {
   return (
     <div>
       {/* filters */}
-      <div className="w-full flex justify-center mb-2"><div className="flex align-items gap-2">
-        <span>تناقض:</span>
-        <input
-          type="checkbox"
-          // data-id={node.id}
-          //   className="mr-2"
-          // className="ml-2"
-          checked={haveContradiction}
-          onChange={(e) =>
-            e.target.checked
-              ? setHaveContradiction(true)
-              : setHaveContradiction(null)
-          }
-        />
-      </div></div>
-      
+      <div className="w-full flex justify-center mb-2">
+        <div className="flex align-items gap-2">
+          <span>تناقض:</span>
+          <input
+            type="checkbox"
+            // data-id={node.id}
+            //   className="mr-2"
+            // className="ml-2"
+            checked={haveContradiction}
+            onChange={(e) =>
+              e.target.checked
+                ? setHaveContradiction(true)
+                : setHaveContradiction(null)
+            }
+          />
+        </div>
+      </div>
+
       {/* first row */}
       <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
         <div
@@ -185,7 +188,7 @@ const FunctionsHistory = () => {
             </thead>
             {/* Scrollable Body */}
             <tbody className="bg-white divide-y divide-gray-200">
-              {tasks.map((item, index) => (
+              {tasks?.map((item, index) => (
                 <tr
                   key={item?.task_id}
                   className="hover:bg-gray-50 cursor-pointer"
@@ -207,7 +210,9 @@ const FunctionsHistory = () => {
                     {toPersianTime(item?.created_at)}
                   </td>
                   <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
-                    {toPersianTime(item?.finished_at)}
+                    {item?.finished_at === null
+                      ? "---"
+                      : toPersianTime(item?.finished_at)}
                   </td>
                   <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[30%]">
                     {formatText(item?.result)}
