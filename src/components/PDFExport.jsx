@@ -1,5 +1,5 @@
 // components/PDFExport.jsx
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef } from "react";
 
 const PDFExport = ({ tableJSX }) => {
   const [loading, setLoading] = useState(false);
@@ -8,11 +8,11 @@ const PDFExport = ({ tableJSX }) => {
 
   const generatePDF = () => {
     setLoading(true);
-    
+
     try {
       // Get the HTML content to export
       const contentHtml = contentRef.current.innerHTML;
-      
+
       // Create print-friendly HTML document
       const printHtml = `
         <!DOCTYPE html>
@@ -42,6 +42,10 @@ const PDFExport = ({ tableJSX }) => {
                 margin: 20px 0;
               }
               
+              thead {
+               display: table-row-group;
+              }
+               
               th {
                 background-color: #242752;
                 color: white;
@@ -76,23 +80,22 @@ const PDFExport = ({ tableJSX }) => {
           </body>
         </html>
       `;
-      
+
       // Set the iframe content
       const iframe = iframeRef.current;
       const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
       iframeDoc.open();
       iframeDoc.write(printHtml);
       iframeDoc.close();
-      
+
       // Add a small delay to ensure content is fully rendered
       setTimeout(() => {
         iframe.contentWindow.focus();
         iframe.contentWindow.print();
         setLoading(false);
       }, 500);
-      
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      console.error("Error generating PDF:", error);
       setLoading(false);
     }
   };
@@ -103,37 +106,36 @@ const PDFExport = ({ tableJSX }) => {
         onClick={generatePDF}
         disabled={loading}
         // className={`px-4 py-2 rounded font-medium ${
-        //   loading 
-        //     ? 'bg-gray-400 cursor-not-allowed' 
+        //   loading
+        //     ? 'bg-gray-400 cursor-not-allowed'
         //     : 'bg-blue-600 hover:bg-blue-700 text-white'
         // }`}
-          className={`px-4 py-2 rounded font-medium cursor-pointer mt-2 ${
-          loading 
-            ? 'bg-gray-400 cursor-not-allowed' 
-            : 'bg-[#242752] hover:bg-[#1e2b4a] text-white'
+        className={`px-4 py-2 rounded font-medium cursor-pointer mt-2 ${
+          loading
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-[#242752] hover:bg-[#1e2b4a] text-white"
         }`}
       >
         {/* {loading ? 'Generating PDF...' : 'Export to PDF'} */}
-        {loading ? 'تولید PDF...' : 'خروجی PDF'}
-
+        {loading ? "تولید PDF..." : "خروجی PDF"}
       </button>
 
       {/* Hidden content for PDF generation */}
-      <div ref={contentRef} style={{ display: 'none' }}>
+      <div ref={contentRef} style={{ display: "none" }}>
         {tableJSX}
       </div>
 
       {/* Hidden iframe for PDF generation */}
-      <iframe 
-        ref={iframeRef} 
-        title="pdf-iframe"
-        style={{ display: 'none' }}
-      />
+      <iframe ref={iframeRef} title="pdf-iframe" style={{ display: "none" }} />
     </div>
   );
 };
 
 export default PDFExport;
+
+
+
+
 
 
 

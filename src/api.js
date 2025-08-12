@@ -15,13 +15,14 @@ import axios from "axios";
 // export const BASE_URL = "http://192.168.2.211:8000";
 
 
+// development:
+export const BASE_URL = "http://localhost:7000";
+export const WEB_SOCKET_URL = "ws://localhost:7001/ws";
 
-// export const BASE_URL = "http://localhost:7000";
-// export const WEB_SOCKET_URL = "ws://localhost:7001/ws";
 
-
-export const BASE_URL = "";
-export const WEB_SOCKET_URL = "";
+// git:
+// export const BASE_URL = "";
+// export const WEB_SOCKET_URL = "";
 
 axios.defaults.withCredentials = true;
 const instance = axios.create({

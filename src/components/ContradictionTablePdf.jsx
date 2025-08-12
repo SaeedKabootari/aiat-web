@@ -118,28 +118,34 @@ const groupBySecondLawId = (data) => {
 
 const ContradictionTablePdf = ({ data }) => {
   const groupedData = groupBySecondLawId(data);
-  console.log(groupedData);
+  console.log("GROUP==>", groupedData);
+
+  // for (let i = 0; i < groupedData.length; i++) {}
 
   return (
     <>
       {groupedData.map((item, index) => {
+        console.log((index === 0))
         return (
           <table
             className="border-collapse border border-gray-400 w-full"
             dir="rtl"
           >
-            <thead lassName="bg-blue-300">
-              <tr>
-                <th colSpan="2" className="border border-gray-400 p-2">
-                  قانون / مقرره
-                </th>
-              </tr>
-              <tr>
-                <td colSpan="2" className="border border-gray-400 p-2">
-                  {item[0].first_law_caption}
-                </td>
-              </tr>
-            </thead>
+            {/* {index === 0 && ( */}
+              <thead lassName="bg-blue-300">
+                <tr>
+                  <th colSpan="2" className="border border-gray-400 p-2">
+                    قانون / مقرره
+                  </th>
+                </tr>
+                <tr>
+                  <td colSpan="2" className="border border-gray-400 p-2">
+                    {item[0].first_law_caption}
+                  </td>
+                </tr>
+              </thead>
+            {/* )} */}
+
             <tbody>
               {item.map((item, index) => {
                 return (

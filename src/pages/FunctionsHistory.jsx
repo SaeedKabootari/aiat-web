@@ -421,6 +421,11 @@ const FunctionsHistory = () => {
             )}
           </div>
         </div>
+
+
+
+        {/* test */}
+        {/* <ContradictionTablePdf  data={messages}/> */}
       </div>
     </div>
   );
