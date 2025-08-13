@@ -51,7 +51,7 @@ const DiscoveringContradiction = (props) => {
   const [fetchAgain, setFetchAgain] = useState(true);
   const intervalRef = useRef(null);
 
-  const systemPromptRef = useRef(null);
+  // const systemPromptRef = useRef(null);
   const titlePromptRef = useRef(null);
 
   const [topics, setTopics] = useState([]);
@@ -182,7 +182,7 @@ const DiscoveringContradiction = (props) => {
       toast.info("کشف تناقض شروع شد.");
       await postActionAx(`/api/analyze`, {
         prompt: newRuleValue,
-        system_prompt: systemPromptRef.current.value,
+        // system_prompt: systemPromptRef.current.value,
         prompt_title: titlePromptRef.current.value,
         check_law_id: discoveringObj.check_law_id,
       })
@@ -196,7 +196,7 @@ const DiscoveringContradiction = (props) => {
       toast.info("کشف تناقض شروع شد.");
       await postActionAx(`/api/analyze`, {
         prompt: newRuleValue,
-        system_prompt: systemPromptRef.current.value,
+        // system_prompt: systemPromptRef.current.value,
         prompt_title: titlePromptRef.current.value,
         check_law_id: "*",
         topic_ids: selectedTopicsId,
@@ -372,13 +372,13 @@ const DiscoveringContradiction = (props) => {
                     />
                   </div>
 
-                  <h1 className="text-[#242752]">پرامپت سیستم:</h1>
+                  {/* <h1 className="text-[#242752]">پرامپت سیستم:</h1>
                   <div className="mt-1 p-3">
                     <textarea
                       ref={systemPromptRef}
                       className="w-full h-10 resize-none p-2 bg-white border-[1px] border-black"
                     />
-                  </div>
+                  </div> */}
                 </div>
               )}
             </div>
