@@ -57,6 +57,8 @@ const DiscoveringContradiction = (props) => {
   const [topics, setTopics] = useState([]);
   const [selectedTopicsId, setSelectedTopicsId] = useState([]);
 
+  const [loading, setLoading] = useState(false);
+
   const selectionIdsHandler = (selectedArray) => {
     setSelectedTopicsId(selectedArray);
     console.log("Selected IDs in parent:", selectedArray);
@@ -122,15 +124,17 @@ const DiscoveringContradiction = (props) => {
             res.data.status === "failed"
           ) {
             res.data.status === "completed" &&
-              toast.success("کشف تناقض پایان یافت.");
+            toast.success("کشف تناقض پایان یافت.");
             res.data.status === "failed" &&
-              toast.error("کشف تناقض با شکست مواجه شد.");
+            toast.error("کشف تناقض با شکست مواجه شد.");
+            setLoading(false);
             console.log("finish");
             if (intervalRef.current) {
               clearInterval(intervalRef.current);
               intervalRef.current = null;
             }
           }
+          
         })
         .catch((err) => {});
     };
@@ -155,6 +159,7 @@ const DiscoveringContradiction = (props) => {
   }, [taskId, fetchAgain]);
 
   const discoveringContradictionHandler = async () => {
+    setLoading(true);
     setTab("resultTab");
     if (!newRule && !compareWithAll) {
       toast.info("کشف تناقض شروع شد.");
@@ -296,6 +301,7 @@ const DiscoveringContradiction = (props) => {
   return (
     <>
       {/* tabs */}
+      {/* <div>{loading ? "true" : "false"}</div> */}
       <div className="flex p-1 bg-gray-200 rounded-md mb-5">
         <button
           className={`px-4 py-1 text-sm font-medium rounded-t-md focus:outline-none cursor-pointer ${
@@ -305,8 +311,8 @@ const DiscoveringContradiction = (props) => {
           }`}
           onClick={() => {
             setTab("requestTab");
-            setMessages([])
-            setSelectedContradiction(null)
+            setMessages([]);
+            setSelectedContradiction(null);
           }}
         >
           درخواست{" "}
@@ -436,10 +442,14 @@ const DiscoveringContradiction = (props) => {
           {/* row 3 */}
           <div className="bg-[#8d8da8] mt-2 text-white">
             <div className="">
+
+
               <div className="p-4">
-                {messages.length === 0 ? (
+                {loading === true && <div>در انتظار نتیجه...</div>}
+                {loading === false && messages.length === 0 && (
                   <div className="">نتیجه ای موجود نیست.</div>
-                ) : (
+                )}
+                {loading === false && messages.length > 0 && (
                   <div className="">
                     <div className="">
                       <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
