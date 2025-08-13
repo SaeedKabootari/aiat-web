@@ -124,7 +124,7 @@ const DiscoveringContradiction = (props) => {
             res.data.status === "completed" &&
               toast.success("کشف تناقض پایان یافت.");
             res.data.status === "failed" &&
-              toast.success("کشف تناقض با شکست مواجه شد.");
+              toast.error("کشف تناقض با شکست مواجه شد.");
             console.log("finish");
             if (intervalRef.current) {
               clearInterval(intervalRef.current);
