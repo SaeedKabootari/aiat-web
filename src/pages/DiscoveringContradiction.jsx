@@ -438,7 +438,7 @@ const DiscoveringContradiction = (props) => {
             <div className="">
               <div className="p-4">
                 {messages.length === 0 ? (
-                  <div className="">تناقضی موجود نیست.</div>
+                  <div className="">نتیجه ای موجود نیست.</div>
                 ) : (
                   <div className="">
                     <div className="">
@@ -538,7 +538,7 @@ const DiscoveringContradiction = (props) => {
                               {/* Add more items as needed */}
                               {/* RESPONSE */}
                               <div className="text-black">
-                                <div className="font-bold">تناقض:</div>
+                                <div className="font-bold">نتیجه:</div>
                                 <div className="pr-1">
                                   {selectedContradiction?.response}
                                 </div>

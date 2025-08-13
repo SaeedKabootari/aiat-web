@@ -52,15 +52,15 @@ const FunctionsHistory = () => {
     getMessages();
   }, []);
 
-  const selectTaskHandler = async (taskId) => {
+  const selectTaskHandler = async (task) => {
     // let getUrl;
     // if (haveContradiction === null) {
     //   getUrl = `/api/task/${taskId}`;
     // } else if (haveContradiction !== null) {
     //   getUrl = `/api/task/${taskId}?contradiction=${haveContradiction}`;
     // }
-
-    let getUrl = `/api/task/${taskId}`;
+    console.log(task);
+    let getUrl = `/api/task/${task.task_id}`;
     const params = new URLSearchParams();
     if (haveContradiction !== null) {
       params.append("contradiction", haveContradiction);
@@ -192,7 +192,7 @@ const FunctionsHistory = () => {
                 <tr
                   key={item?.task_id}
                   className="hover:bg-gray-50 cursor-pointer"
-                  onClick={() => selectTaskHandler(item.task_id)}
+                  onClick={() => selectTaskHandler(item)}
                 >
                   <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
                     {index + 1}
@@ -311,7 +311,11 @@ const FunctionsHistory = () => {
                     </div>
                   </div>
                   <PDFExport
-                    tableJSX={<ContradictionTablePdf data={messages} />}
+                    tableJSX={
+                      <>
+                        <ContradictionTablePdf data={messages} />
+                      </>
+                    }
                   />
                 </div>
                 <div className="col-span-4">
@@ -326,7 +330,7 @@ const FunctionsHistory = () => {
                           {/* Add more items as needed */}
                           {/* RESPONSE */}
                           <div className="text-black">
-                            <div className="font-bold">تناقض:</div>
+                            <div className="font-bold">نتیجه:</div>
                             <div className="pr-1">
                               {selectedContradiction?.response}
                             </div>
@@ -421,8 +425,6 @@ const FunctionsHistory = () => {
             )}
           </div>
         </div>
-
-
 
         {/* test */}
         {/* <ContradictionTablePdf  data={messages}/> */}

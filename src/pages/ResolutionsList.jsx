@@ -1,9 +1,6 @@
 import { useRef, useState } from "react";
-import MultiSelect from "../components/MultiSelect";
 import { getActionAx } from "../api";
 import { transformKeys } from "../utils/utils";
-import PDFExport from "../components/PDFExport";
-import MyTable from "../components/ContradictionTablePdf";
 
 const ResolutionsList = (props) => {
   const [topics, setTopics] = useState([]);
@@ -46,8 +43,8 @@ const ResolutionsList = (props) => {
   };
   return (
     <>
-    <div>resolutions-list</div>
-    {/* <table className="border-collapse border border-gray-400">
+      <div>resolutions-list</div>{" "}
+      {/* <table className="border-collapse border border-gray-400">
   <tbody>
     <tr>
       <td rowSpan="2" className="border border-gray-400 p-2">پراپرتی مشترک (ادغام شده در ردیف‌ها)</td>
