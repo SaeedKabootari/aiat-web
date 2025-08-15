@@ -88,7 +88,7 @@ const SearchResolutionModal = (props) => {
 
     await postActionAx(`/api/laws/search`, {
       q: searchTermRef.current.value,
-      limit: 10,
+      limit: 50,
       topic_ids: selectedTopicsId,
     })
       .then((res) => {

@@ -167,7 +167,7 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef(null);
-  const [loading , setloading] =useState(false)
+  const [loading, setloading] = useState(false);
 
   const resetChatHandler = () => {
     setInputValue("");
@@ -178,7 +178,7 @@ const ChatPage = () => {
     e.preventDefault();
     if (inputValue.trim() === "") return;
 
-setloading(true)
+    setloading(true);
 
     const newMessage = {
       id: messages.length + 1,
@@ -195,13 +195,12 @@ setloading(true)
     })
       .then((res) => {
         botMsg = res.data.message;
-        
       })
       .catch((err) => {
         console.log(err);
       });
 
-setloading(false)
+    setloading(false);
 
     setTimeout(() => {
       setMessages((prev) => [
@@ -231,7 +230,7 @@ setloading(false)
           onClick={resetChatHandler}
           className="px-4 py-1 text-sm font-medium rounded-md focus:outline-none cursor-pointer text-white bg-[#4f46e5]"
         >
-          ریست چت
+          چت جدید{" "}
         </button>
       </header>
 
@@ -376,7 +375,6 @@ setloading(false)
         <div ref={messagesEndRef} />
       </div> */}
 
-      
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message) => (
           <div
@@ -393,7 +391,6 @@ setloading(false)
               }`}
               dir="auto"
             >
-              
               {message.sender === "me" ? (
                 <div dir="rtl" className="whitespace-pre-wrap break-words">
                   {message.text}
@@ -503,43 +500,30 @@ setloading(false)
           </div>
         ))}
 
-
-
-
-
-
-{/* Loading Indicator */}
+        {/* Loading Indicator */}
         {loading && (
           <div className="flex justify-end">
             <div className="bg-[#2f346b] text-white rounded-2xl rounded-tl-none  px-4 py-2">
               <div className="flex items-center justify-end space-x-2 rtl:space-x-reverse">
                 {/* <span>در حال پردازش</span> */}
                 <div className="flex space-x-1 py-2">
-                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>                  
+                  <div
+                    className="w-2 h-2 bg-white rounded-full animate-bounce"
+                    style={{ animationDelay: "0ms" }}
+                  ></div>
+                  <div
+                    className="w-2 h-2 bg-white rounded-full animate-bounce"
+                    style={{ animationDelay: "150ms" }}
+                  ></div>
+                  <div
+                    className="w-2 h-2 bg-white rounded-full animate-bounce"
+                    style={{ animationDelay: "300ms" }}
+                  ></div>
                 </div>
               </div>
             </div>
           </div>
         )}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         <div ref={messagesEndRef} />
       </div>
