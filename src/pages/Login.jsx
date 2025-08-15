@@ -63,7 +63,7 @@ const Login = () => {
               value={username}
               onChange={(event) => setUsername(event.target.value)}
               className="w-full px-4 py-2 border border-[#E0E0E0] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-[#fff]"
-              placeholder={t("enter_your_username")}
+              // placeholder={t("enter_your_username")}
               required
             />
           </div>
@@ -80,7 +80,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-2 border border-[#E0E0E0] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-[#fff]"
-              placeholder="••••••••"
+              // placeholder="••••••••"
               required
             />
           </div>
