@@ -167,6 +167,7 @@ const ChatPage = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef(null);
+  const [loading , setloading] =useState(false)
 
   const resetChatHandler = () => {
     setInputValue("");
@@ -176,6 +177,8 @@ const ChatPage = () => {
   const handleSend = async (e) => {
     e.preventDefault();
     if (inputValue.trim() === "") return;
+
+setloading(true)
 
     const newMessage = {
       id: messages.length + 1,
@@ -192,10 +195,13 @@ const ChatPage = () => {
     })
       .then((res) => {
         botMsg = res.data.message;
+        
       })
       .catch((err) => {
         console.log(err);
       });
+
+setloading(false)
 
     setTimeout(() => {
       setMessages((prev) => [
@@ -370,6 +376,7 @@ const ChatPage = () => {
         <div ref={messagesEndRef} />
       </div> */}
 
+      
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message) => (
           <div
@@ -386,6 +393,7 @@ const ChatPage = () => {
               }`}
               dir="auto"
             >
+              
               {message.sender === "me" ? (
                 <div dir="rtl" className="whitespace-pre-wrap break-words">
                   {message.text}
@@ -494,6 +502,45 @@ const ChatPage = () => {
             </div>
           </div>
         ))}
+
+
+
+
+
+
+{/* Loading Indicator */}
+        {loading && (
+          <div className="flex justify-end">
+            <div className="bg-[#2f346b] text-white rounded-2xl rounded-tl-none  px-4 py-2">
+              <div className="flex items-center justify-end space-x-2 rtl:space-x-reverse">
+                {/* <span>در حال پردازش</span> */}
+                <div className="flex space-x-1 py-2">
+                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>                  
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <div ref={messagesEndRef} />
       </div>
 
