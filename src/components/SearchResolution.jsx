@@ -1,5 +1,6 @@
 import { useState } from "react";
 import SearchResolutionModal from "./SearchResolutionModal";
+import { cleanMessageText } from "../utils/utils";
 
 const SearchResolution = (props) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -42,7 +43,8 @@ const SearchResolution = (props) => {
                     }));
                   }}
                 >
-                  {item.text}
+                  {cleanMessageText(item.text)}
+                  {/* {(item.text)} */}
                 </div>
               );
             })}

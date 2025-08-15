@@ -1,3 +1,4 @@
+import he from 'he'
 export function toPersianTime(timestamp) {
   return new Date(timestamp * 1000).toLocaleTimeString("fa-IR");
 }
@@ -25,4 +26,26 @@ export const transformKeys = (data) => {
 
     return transformedItem;
   });
+};
+
+
+
+
+export const cleanMessageText = (text) => {
+  if (!text) return '';
+  
+  // Create a temporary element for HTML entity decoding
+  const textarea = document.createElement('textarea');
+  textarea.innerHTML = text;
+  let cleaned = textarea.value;
+
+  // Replace common HTML tags with appropriate formatting
+  cleaned = cleaned
+    .replace(/<br\s*\/?>/gi, '\n')          // Convert <br> to newlines
+    .replace(/<\/?[a-z][^>]*>/gi, '')       // Remove all other HTML tags
+    .replace(/(\n){3,}/g, '\n\n')           // Normalize multiple newlines
+    .replace(/&nbsp;/g, ' ')                 // Replace &nbsp; with regular spaces
+    .trim();
+
+  return cleaned;
 };
