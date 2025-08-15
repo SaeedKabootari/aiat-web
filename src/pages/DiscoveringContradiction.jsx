@@ -124,9 +124,9 @@ const DiscoveringContradiction = (props) => {
             res.data.status === "failed"
           ) {
             res.data.status === "completed" &&
-            toast.success("کشف تناقض پایان یافت.");
+              toast.success("کشف تناقض پایان یافت.");
             res.data.status === "failed" &&
-            toast.error("کشف تناقض با شکست مواجه شد.");
+              toast.error("کشف تناقض با شکست مواجه شد.");
             setLoading(false);
             console.log("finish");
             if (intervalRef.current) {
@@ -134,7 +134,6 @@ const DiscoveringContradiction = (props) => {
               intervalRef.current = null;
             }
           }
-          
         })
         .catch((err) => {});
     };
@@ -442,14 +441,14 @@ const DiscoveringContradiction = (props) => {
           {/* row 3 */}
           <div className="bg-[#8d8da8] mt-2 text-white">
             <div className="">
-
-
               <div className="p-4">
-                {loading === true && <div>در انتظار نتیجه...</div>}
+                {/* title */}
+                {loading === true ? <div className="mb-2">در انتظار نتیجه...</div> : <div></div>}
                 {loading === false && messages.length === 0 && (
                   <div className="">نتیجه ای موجود نیست.</div>
                 )}
-                {loading === false && messages.length > 0 && (
+
+                {messages.length > 0 && (
                   <div className="">
                     <div className="">
                       <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
