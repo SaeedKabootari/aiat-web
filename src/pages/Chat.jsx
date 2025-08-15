@@ -164,17 +164,13 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
 const ChatPage = () => {
-  const [messages, setMessages] = useState([
-    { id: 1, text: "سلام.چه کمکی از دستم برمیاد؟", sender: "other" },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef(null);
 
   const resetChatHandler = () => {
     setInputValue("");
-    setMessages([
-      { id: 1, text: "سلام.چه کمکی از دستم برمیاد؟", sender: "other" },
-    ]);
+    setMessages([]);
   };
 
   const handleSend = async (e) => {
@@ -374,125 +370,132 @@ const ChatPage = () => {
         <div ref={messagesEndRef} />
       </div> */}
 
-
-<div className="flex-1 overflow-y-auto p-4 space-y-4">
-  {messages.map((message) => (
-    <div
-      key={message.id}
-      className={`flex ${
-        message.sender === "other" ? "justify-end" : "justify-start"
-      }`}
-    >
-      <div
-        className={`px-4 py-2 rounded-2xl ${
-          message.sender === "other"
-            ? "bg-[#2f346b] text-white rounded-tl-none max-w-full"
-            : "bg-[#4f46e5] text-white rounded-tr-none max-w-[90%]"
-        }`}
-        dir="auto"
-      >
-        {message.sender === "me" ? (
-          <div dir="rtl" className="whitespace-pre-wrap break-words">
-            {message.text}
-          </div>
-        ) : (
-          <div className="prose prose-invert max-w-none">
-            <ReactMarkdown
-              remarkPlugins={[remarkGfm]}
-              components={{
-                // RTL support for various elements
-                p: ({ node, ...props }) => (
-                  <p dir="rtl" className="my-4 text-justify leading-relaxed" {...props} />
-                ),
-                li: ({ node, ...props }) => (
-                  <li dir="rtl" className="text-right my-2 mr-6 leading-relaxed" {...props} />
-                ),
-                ul: ({ node, ...props }) => (
-                  <ul dir="rtl" className="list-disc pr-6 space-y-2" {...props} />
-                ),
-                ol: ({ node, ...props }) => (
-                  <ol dir="rtl" className="list-decimal pr-6 space-y-2" {...props} />
-                ),
-                h1: ({ node, ...props }) => (
-                  <h1 dir="rtl" className="text-2xl font-bold my-4 text-right" {...props} />
-                ),
-                h2: ({ node, ...props }) => (
-                  <h2 dir="rtl" className="text-xl font-bold my-3 text-right" {...props} />
-                ),
-                h3: ({ node, ...props }) => (
-                  <h3 dir="rtl" className="text-lg font-bold my-2 text-right" {...props} />
-                ),
-                blockquote: ({ node, ...props }) => (
-                  <blockquote
-                    dir="rtl"
-                    className="border-r-4 border-gray-400 pr-4 my-4 text-gray-300"
-                    {...props}
-                  />
-                ),
-                hr: ({ node, ...props }) => (
-                  <hr className="my-6 border-gray-600" {...props} />
-                ),
-                table: ({ node, ...props }) => (
-                  <div className="overflow-x-auto">
-                    <table
-                      dir="rtl"
-                      className="w-full my-4 border-collapse border border-gray-600"
-                      {...props}
-                    />
-                  </div>
-                ),
-                th: ({ node, ...props }) => (
-                  <th
-                    className="px-4 py-2 border border-gray-600 bg-gray-700 text-right"
-                    {...props}
-                  />
-                ),
-                td: ({ node, ...props }) => (
-                  <td
-                    className="px-4 py-2 border border-gray-600 text-right"
-                    {...props}
-                  />
-                ),
-                strong: ({ node, ...props }) => (
-                  <strong className="font-bold" {...props} />
-                ),
-                em: ({ node, ...props }) => (
-                  <em className="italic" {...props} />
-                ),
-                br: ({ node, ...props }) => (
-                  <br className="my-2" {...props} />
-                ),
-              }}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={`flex ${
+              message.sender === "other" ? "justify-end" : "justify-start"
+            }`}
+          >
+            <div
+              className={`px-4 py-2 rounded-2xl ${
+                message.sender === "other"
+                  ? "bg-[#2f346b] text-white rounded-tl-none w-full"
+                  : "bg-[#4f46e5] text-white rounded-tr-none max-w-[90%]"
+              }`}
+              dir="auto"
             >
-              {message.text}
-            </ReactMarkdown>
+              {message.sender === "me" ? (
+                <div dir="rtl" className="whitespace-pre-wrap break-words">
+                  {message.text}
+                </div>
+              ) : (
+                <div className="prose prose-invert max-w-none">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      // RTL support for various elements
+                      p: ({ node, ...props }) => (
+                        <p
+                          dir="rtl"
+                          className="my-4 text-justify leading-relaxed"
+                          {...props}
+                        />
+                      ),
+                      li: ({ node, ...props }) => (
+                        <li
+                          dir="rtl"
+                          className="text-right my-2 mr-6 leading-relaxed"
+                          {...props}
+                        />
+                      ),
+                      ul: ({ node, ...props }) => (
+                        <ul
+                          dir="rtl"
+                          className="list-disc pr-6 space-y-2"
+                          {...props}
+                        />
+                      ),
+                      ol: ({ node, ...props }) => (
+                        <ol
+                          dir="rtl"
+                          className="list-decimal pr-6 space-y-2"
+                          {...props}
+                        />
+                      ),
+                      h1: ({ node, ...props }) => (
+                        <h1
+                          dir="rtl"
+                          className="text-2xl font-bold my-4 text-right"
+                          {...props}
+                        />
+                      ),
+                      h2: ({ node, ...props }) => (
+                        <h2
+                          dir="rtl"
+                          className="text-xl font-bold my-3 text-right"
+                          {...props}
+                        />
+                      ),
+                      h3: ({ node, ...props }) => (
+                        <h3
+                          dir="rtl"
+                          className="text-lg font-bold my-2 text-right"
+                          {...props}
+                        />
+                      ),
+                      blockquote: ({ node, ...props }) => (
+                        <blockquote
+                          dir="rtl"
+                          className="border-r-4 border-gray-400 pr-4 my-4 text-gray-300"
+                          {...props}
+                        />
+                      ),
+                      hr: ({ node, ...props }) => (
+                        <hr className="my-6 border-gray-600" {...props} />
+                      ),
+                      table: ({ node, ...props }) => (
+                        <div className="overflow-x-auto">
+                          <table
+                            dir="rtl"
+                            className="w-full my-4 border-collapse border border-gray-600"
+                            {...props}
+                          />
+                        </div>
+                      ),
+                      th: ({ node, ...props }) => (
+                        <th
+                          className="px-4 py-2 border border-gray-600 bg-gray-700 text-right"
+                          {...props}
+                        />
+                      ),
+                      td: ({ node, ...props }) => (
+                        <td
+                          className="px-4 py-2 border border-gray-600 text-right"
+                          {...props}
+                        />
+                      ),
+                      strong: ({ node, ...props }) => (
+                        <strong className="font-bold" {...props} />
+                      ),
+                      em: ({ node, ...props }) => (
+                        <em className="italic" {...props} />
+                      ),
+                      br: ({ node, ...props }) => (
+                        <br className="my-2" {...props} />
+                      ),
+                    }}
+                  >
+                    {message.text}
+                  </ReactMarkdown>
+                </div>
+              )}
+            </div>
           </div>
-        )}
+        ))}
+        <div ref={messagesEndRef} />
       </div>
-    </div>
-  ))}
-  <div ref={messagesEndRef} />
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
       {/* Input Area */}
       <footer className="bg-[#242752] p-4">
@@ -531,11 +534,3 @@ const ChatPage = () => {
 };
 
 export default ChatPage;
-
-
-
-
-
-
-
-
