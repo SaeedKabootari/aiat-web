@@ -1,45 +1,43 @@
 import { useEffect, useRef, useState } from "react";
-import { getActionAx , postActionAx } from "../api";
+import { getActionAx, postActionAx } from "../api";
 import MultiSelect from "./MultiSelect";
 import { transformKeys } from "../utils/utils";
 
 const SendSearchResolutionModal = (props) => {
   const [resolutions, setResolutions] = useState(null);
 
-    const [topics, setTopics] = useState([]);
-    const [selectedTopicsId, setSelectedTopicsId] = useState([]);
-  
-    const selectionIdsHandler = (selectedArray) => {
-      setSelectedTopicsId(selectedArray);
-      console.log("Selected IDs in parent:", selectedArray);
+  const [topics, setTopics] = useState([]);
+  const [selectedTopicsId, setSelectedTopicsId] = useState([]);
+
+  const selectionIdsHandler = (selectedArray) => {
+    setSelectedTopicsId(selectedArray);
+    console.log("Selected IDs in parent:", selectedArray);
+  };
+
+  useEffect(() => {
+    const getTopics = async () => {
+      await getActionAx(`/api/topics`)
+        .then((res) => {
+          console.log("ZZZZZZZZZZZZZZZZZZZZ", res);
+          console.log(transformKeys(res.data));
+          console.log(res.data);
+          setTopics(transformKeys(res.data));
+        })
+        .catch((err) => {
+          console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
+          console.log(err);
+        });
     };
-  
-    useEffect(() => {
-      const getTopics = async () => {
-        await getActionAx(`/api/topics`)
-          .then((res) => {
-            console.log("ZZZZZZZZZZZZZZZZZZZZ", res);
-            console.log(transformKeys(res.data));
-            console.log(res.data);
-            setTopics(transformKeys(res.data));
-          })
-          .catch((err) => {
-            console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
-            console.log(err);
-          });
-      };
-  
-      getTopics();
-    }, []);
+
+    getTopics();
+  }, []);
 
   const selectResolutionHandler = async (resolutionId) => {
     props.setDiscoveringObj((prevState) => ({
       ...prevState,
       check_law_id: parseInt(resolutionId, 10),
     }));
-    await getActionAx(
-      `/api/laws/${parseInt(resolutionId, 10)}/sections`
-    )
+    await getActionAx(`/api/laws/${parseInt(resolutionId, 10)}/sections`)
       .then((res) => {
         console.log("SHOW", res.data);
         props.setSelectedResolution(res.data);
@@ -68,9 +66,7 @@ const SendSearchResolutionModal = (props) => {
     //     console.log(err);
     //   });
 
-
-
- await postActionAx(`/api/laws/search`, {
+    await postActionAx(`/api/laws/search`, {
       q: searchTermRef.current.value,
       limit: 50,
       topic_ids: selectedTopicsId,
@@ -82,16 +78,19 @@ const SendSearchResolutionModal = (props) => {
       .catch((err) => {
         console.log(err);
       });
-
-
-
   };
 
   return (
     // Backdrop
-    <div className="fixed inset-0 bg-[rgba(36,39,82,0.5)] backdrop-blur-md z-50 flex items-center justify-center">
+    <div
+      className="fixed inset-0 bg-[rgba(36,39,82,0.5)] backdrop-blur-md z-50 flex items-center justify-center"
+      onClick={props.onClose}
+    >
       {/* Modal container */}
-      <div className="bg-white p-4 rounded shadow-lg relative max-w-4xl w-full">
+      <div
+        className="bg-white p-4 rounded shadow-lg relative max-w-4xl w-full"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Close button */}
         <button
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 cursor-pointer"
@@ -119,7 +118,7 @@ const SendSearchResolutionModal = (props) => {
             ✖
           </button>
         </div>
-         {resolutions === null && (
+        {resolutions === null && (
           <div>
             <MultiSelect
               treeData={topics}

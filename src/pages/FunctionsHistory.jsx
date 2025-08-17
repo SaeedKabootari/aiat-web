@@ -66,7 +66,8 @@ const FunctionsHistory = () => {
     getTasks()
   }, []);
 
-  const deleteTaskHandler = (item) => {
+  const deleteTaskHandler = (event ,item) => {
+    event.stopPropagation()
     console.log(item.task_id);
     //write api for it
     getTasks()
@@ -245,7 +246,7 @@ const FunctionsHistory = () => {
                   </td>
                   <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
                     <button
-                      onClick={() => deleteTaskHandler(item)}
+                      onClick={(event) => deleteTaskHandler(event,item)}
                       className="cursor-pointer hover:text-red-500"
                     >
                       <svg

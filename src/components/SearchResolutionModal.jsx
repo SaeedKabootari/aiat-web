@@ -3,9 +3,6 @@ import { getActionAx, postActionAx } from "../api";
 import MultiSelect from "./MultiSelect";
 import { transformKeys } from "../utils/utils";
 
-
-
-
 const SearchResolutionModal = (props) => {
   const [resolutions, setResolutions] = useState(null);
 
@@ -102,9 +99,18 @@ const SearchResolutionModal = (props) => {
 
   return (
     // Backdrop
-    <div className="fixed inset-0 bg-[rgba(36,39,82,0.5)] backdrop-blur-md z-50 flex items-center justify-center">
+    <div
+      className="fixed inset-0 bg-[rgba(36,39,82,0.5)] backdrop-blur-md z-50 flex items-center justify-center"
+      // onClick={(event) => {
+      //   event.stopPropagation();
+      //   props.onClose();
+      // }}
+      onClick={props.onClose}
+    >
       {/* Modal container */}
-      <div className="bg-white p-4 rounded shadow-lg relative max-w-4xl w-full">
+      <div className="bg-white p-4 rounded shadow-lg relative max-w-4xl w-full"
+      onClick={(e) => e.stopPropagation()}
+      >
         {/* Close button */}
         <button
           className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 cursor-pointer"
