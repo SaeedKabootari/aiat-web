@@ -295,3 +295,21 @@ export const postActionAxToken = function (url, authToken, body) {
   };
   return handleMethod();
 };
+
+
+
+
+// ================ post axios ============================
+export const postActionSignalAx = async function (url, body, options = {}) {
+  try {
+    const response = await axios.post(BASE_URL + url, body, {
+      ...options,  // Spread options to include signal if provided
+      withCredentials: true,  // Keep this as is
+    });
+    
+    console.log(response, "in api res");  // Logging the response
+    return response;  // Return the response
+  } catch (err) {
+    throw err;  // Throw the error to handle it in the caller
+  }
+};
