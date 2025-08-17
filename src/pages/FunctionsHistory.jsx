@@ -35,22 +35,42 @@ const FunctionsHistory = () => {
     console.log(haveContradiction);
   }, [haveContradiction]);
 
+  const getTasks = async () => {
+    let getUrl = "/api/tasks";
+
+    await getActionAx(getUrl)
+      .then((res) => {
+        console.log(res.data);
+        setTasks(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
-    const getMessages = async () => {
-      let getUrl = "/api/tasks";
+    // const getMessages = async () => {
+    //   let getUrl = "/api/tasks";
 
-      await getActionAx(getUrl)
-        .then((res) => {
-          console.log(res.data);
-          setTasks(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    };
+    //   await getActionAx(getUrl)
+    //     .then((res) => {
+    //       console.log(res.data);
+    //       setTasks(res.data);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    // };
 
-    getMessages();
+    // getMessages();
+    getTasks()
   }, []);
+
+  const deleteTaskHandler = (item) => {
+    console.log(item.task_id);
+    //write api for it
+    getTasks()
+  };
 
   const selectTaskHandler = async (task) => {
     // let getUrl;
@@ -184,6 +204,9 @@ const FunctionsHistory = () => {
                 <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                   عنوان
                 </th>
+                <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                  عملیات
+                </th>
               </tr>
             </thead>
             {/* Scrollable Body */}
@@ -217,8 +240,28 @@ const FunctionsHistory = () => {
                   <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[30%]">
                     {formatText(item?.result)}
                   </td>
-                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[30%]">
+                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[25%]">
                     {formatText(item?.title)}
+                  </td>
+                  <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                    <button
+                      onClick={() => deleteTaskHandler(item)}
+                      className="cursor-pointer hover:text-red-500"
+                    >
+                      <svg
+                        className="w-5 h-5 mr-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3H9m9 0H6"
+                        />
+                      </svg>
+                    </button>
                   </td>
                 </tr>
               ))}
