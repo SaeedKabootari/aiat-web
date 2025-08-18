@@ -444,7 +444,9 @@ const DiscoveringContradiction = (props) => {
             </button>
           </div> */}
           {/* third */}
-          <div className="fixed bottom-2 w-[80%] py-3 px-3  bg-[#8d8da8] rounded-sm">
+          {/* <div className="fixed bottom-2 w-[80%] py-3 px-3  bg-BLUE-200 rounded-sm ring-2 ring-[#242752]"> */}
+
+          <div className="fixed bottom-2 w-[80%] py-3 px-3  bg-[#8d8da8] rounded-sm ring-2 ring-[#242752]">
             <div className="flex justify-end">
               <button
                 onClick={discoveringContradictionHandler}
