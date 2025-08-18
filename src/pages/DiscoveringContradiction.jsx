@@ -298,7 +298,7 @@ const DiscoveringContradiction = (props) => {
   // };
 
   return (
-    <>
+    <div className="relative ">
       {/* tabs */}
       {/* <div>{loading ? "true" : "false"}</div> */}
       <div className="flex p-1 bg-gray-200 rounded-md mb-5">
@@ -444,9 +444,19 @@ const DiscoveringContradiction = (props) => {
             </button>
           </div> */}
           {/* third */}
-          {/* <div className="fixed bottom-2 w-[80%] py-3 px-3  bg-BLUE-200 rounded-sm ring-2 ring-[#242752]"> */}
+          {/* <div className="fixed bottom-2 w-[80%] py-3 px-3  bg-[#8d8da8] rounded-sm ring-2 ring-[#242752]">
+            <div className="flex justify-end">
+              <button
+                onClick={discoveringContradictionHandler}
+                className=" bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300 cursor-pointer"
+              >
+                کشف تناقض
+              </button>
+            </div>
+          </div> */}
+{/* forth */}
 
-          <div className="fixed bottom-2 w-[80%] py-3 px-3  bg-[#8d8da8] rounded-sm ring-2 ring-[#242752]">
+<div className="absolute w-full py-3 px-3  bg-[#8d8da8] rounded-sm ring-2 ring-[#242752]">
             <div className="flex justify-end">
               <button
                 onClick={discoveringContradictionHandler}
@@ -456,6 +466,19 @@ const DiscoveringContradiction = (props) => {
               </button>
             </div>
           </div>
+
+
+          {/* fifth */}
+          {/* <div className="fixed left-1/2 transform -translate-x-1/2 w- bottom-2 w-[50%] py-3 px-3  bg-[#8d8da8] rounded-sm ring-2 ring-[#242752] ">
+            <div className="flex justify-end ">
+              <button
+                onClick={discoveringContradictionHandler}
+                className=" bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300 cursor-pointer"
+              >
+                کشف تناقض
+              </button>
+            </div>
+          </div> */}
         </div>
       )}
       {/* resultTab: */}
@@ -673,7 +696,7 @@ const DiscoveringContradiction = (props) => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
