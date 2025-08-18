@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { getActionAx, postActionAx } from "../api";
 import { transformKeys } from "../utils/utils";
 import MultiSelect from "../components/MultiSelect";
+import { useNavigate } from "react-router-dom";
 
 const ResolutionsList = (props) => {
+  const navigate = useNavigate()
   const [resolutions, setResolutions] = useState(null);
 
   const [topics, setTopics] = useState([]);
@@ -33,20 +35,24 @@ const ResolutionsList = (props) => {
   }, []);
 
   const selectResolutionHandler = async (resolutionId) => {
+
+    navigate(`/resolution/${resolutionId}`)
     // props.setDiscoveringObj((prevState) => ({
     //   ...prevState,
     //   check_law_id: parseInt(resolutionId, 10),
     // }));
-    await getActionAx(`/api/laws/${parseInt(resolutionId, 10)}/sections`)
-      .then((res) => {
-        console.log("SHOW", res.data);
-        // props.setSelectedResolution(res.data);
-        // props.onClose();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    console.log(resolutionId, "id");
+    // await getActionAx(`/api/laws/${parseInt(resolutionId, 10)}/sections`)
+    //   .then((res) => {
+    //     console.log("SHOW", res.data);
+    //     // props.setSelectedResolution(res.data);
+    //     // props.onClose();
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
+    // console.log(resolutionId, "id");
+
+
   };
 
   const searchTermRef = useRef(null);
