@@ -32,6 +32,7 @@ const SendResolution = (props) => {
               {selectedResolution?.sections?.map((item, index) => {
                 // return <div className="text-sm">{item.text}</div>;
                 return <div className="text-sm">{cleanMessageText(item.text)}</div>;
+                return <div className=" whitespace-pre-wrap">{item.text}</div>;
 
               })}
             </div>
