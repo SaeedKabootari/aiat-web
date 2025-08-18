@@ -178,7 +178,7 @@ const LayoutMenu = (props) => {
                   </NavLink>
                 </li>
 
-                {/* <li>
+                <li>
                   <NavLink
                     to="/resolutions-list"
                     className={({ isActive }) =>
@@ -204,7 +204,7 @@ const LayoutMenu = (props) => {
                     </svg>
                     {t("List of resolutions")}
                   </NavLink>
-                </li> */}
+                </li>
               </ul>
             </nav>
           </aside>

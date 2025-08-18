@@ -13,6 +13,7 @@ import DiscoveringContradiction from "./pages/DiscoveringContradiction";
 import { useSelector } from "react-redux";
 import FunctionsHistory from "./pages/FunctionsHistory";
 import Chat from "./pages/Chat";
+import ResolutionDetail from "./pages/ResolutionDetail";
 
 // Translation resources
 const resources = {
@@ -61,7 +62,8 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: "en",
+    fallbackLng: "fa",
+    lng:'fa',
     interpolation: {
       escapeValue: false,
     },
@@ -132,6 +134,8 @@ function App() {
                     path="/resolutions-list"
                     element={<ResolutionsList />}
                   />
+
+                  <Route path="/resolution/:id" element={<ResolutionDetail />} />
                   
                 </Route>
                 
