@@ -298,7 +298,7 @@ const DiscoveringContradiction = (props) => {
   // };
 
   return (
-    <div className="relative ">
+    <div className="relative  h-[85vh]">
       {/* tabs */}
       {/* <div>{loading ? "true" : "false"}</div> */}
       <div className="flex p-1 bg-gray-200 rounded-md mb-5">
@@ -456,7 +456,7 @@ const DiscoveringContradiction = (props) => {
           </div> */}
 {/* forth */}
 
-<div className="absolute w-full py-3 px-3  bg-[#8d8da8] rounded-sm ring-2 ring-[#242752]">
+<div className="absolute bottom-0 w-full py-3 px-3  bg-[#8d8da8] rounded-sm ring-2 ring-[#242752]">
             <div className="flex justify-end">
               <button
                 onClick={discoveringContradictionHandler}
