@@ -425,13 +425,34 @@ const DiscoveringContradiction = (props) => {
             </div>
           </div>
           {/* row 2 */}
-          <div className="flex ">
+          {/* first */}
+          {/* <div className="flex ">
             <button
               onClick={discoveringContradictionHandler}
               className=" bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300 cursor-pointer"
             >
               کشف تناقض
             </button>
+          </div> */}
+          {/* second */}
+          {/* <div className="flex flex-row-reverse">
+            <button
+              onClick={discoveringContradictionHandler}
+              className=" bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300 cursor-pointer"
+            >
+              کشف تناقض
+            </button>
+          </div> */}
+          {/* third */}
+          <div className="fixed bottom-2 w-[80%] py-3 px-3  bg-[#8d8da8] rounded-sm">
+            <div className="flex justify-end">
+              <button
+                onClick={discoveringContradictionHandler}
+                className=" bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300 cursor-pointer"
+              >
+                کشف تناقض
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -443,7 +464,11 @@ const DiscoveringContradiction = (props) => {
             <div className="">
               <div className="p-4">
                 {/* title */}
-                {loading === true ? <div className="mb-2">در انتظار نتیجه...</div> : <div></div>}
+                {loading === true ? (
+                  <div className="mb-2">در انتظار نتیجه...</div>
+                ) : (
+                  <div></div>
+                )}
                 {loading === false && messages.length === 0 && (
                   <div className="">نتیجه ای موجود نیست.</div>
                 )}
