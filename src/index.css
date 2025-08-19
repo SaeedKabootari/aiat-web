@@ -19,3 +19,45 @@ body, html {
 }
 
 /* font-[IRANSans] */
+
+
+
+
+
+/* Preserve whitespace for all content */
+.content-container {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: inherit;
+}
+
+/* Reset whitespace handling for tables and their cells */
+.content-container table,
+.content-container th,
+.content-container td {
+  white-space: normal;
+}
+
+/* Table styling */
+.content-container table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+}
+
+.content-container table, 
+.content-container th, 
+.content-container td {
+  border: 1px solid #ccc;
+}
+
+.content-container th, 
+.content-container td {
+  padding: 8px;
+  text-align: right;
+}
+
+/* Special handling for text nodes directly in container */
+.content-container > :not(table) {
+  white-space: pre-wrap;
+}
