@@ -1,20 +1,17 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getActionAx } from "../api";
-import DOMPurify from "dompurify";
 
 const ResolutionDetail = () => {
   const [resolution, setResolution] = useState();
   const params = useParams();
+  
   const getResolution = async () => {
     await getActionAx(`/api/laws/${parseInt(params.id, 10)}/sections`)
       .then((res) => {
         setResolution(res.data);
-        console.log("resolutionDetail==>", res.data);
       })
-      .catch((err) => {
-        console.log(err);
-      });
+      .catch(console.error);
   };
 
   useEffect(() => {
@@ -22,85 +19,62 @@ const ResolutionDetail = () => {
   }, []);
 
   return (
-    <div>
-        <style>
+    <div className="mt-2 p-2">
+      <style>
         {`
-          .custom-table table {
-            width: 100%;
+          /* Preserve whitespace for all content */
+          .content-container {
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: inherit;
+          }
+          
+          /* Reset whitespace handling for tables and their cells */
+          .content-container table,
+          .content-container th,
+          .content-container td {
+            white-space: normal;
+          }
+          
+          /* Table styling */
+          .content-container table {
             border-collapse: collapse;
-            table-layout: auto;  /* Adjusts table based on content */
-            margin: 0 auto;  /* Centers the table horizontally if desired */
+            width: 100%;
+            margin: 1rem 0;
           }
-
-          .custom-table th, .custom-table td {
-            border: 1px solid #000;
-            padding: 10px 15px;  /* Increased padding for better spacing */
-            text-align: right;  /* Right alignment for RTL; change to 'center' if you want centered text */
-
-            word-wrap: break-word;  /* Ensures long text wraps and doesn't overflow */
-            min-width: 100px;  /* Prevents cells from being too narrow */
+          
+          .content-container table, 
+          .content-container th, 
+          .content-container td {
+            border: 1px solid #ccc;
           }
-
-          .custom-table td {
-            /* Specific styles for td elements */
-            font-size: 14px;  /* Adjust font size for readability if needed */
+          
+          .content-container th, 
+          .content-container td {
+            padding: 8px;
+            text-align: right;
+          }
+          
+          /* Special handling for text nodes directly in container */
+          .content-container > :not(table) {
+            white-space: pre-wrap;
           }
         `}
       </style>
+
       {resolution && (
-        <div className="mt-2 p-2">
-          <div className="text-[#242752]  ">
-            <h1 className="text-2xl"> {resolution?.law?.caption}</h1>
+        <div>
+          <div className="text-[#242752]">
+            <h1 className="text-2xl">{resolution?.law?.caption}</h1>
           </div>
           <div className="flex flex-col mt-6">
-            {/* before */}
-            {/* {resolution?.sections?.map((item, index) => {
-              return <div className=" whitespace-pre-wrap">{item.text}</div>;
-            })} */}
-            {/* then */}
-            {resolution?.sections?.map((item, index) => {
-              const sanitizedHTML = DOMPurify.sanitize(item.text || "", {
-                ALLOWED_TAGS: [
-                  "br",
-                  "table",
-                  "tr",
-                  "td",
-                  "th",
-                  "hr",
-                  "div",
-                  "col",
-                ],
-                ALLOWED_ATTR: [
-                  "style",
-                  "width",
-                  "dir",
-                  "lang",
-                  "border",
-                  "cellpadding",
-                  "cellspacing",
-                  "valign",
-                  "padding-top",
-                  "padding-bottom",
-                  "padding-left",
-                  "padding-right",
-                ],
-              });
-
-              return (
-                <div
-                  key={index}
-                  className="custom-table dir-rtl p-4 rounded mb-3 overflow-x-auto overflow-y-auto"
-                >
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: sanitizedHTML,
-                    }}
-                  />
-                </div>
-              );
-            })}
-
-            {/* end */}
+            {resolution?.sections?.map((item, index) => (
+              <div 
+                key={index} 
+                className="content-container dir-rtl  p-3 bg-white rounded "
+                dangerouslySetInnerHTML={{ __html: item.text }} 
+              />
+            ))}
           </div>
         </div>
       )}
