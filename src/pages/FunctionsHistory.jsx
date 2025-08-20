@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { getActionAx } from "../api";
 import { formatText, toPersianTime } from "../utils/utils";
 import PDFExport from "../components/PDFExport";
 import ContradictionTablePdf from "../components/ContradictionTablePdf";
 import useErrorHandler from "../hooks/useErrorHandler";
+import Modal from "../components/Modal";
 
 // const testItems = Array.from({ length: 20 }, (_, index) => ({
 //   contradiction: false,
@@ -30,6 +31,10 @@ const FunctionsHistory = () => {
   const [selectedContradiction, setSelectedContradiction] = useState(null);
 
   const [haveContradiction, setHaveContradiction] = useState(false);
+
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const deleteTaskRef = useRef(null);
 
   useEffect(() => {
     console.log(haveContradiction);
@@ -63,14 +68,18 @@ const FunctionsHistory = () => {
     // };
 
     // getMessages();
-    getTasks()
+    getTasks();
   }, []);
 
-  const deleteTaskHandler = (event ,item) => {
-    event.stopPropagation()
-    console.log(item.task_id);
+  const deleteTaskHandler = async () => {
+    console.log(deleteTaskRef.current)
+    console.log("delete=>", deleteTaskRef.current.title);
+    console.log("deleteId=>", deleteTaskRef.current.task_id);
+
     //write api for it
-    getTasks()
+    setDeleteModalOpen(false);
+
+    // getTasks();
   };
 
   const selectTaskHandler = async (task) => {
@@ -152,6 +161,34 @@ const FunctionsHistory = () => {
 
   return (
     <div>
+      <Modal
+        isOpen={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        // title="Simple Modal"
+      >
+        <div className="w-full">
+          <div>ایا مطمعنید میخواهید این تسک را حذف کنید؟ </div>
+          <div className="text-sm mt-2">
+            {deleteTaskRef && deleteTaskRef?.current?.title}
+          </div>
+
+          <div className="w-full flex flex-row-reverse gap-2">
+            <button
+              className="bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300 w-[200px] cursor-pointer"
+              onClick={() => deleteTaskHandler()}
+            >
+              بله
+            </button>
+            <button
+              className=" text-white py-2 px-4 rounded bg-gray-300 hover:bg-gray-400 transition duration-300 w-[200px] cursor-pointer"
+              onClick={() => setDeleteModalOpen(false)}
+            >
+              خیر
+            </button>
+          </div>
+        </div>
+      </Modal>
+
       {/* filters */}
       <div className="w-full flex justify-center mb-2">
         <div className="flex align-items gap-2">
@@ -246,7 +283,16 @@ const FunctionsHistory = () => {
                   </td>
                   <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
                     <button
-                      onClick={(event) => deleteTaskHandler(event,item)}
+                      // onClick={(event) => deleteTaskHandler(event, item)}
+                      onClick={(event) => {
+                        setDeleteModalOpen(true);
+                        deleteTaskRef.current = item;
+                        console.log(item);
+                        event.stopPropagation();
+                        console.log(item.task_id);
+                        //write api for it
+                        getTasks();
+                      }}
                       className="cursor-pointer hover:text-red-500"
                     >
                       <svg
