@@ -24,6 +24,7 @@ import Modal from "../components/Modal";
 // }));
 
 const FunctionsHistory = () => {
+  const errorHandler = useErrorHandler();
   const [tasks, setTasks] = useState([]);
   // const [messages, setMessages] = useState([...testItems]);
   const [messages, setMessages] = useState([]);
@@ -49,6 +50,7 @@ const FunctionsHistory = () => {
         setTasks(res.data);
       })
       .catch((err) => {
+        errorHandler(err);
         console.log(err);
       });
   };
@@ -72,7 +74,7 @@ const FunctionsHistory = () => {
   }, []);
 
   const deleteTaskHandler = async () => {
-    console.log(deleteTaskRef.current)
+    console.log(deleteTaskRef.current);
     console.log("delete=>", deleteTaskRef.current.title);
     console.log("deleteId=>", deleteTaskRef.current.task_id);
 
@@ -282,33 +284,57 @@ const FunctionsHistory = () => {
                     {formatText(item?.title)}
                   </td>
                   <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
-                    <button
-                      // onClick={(event) => deleteTaskHandler(event, item)}
-                      onClick={(event) => {
-                        setDeleteModalOpen(true);
-                        deleteTaskRef.current = item;
-                        console.log(item);
-                        event.stopPropagation();
-                        console.log(item.task_id);
-                        //write api for it
-                        getTasks();
-                      }}
-                      className="cursor-pointer hover:text-red-500"
-                    >
-                      <svg
-                        className="w-5 h-5 mr-3"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                    <div className="flex items-center gap-2">
+                      <button
+                        // onClick={(event) => deleteTaskHandler(event, item)}
+                        onClick={(event) => {
+                          setDeleteModalOpen(true);
+                          deleteTaskRef.current = item;
+                          console.log(item);
+                          event.stopPropagation();
+                          console.log(item.task_id);
+                          //write api for it
+                          getTasks();
+                        }}
+                        className="cursor-pointer hover:text-red-500"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3H9m9 0H6"
-                        />
-                      </svg>
-                    </button>
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3H9m9 0H6"
+                          />
+                        </svg>
+                      </button>
+
+                      <button className="cursor-pointer hover:text-blue-500">
+                        <svg
+                          className="w-5 h-5 "
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 15a3 3 0 100-6 3 3 0 000 6z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
