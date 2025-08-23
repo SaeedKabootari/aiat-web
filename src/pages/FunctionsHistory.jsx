@@ -192,14 +192,11 @@ const FunctionsHistory = () => {
       </Modal>
 
       {/* filters */}
-      <div className="w-full flex justify-center mb-2">
+      {/* <div className="w-full flex justify-center mb-2">
         <div className="flex align-items gap-2">
           <span>تناقض:</span>
           <input
             type="checkbox"
-            // data-id={node.id}
-            //   className="mr-2"
-            // className="ml-2"
             checked={haveContradiction}
             onChange={(e) =>
               e.target.checked
@@ -208,6 +205,23 @@ const FunctionsHistory = () => {
             }
           />
         </div>
+      </div> */}
+
+      <div className="w-full mb-5 flex justify-center">
+        <div className="w-[100%] py-3 px-3  flex items-center justify-center gap-2 bg-gray-50 rounded-sm ring-2 ring-[#242752]">
+          <span>تناقض:</span>
+          <input
+            type="checkbox"
+
+            checked={haveContradiction}
+            onChange={(e) =>
+              e.target.checked
+                ? setHaveContradiction(true)
+                : setHaveContradiction(null)
+            }
+          />
+        </div>
+        <div className="flex justify-end"></div>
       </div>
 
       {/* first row */}
