@@ -1,10 +1,16 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import { WebSocketProvider } from "./context/WebSocketContext";
 import Home from "./pages/Home";
 import SignIn from "./pages/Login";
 import LayoutMenu from "./layouts/LayoutMenu";
 import Test from "./pages/Test";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import i18n from "i18next";
 import { useTranslation, initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
@@ -29,11 +35,11 @@ const resources = {
       toggle_language: "Toggle Language",
       "Discovering a contradiction": "Discovering contradiction",
       "List of resolutions": "Resolutions list",
-      login: 'login',
-      welcome_to_diar: 'Welcome To Diar',
-      username: 'Username',
-      password :'Password',
-      enter_your_username : 'Enter your username'
+      login: "login",
+      welcome_to_diar: "Welcome To Diar",
+      username: "Username",
+      password: "Password",
+      enter_your_username: "Enter your username",
     },
   },
   fa: {
@@ -48,11 +54,11 @@ const resources = {
       toggle_language: "تغییر زبان",
       "Discovering a contradiction": "کشف تناقض",
       "List of resolutions": "لیست مصوبه ها",
-      login: 'ورود',
-      welcome_to_diar : 'به سامانه دیار خوش آمدید',
-      username: 'نام کاربری',
-      password:'رمز عبور',
-      enter_your_username : 'نام کاربری خود را وارد کنید'
+      login: "ورود",
+      welcome_to_diar: "به سامانه دیار خوش آمدید",
+      username: "نام کاربری",
+      password: "رمز عبور",
+      enter_your_username: "نام کاربری خود را وارد کنید",
     },
   },
 };
@@ -63,7 +69,7 @@ i18n
   .init({
     resources,
     fallbackLng: "fa",
-    lng:'fa',
+    lng: "fa",
     interpolation: {
       escapeValue: false,
     },
@@ -74,9 +80,25 @@ i18n
   });
 
 function App() {
-  
+  const [pathname, setPathname] = useState(window.location.pathname);
+  useEffect(() => {
+    const handleRouteChange = () => {
+      console.log('z')
+      const currentPath = window.location.pathname;
+      if (currentPath !== pathname) {
+        setPathname(currentPath);
+      }
+    };
+
+    // You can use setTimeout as a fallback to check periodically
+    const intervalId = setInterval(handleRouteChange, 300); // check every 300ms
+
+    return () => clearInterval(intervalId);
+  }, [pathname]);
+
   const { t, i18n } = useTranslation();
 
+  console.log(window.location.pathname);
 
   const loggedIn = useSelector((state) => state.todo.loggedIn);
 
@@ -91,7 +113,6 @@ function App() {
     i18n.changeLanguage(newLang);
   };
 
-
   return (
     <div
       className={`min-h-screen w-full ${
@@ -102,15 +123,17 @@ function App() {
         <BrowserRouter>
           <div className="">
             {/* Language Toggle Button */}
-            <button
-              onClick={toggleLanguage}
-              className={`fixed top-[26px] bg-blue-500 text-white px-2 py-1 rounded shadow-md cursor-pointer ${
-                i18n.language === "fa" ? "left-22" : "right-22"
-              }`}
-              title={t("toggle_language")}
-            >
-              {i18n.language === "en" ? "FA" : "EN"}
-            </button>
+            {pathname !== "/" && (
+              <button
+                onClick={toggleLanguage}
+                className={`fixed top-[26px] bg-blue-500 text-white px-2 py-1 rounded shadow-md cursor-pointer ${
+                  i18n.language === "fa" ? "left-22" : "right-22"
+                }`}
+                title={t("toggle_language")}
+              >
+                {i18n.language === "en" ? "FA" : "EN"}
+              </button>
+            )}
             <Routes>
               <Route path="/" element={<SignIn />} />
               {/* Protected Routes - ONLY show when logged in */}
@@ -126,19 +149,17 @@ function App() {
                     path="/functions-history"
                     element={<FunctionsHistory />}
                   />
-                  <Route
-                    path="/chat"
-                    element={<Chat />}
-                  />
+                  <Route path="/chat" element={<Chat />} />
                   <Route
                     path="/resolutions-list"
                     element={<ResolutionsList />}
                   />
 
-                  <Route path="/resolution/:id" element={<ResolutionDetail />} />
-                  
+                  <Route
+                    path="/resolution/:id"
+                    element={<ResolutionDetail />}
+                  />
                 </Route>
-                
               ) : (
                 <Route path="*" element={<Navigate to="/" replace />} />
               )}
