@@ -208,7 +208,7 @@ const FunctionsHistory = () => {
       </div> */}
 
       <div className="w-full mb-5 flex justify-center">
-        <div className="w-[100%] py-3 px-3  flex items-center justify-center gap-2 bg-gray-50 rounded-sm ring-2 ring-[#242752]">
+        <div className="w-[100%] py-3 px-3  flex items-center  gap-2 bg-gray-50 rounded-sm ring-2 ring-[#242752]">
           <span>تناقض:</span>
           <input
             type="checkbox"
