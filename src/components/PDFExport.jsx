@@ -1,5 +1,4 @@
-// components/PDFExport.jsx
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 
 const PDFExport = ({ tableJSX }) => {
   const [loading, setLoading] = useState(false);

@@ -4,6 +4,8 @@ import MultiSelect from "./MultiSelect";
 import { transformKeys } from "../utils/utils";
 
 const SearchResolutionModal = (props) => {
+  
+
   const [resolutions, setResolutions] = useState(null);
 
   const [topics, setTopics] = useState([]);
@@ -11,20 +13,15 @@ const SearchResolutionModal = (props) => {
 
   const selectionIdsHandler = (selectedArray) => {
     setSelectedTopicsId(selectedArray);
-    console.log("Selected IDs in parent:", selectedArray);
   };
 
   useEffect(() => {
     const getTopics = async () => {
       await getActionAx(`/api/topics`)
         .then((res) => {
-          console.log("ZZZZZZZZZZZZZZZZZZZZ", res);
-          console.log(transformKeys(res.data));
-          console.log(res.data);
           setTopics(transformKeys(res.data));
         })
         .catch((err) => {
-          console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
           console.log(err);
         });
     };
@@ -37,59 +34,24 @@ const SearchResolutionModal = (props) => {
       ...prevState,
       law_id: parseInt(resolutionId, 10),
     }));
-    console.log("law_id", parseInt(resolutionId, 10));
     await getActionAx(`/api/laws/${parseInt(resolutionId, 10)}/sections`)
       .then((res) => {
-        console.log("SHOW", res.data);
         props.setSelectedResolution(res.data);
-        console.log("SSSSSSSSSSSS", res.data);
         props.onClose();
       })
       .catch((err) => {
-        console.log(err);
       });
-    console.log(resolutionId, "id");
   };
 
   const searchTermRef = useRef(null);
 
   const searchHandler = async () => {
-    // console.log(searchTermRef.current.value);
-    // console.log(localStorage.getItem("token"));
-    // console.log(document.cookie);
-
-    // fetch('http://localhost:7000/api/protected', {
-    //   method: 'GET',
-    //   credentials: 'include', // This is the key for sending cookies
-    //   headers: {
-    //     // 'Content-Type': 'application/json',
-    //     'Accept': 'application/json'
-    //   }
-    // })
-    // .then(response => response.json())
-    // .then(data => console.log(data))
-    // .catch(error => console.error('Error:', error));
-
-    // await getActionAx(
-    //   `/api/laws/search?q=${searchTermRef.current.value}&limit=${10}`
-    // )
-    //   .then((res) => {
-    //     console.log("ZZZZZZZZZZZZZZZZZZZZ", res);
-    //     console.log(res.data);
-    //     setResolutions(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
-    //     console.log(err);
-    //   });
-
     await postActionAx(`/api/laws/search`, {
       q: searchTermRef.current.value,
       limit: 50,
       topic_ids: selectedTopicsId,
     })
       .then((res) => {
-        console.log(res.data);
         setResolutions(res.data);
       })
       .catch((err) => {
@@ -101,10 +63,6 @@ const SearchResolutionModal = (props) => {
     // Backdrop
     <div
       className="fixed inset-0 bg-[rgba(36,39,82,0.5)] backdrop-blur-md z-50 flex items-center justify-center"
-      // onClick={(event) => {
-      //   event.stopPropagation();
-      //   props.onClose();
-      // }}
       onClick={props.onClose}
     >
       {/* Modal container */}

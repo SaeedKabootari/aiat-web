@@ -4,19 +4,18 @@ import { getActionAx } from "../api";
 import useErrorHandler from "../hooks/useErrorHandler";
 
 const ResolutionDetail = () => {
-    const errorHandler = useErrorHandler();
+  const errorHandler = useErrorHandler();
 
   const [resolution, setResolution] = useState();
   const params = useParams();
-  
+
   const getResolution = async () => {
     await getActionAx(`/api/laws/${parseInt(params.id, 10)}/sections`)
       .then((res) => {
         setResolution(res.data);
-        console.log('OOOOO' ,res.data )
       })
       .catch(console.error);
-      errorHandler(err);
+    errorHandler(err);
   };
 
   useEffect(() => {
@@ -25,8 +24,6 @@ const ResolutionDetail = () => {
 
   return (
     <div className="mt-2 p-2">
-
-
       {resolution && (
         <div className="bg-white p-3">
           <div className="text-[#242752]">
@@ -34,10 +31,10 @@ const ResolutionDetail = () => {
           </div>
           <div className="flex flex-col mt-6">
             {resolution?.sections?.map((item, index) => (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="content-container dir-rtl p-3 rounded "
-                dangerouslySetInnerHTML={{ __html: item.text }} 
+                dangerouslySetInnerHTML={{ __html: item.text }}
               />
             ))}
           </div>
@@ -48,9 +45,3 @@ const ResolutionDetail = () => {
 };
 
 export default ResolutionDetail;
-
-
-
-
-
-

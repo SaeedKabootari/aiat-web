@@ -19,7 +19,6 @@ const SendSearchResolution = (props) => {
           setDiscoveringObj={props.setDiscoveringObj}
         />
       )}
-
       {selectedResolution && (
         <div className="mt-2 p-2">
           <div className="text-[#242752]">

@@ -9,7 +9,7 @@ import { todoActions } from "../shop/todoSlice";
 import useErrorHandler from "../hooks/useErrorHandler";
 
 const Login = () => {
-    const errorHandler = useErrorHandler();
+  const errorHandler = useErrorHandler();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -28,8 +28,6 @@ const Login = () => {
       password: password,
     })
       .then((res) => {
-        // console.log(res.data.access_token);
-
         dispatch(todoActions.changeloggedInState(true));
         localStorage.setItem("loggedIn", true);
 
@@ -38,7 +36,6 @@ const Login = () => {
         navigate("/discovering-contradiction");
       })
       .catch((err) => {
-        console.log(err);
         errorHandler(err);
       });
   };

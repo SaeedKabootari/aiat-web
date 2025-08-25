@@ -7,25 +7,8 @@ import { formatText, toPersianTime, transformKeys } from "../utils/utils";
 import MultiSelect from "../components/MultiSelect";
 import useErrorHandler from "../hooks/useErrorHandler";
 
-// const testItems = Array.from({ length: 20 }, (_, index) => ({
-//   contradiction: false,
-//   finish_time: 1754479574,
-//   first_law_caption:
-//     "قانون وصول برخي از درآمدهاي دولت و مصرف آن در موارد معيّن",
-//   first_law_id: 21,
-//   first_section_caption: "ماده 8>بند هـ",
-//   first_section_id: 117356,
-//   id: 5128 + index, // Unieke ID voor elk item
-//   response:
-//     "ماده 24 قانون معادن به دستگاه‌های اجرایی و متوليان قانونی مربوطه دستور می‌دهد که حداکثر ظرف دو ماه به استعلام وزارت صنعت، معدن و تجارت برای صدور پروانه اکتشاف پاسخ دهند. در حالی که متن دوم که مربوط به مالیات بر درآمد مستغلات است، هیچ ارتباطی با موضوع اکتشاف معادن ندارد.",
-//   second_law_caption: null,
-//   second_law_id: null,
-//   second_section_caption: null,
-//   second_section_id: null,
-// }));
-
 const DiscoveringContradiction = (props) => {
-    const errorHandler = useErrorHandler();
+  const errorHandler = useErrorHandler();
 
   const [tab, setTab] = useState("requestTab");
 
@@ -38,14 +21,6 @@ const DiscoveringContradiction = (props) => {
   const [newRule, setnNewRule] = useState(true);
   const [newRuleValue, setnNewRuleValue] = useState(null);
 
-  useEffect(() => {
-    console.log("discoveringObj", discoveringObj);
-  }, [discoveringObj]);
-
-  useEffect(() => {
-    console.log("newRule", newRule);
-    console.log("compareWithAll", compareWithAll);
-  }, [newRule, compareWithAll]);
 
   const [taskId, setTaskId] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -64,21 +39,15 @@ const DiscoveringContradiction = (props) => {
 
   const selectionIdsHandler = (selectedArray) => {
     setSelectedTopicsId(selectedArray);
-    console.log("Selected IDs in parent:", selectedArray);
   };
 
   useEffect(() => {
     const getTopics = async () => {
       await getActionAx(`/api/topics`)
         .then((res) => {
-          console.log("ZZZZZZZZZZZZZZZZZZZZ", res);
-          console.log(transformKeys(res.data));
-          console.log(res.data);
           setTopics(transformKeys(res.data));
         })
         .catch((err) => {
-          console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
-          console.log(err);
           errorHandler(err);
         });
     };
@@ -86,11 +55,7 @@ const DiscoveringContradiction = (props) => {
     getTopics();
   }, []);
 
-  useEffect(() => {
-    console.log("MESSAGES ==========>>>>>>>>>>>>>>>", messages);
-  }, [messages]);
 
-  // const [since, setSince] = useState(null);
   const sinceRef = useRef(null); // Add this ref
 
   useEffect(() => {
@@ -104,11 +69,7 @@ const DiscoveringContradiction = (props) => {
 
       await getActionAx(getUrl)
         .then((res) => {
-          console.log(res);
-          console.log(res.data.results);
           setMessages((prevMessages) => [...prevMessages, ...res.data.results]);
-          console.log(res.data.latest_timestamp);
-          // setSince(res.data.latest_timestamp);
           if (sinceRef.current === null) {
             sinceRef.current = res.data.latest_timestamp;
           } else if (sinceRef.current !== null) {
@@ -116,8 +77,6 @@ const DiscoveringContradiction = (props) => {
               sinceRef.current = res.data.latest_timestamp;
             }
           }
-
-          // sinceRef.current = res.data.latest_timestamp;
           if (
             res.data.status === "pending" ||
             res.data.status === "processing"
@@ -132,17 +91,17 @@ const DiscoveringContradiction = (props) => {
             res.data.status === "failed" &&
               toast.error("کشف تناقض با شکست مواجه شد.");
             setLoading(false);
-            console.log("finish");
             if (intervalRef.current) {
               clearInterval(intervalRef.current);
               intervalRef.current = null;
             }
           }
         })
-        .catch((err) => {errorHandler(err);});
+        .catch((err) => {
+          errorHandler(err);
+        });
     };
 
-    console.log("++++");
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -171,7 +130,6 @@ const DiscoveringContradiction = (props) => {
           setTaskId(res.data.task_id);
         })
         .catch((err) => {
-          console.log(err);
           errorHandler(err);
         });
     } else if (!newRule && compareWithAll) {
@@ -185,14 +143,12 @@ const DiscoveringContradiction = (props) => {
           setTaskId(res.data.task_id);
         })
         .catch((err) => {
-          console.log(err);
           errorHandler(err);
         });
     } else if (newRule && !compareWithAll) {
       toast.info("کشف تناقض شروع شد.");
       await postActionAx(`/api/analyze`, {
         prompt: newRuleValue,
-        // system_prompt: systemPromptRef.current.value,
         prompt_title: titlePromptRef.current.value,
         check_law_id: discoveringObj.check_law_id,
       })
@@ -200,14 +156,12 @@ const DiscoveringContradiction = (props) => {
           setTaskId(res.data.task_id);
         })
         .catch((err) => {
-          console.log(err);
           errorHandler(err);
         });
     } else if (newRule && compareWithAll) {
       toast.info("کشف تناقض شروع شد.");
       await postActionAx(`/api/analyze`, {
         prompt: newRuleValue,
-        // system_prompt: systemPromptRef.current.value,
         prompt_title: titlePromptRef.current.value,
         check_law_id: "*",
         topic_ids: selectedTopicsId,
@@ -216,15 +170,12 @@ const DiscoveringContradiction = (props) => {
           setTaskId(res.data.task_id);
         })
         .catch((err) => {
-          console.log(err);
           errorHandler(err);
         });
     }
   };
 
   const selectContradictionHandler = async (item) => {
-    console.log(item);
-
     let showObj = {
       first_law_caption: item.first_law_caption,
       first_section_caption: item.first_section_caption,
@@ -233,42 +184,30 @@ const DiscoveringContradiction = (props) => {
       response: item.response,
     };
 
-    // this line for test:
     if (item.first_section_id !== null) {
-      // await getActionAx(`/api/sections/${2446350}`)
       await getActionAx(`/api/sections/${item.first_section_id}`)
         .then((res) => {
-          console.log("first_______________________", res);
-          console.log(res.data);
           showObj.first_section_full_path = res.data.full_path;
           showObj.first_section_text = res.data.text;
           showObj.first_section_status_caption = res.data.status_caption;
           showObj.first_section_topics = res.data.topics;
         })
         .catch((err) => {
-          console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
-          console.log(err);
           errorHandler(err);
         });
     }
     if (item.second_section_id !== null) {
-      // await getActionAx(`/api/sections/${2446350}`)
       await getActionAx(`/api/sections/${item.second_section_id}`)
         .then((res) => {
-          console.log("second_______________________", res);
-          console.log(res.data);
           showObj.second_section_full_path = res.data.full_path;
           showObj.second_section_text = res.data.text;
           showObj.second_section_status_caption = res.data.status_caption;
           showObj.second_section_topics = res.data.topics;
         })
         .catch((err) => {
-          console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
-          console.log(err);
           errorHandler(err);
         });
     }
-    console.log(showObj);
 
     setSelectedContradiction(showObj);
   };
@@ -310,7 +249,6 @@ const DiscoveringContradiction = (props) => {
   return (
     <div className="relative  h-[85vh]">
       {/* tabs */}
-      {/* <div>{loading ? "true" : "false"}</div> */}
       <div className="flex p-1 bg-gray-200 rounded-md mb-5">
         <button
           className={`px-4 py-1 text-sm font-medium rounded-t-md focus:outline-none cursor-pointer ${
@@ -386,14 +324,6 @@ const DiscoveringContradiction = (props) => {
                       className="w-full h-20 resize-none p-2 bg-white border-[1px] border-black"
                     />
                   </div>
-
-                  {/* <h1 className="text-[#242752]">پرامپت سیستم:</h1>
-                  <div className="mt-1 p-3">
-                    <textarea
-                      ref={systemPromptRef}
-                      className="w-full h-10 resize-none p-2 bg-white border-[1px] border-black"
-                    />
-                  </div> */}
                 </div>
               )}
             </div>
@@ -465,7 +395,6 @@ const DiscoveringContradiction = (props) => {
             </div>
           </div> */}
           {/* forth */}
-
           <div className="absolute bottom-0 w-full py-3 px-3  bg-[#8d8da8] rounded-sm ring-2 ring-[#242752]">
             <div className="flex justify-end">
               <button
@@ -476,7 +405,6 @@ const DiscoveringContradiction = (props) => {
               </button>
             </div>
           </div>
-
           {/* fifth */}
           {/* <div className="fixed left-1/2 transform -translate-x-1/2 w- bottom-2 w-[50%] py-3 px-3  bg-[#8d8da8] rounded-sm ring-2 ring-[#242752] ">
             <div className="flex justify-end ">
@@ -506,7 +434,6 @@ const DiscoveringContradiction = (props) => {
                 {loading === false && messages.length === 0 && (
                   <div className="">نتیجه ای موجود نیست.</div>
                 )}
-
                 {messages.length > 0 && (
                   <div className="">
                     <div className="">
@@ -649,12 +576,6 @@ const DiscoveringContradiction = (props) => {
                                 </div>
                               </div>
 
-                              {/* {newRuleValue !== null && (
-                            <div className="text-black">
-                              <div className="font-bold">قانون جدید:</div>
-                              <div className="pr-1">{newRuleValue}</div>
-                            </div>
-                          )} */}
                               {/*  LAW 2 */}
                               <div className="text-black">
                                 <div className="font-bold">قانون دوم:</div>

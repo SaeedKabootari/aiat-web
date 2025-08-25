@@ -11,20 +11,15 @@ const SendSearchResolutionModal = (props) => {
 
   const selectionIdsHandler = (selectedArray) => {
     setSelectedTopicsId(selectedArray);
-    console.log("Selected IDs in parent:", selectedArray);
   };
 
   useEffect(() => {
     const getTopics = async () => {
       await getActionAx(`/api/topics`)
         .then((res) => {
-          console.log("ZZZZZZZZZZZZZZZZZZZZ", res);
-          console.log(transformKeys(res.data));
-          console.log(res.data);
           setTopics(transformKeys(res.data));
         })
         .catch((err) => {
-          console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
           console.log(err);
         });
     };
@@ -39,40 +34,25 @@ const SendSearchResolutionModal = (props) => {
     }));
     await getActionAx(`/api/laws/${parseInt(resolutionId, 10)}/sections`)
       .then((res) => {
-        console.log("SHOW", res.data);
+
         props.setSelectedResolution(res.data);
         props.onClose();
       })
       .catch((err) => {
         console.log(err);
       });
-    console.log(resolutionId, "id");
+
   };
 
   const searchTermRef = useRef(null);
 
   const searchHandler = async () => {
-    console.log(searchTermRef.current.value);
-    console.log(localStorage.getItem("token"));
-
-    // await getActionAx(
-    //   `/api/laws/search?q=${searchTermRef.current.value}&limit=${10}`
-    // )
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     setResolutions(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-
     await postActionAx(`/api/laws/search`, {
       q: searchTermRef.current.value,
       limit: 50,
       topic_ids: selectedTopicsId,
     })
       .then((res) => {
-        console.log(res.data);
         setResolutions(res.data);
       })
       .catch((err) => {

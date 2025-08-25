@@ -6,9 +6,9 @@ import { useNavigate } from "react-router-dom";
 import useErrorHandler from "../hooks/useErrorHandler";
 
 const ResolutionsList = (props) => {
-    const errorHandler = useErrorHandler();
+  const errorHandler = useErrorHandler();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [resolutions, setResolutions] = useState(null);
 
   const [topics, setTopics] = useState([]);
@@ -16,21 +16,15 @@ const ResolutionsList = (props) => {
 
   const selectionIdsHandler = (selectedArray) => {
     setSelectedTopicsId(selectedArray);
-    console.log("Selected IDs in parent:", selectedArray);
   };
 
   useEffect(() => {
     const getTopics = async () => {
       await getActionAx(`/api/topics`)
         .then((res) => {
-          console.log("ZZZZZZZZZZZZZZZZZZZZ", res);
-          console.log(transformKeys(res.data));
-          console.log(res.data);
           setTopics(transformKeys(res.data));
         })
         .catch((err) => {
-          console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
-          console.log(err);
           errorHandler(err);
         });
     };
@@ -39,42 +33,12 @@ const ResolutionsList = (props) => {
   }, []);
 
   const selectResolutionHandler = async (resolutionId) => {
-
-    navigate(`/resolution/${resolutionId}`)
-    // props.setDiscoveringObj((prevState) => ({
-    //   ...prevState,
-    //   check_law_id: parseInt(resolutionId, 10),
-    // }));
-    // await getActionAx(`/api/laws/${parseInt(resolutionId, 10)}/sections`)
-    //   .then((res) => {
-    //     console.log("SHOW", res.data);
-    //     // props.setSelectedResolution(res.data);
-    //     // props.onClose();
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-    // console.log(resolutionId, "id");
-
-
+    navigate(`/resolution/${resolutionId}`);
   };
 
   const searchTermRef = useRef(null);
 
   const searchHandler = async () => {
-    console.log(searchTermRef.current.value);
-    console.log(localStorage.getItem("token"));
-
-    // await getActionAx(
-    //   `/api/laws/search?q=${searchTermRef.current.value}&limit=${10}`
-    // )
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     setResolutions(res.data);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
 
     await postActionAx(`/api/laws/search`, {
       q: searchTermRef.current.value,
@@ -82,11 +46,9 @@ const ResolutionsList = (props) => {
       topic_ids: selectedTopicsId,
     })
       .then((res) => {
-        console.log(res.data);
         setResolutions(res.data);
       })
       .catch((err) => {
-        console.log(err);
         errorHandler(err);
       });
   };

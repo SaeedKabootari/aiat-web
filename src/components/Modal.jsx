@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import  { useEffect, useRef } from 'react';
 
 // Define the Modal component with TypeScript-like prop types (or use PropTypes in JS)
 const Modal = ({

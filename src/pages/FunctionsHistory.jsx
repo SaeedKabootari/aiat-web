@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getActionAx } from "../api";
 import { formatText, toPersianTime } from "../utils/utils";
 import PDFExport from "../components/PDFExport";
@@ -6,27 +6,9 @@ import ContradictionTablePdf from "../components/ContradictionTablePdf";
 import useErrorHandler from "../hooks/useErrorHandler";
 import Modal from "../components/Modal";
 
-// const testItems = Array.from({ length: 20 }, (_, index) => ({
-//   contradiction: false,
-//   finish_time: 1754479574,
-//   first_law_caption:
-//     "قانون وصول برخي از درآمدهاي دولت و مصرف آن در موارد معيّن",
-//   first_law_id: 21,
-//   first_section_caption: "ماده 8>بند هـ",
-//   first_section_id: 117356,
-//   id: 5128 + index, // Unieke ID voor elk item
-//   response:
-//     "ماده 24 قانون معادن به دستگاه‌های اجرایی و متوليان قانونی مربوطه دستور می‌دهد که حداکثر ظرف دو ماه به استعلام وزارت صنعت، معدن و تجارت برای صدور پروانه اکتشاف پاسخ دهند. در حالی که متن دوم که مربوط به مالیات بر درآمد مستغلات است، هیچ ارتباطی با موضوع اکتشاف معادن ندارد.",
-//   second_law_caption: null,
-//   second_law_id: null,
-//   second_section_caption: null,
-//   second_section_id: null,
-// }));
-
 const FunctionsHistory = () => {
   const errorHandler = useErrorHandler();
   const [tasks, setTasks] = useState([]);
-  // const [messages, setMessages] = useState([...testItems]);
   const [messages, setMessages] = useState([]);
 
   const [selectedContradiction, setSelectedContradiction] = useState(null);
@@ -37,61 +19,29 @@ const FunctionsHistory = () => {
 
   const deleteTaskRef = useRef(null);
 
-  useEffect(() => {
-    console.log(haveContradiction);
-  }, [haveContradiction]);
-
   const getTasks = async () => {
     let getUrl = "/api/tasks";
 
     await getActionAx(getUrl)
       .then((res) => {
-        console.log(res.data);
         setTasks(res.data);
       })
       .catch((err) => {
         errorHandler(err);
-        console.log(err);
       });
   };
 
   useEffect(() => {
-    // const getMessages = async () => {
-    //   let getUrl = "/api/tasks";
-
-    //   await getActionAx(getUrl)
-    //     .then((res) => {
-    //       console.log(res.data);
-    //       setTasks(res.data);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    // };
-
-    // getMessages();
     getTasks();
   }, []);
 
   const deleteTaskHandler = async () => {
-    console.log(deleteTaskRef.current);
-    console.log("delete=>", deleteTaskRef.current.title);
-    console.log("deleteId=>", deleteTaskRef.current.task_id);
-
     //write api for it
     setDeleteModalOpen(false);
-
     // getTasks();
   };
 
   const selectTaskHandler = async (task) => {
-    // let getUrl;
-    // if (haveContradiction === null) {
-    //   getUrl = `/api/task/${taskId}`;
-    // } else if (haveContradiction !== null) {
-    //   getUrl = `/api/task/${taskId}?contradiction=${haveContradiction}`;
-    // }
-    console.log(task);
     let getUrl = `/api/task/${task.task_id}`;
     const params = new URLSearchParams();
     if (haveContradiction !== null) {
@@ -111,8 +61,6 @@ const FunctionsHistory = () => {
   };
 
   const selectContradictionHandler = async (item) => {
-    console.log(item);
-
     let showObj = {
       first_law_caption: item.first_law_caption,
       first_section_caption: item.first_section_caption,
@@ -123,47 +71,31 @@ const FunctionsHistory = () => {
 
     // this line for test:
     if (item.first_section_id !== null) {
-      // await getActionAx(`/api/sections/${2446350}`)
       await getActionAx(`/api/sections/${item.first_section_id}`)
         .then((res) => {
-          console.log("first_______________________", res);
-          console.log(res.data);
           showObj.first_section_full_path = res.data.full_path;
           showObj.first_section_text = res.data.text;
           showObj.first_section_status_caption = res.data.status_caption;
           showObj.first_section_topics = res.data.topics;
         })
         .catch((err) => {
-          console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
-          console.log(err);
           errorHandler(err);
         });
     }
     if (item.second_section_id !== null) {
-      // await getActionAx(`/api/sections/${2446350}`)
       await getActionAx(`/api/sections/${item.second_section_id}`)
         .then((res) => {
-          console.log("second_______________________", res);
-          console.log(res.data);
           showObj.second_section_full_path = res.data.full_path;
           showObj.second_section_text = res.data.text;
           showObj.second_section_status_caption = res.data.status_caption;
           showObj.second_section_topics = res.data.topics;
         })
         .catch((err) => {
-          console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
-          console.log(err);
           errorHandler(err);
         });
     }
-    console.log(showObj);
-
     setSelectedContradiction(showObj);
   };
-
-  // function toPersianTime(timestamp) {
-  //   return new Date(timestamp * 1000).toLocaleTimeString("fa-IR");
-  // }
 
   return (
     <div>
@@ -195,28 +127,11 @@ const FunctionsHistory = () => {
         </div>
       </Modal>
 
-      {/* filters */}
-      {/* <div className="w-full flex justify-center mb-2">
-        <div className="flex align-items gap-2">
-          <span>تناقض:</span>
-          <input
-            type="checkbox"
-            checked={haveContradiction}
-            onChange={(e) =>
-              e.target.checked
-                ? setHaveContradiction(true)
-                : setHaveContradiction(null)
-            }
-          />
-        </div>
-      </div> */}
-
       <div className="w-full mb-5 flex justify-center">
         <div className="w-[100%] py-3 px-3  flex items-center  gap-2 bg-gray-50 rounded-sm ring-2 ring-[#242752]">
           <span>تناقض:</span>
           <input
             type="checkbox"
-
             checked={haveContradiction}
             onChange={(e) =>
               e.target.checked
@@ -559,9 +474,6 @@ const FunctionsHistory = () => {
             )}
           </div>
         </div>
-
-        {/* test */}
-        {/* <ContradictionTablePdf  data={messages}/> */}
       </div>
     </div>
   );
