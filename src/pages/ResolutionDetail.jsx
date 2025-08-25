@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getActionAx } from "../api";
+import useErrorHandler from "../hooks/useErrorHandler";
 
 const ResolutionDetail = () => {
+    const errorHandler = useErrorHandler();
+
   const [resolution, setResolution] = useState();
   const params = useParams();
   
@@ -13,6 +16,7 @@ const ResolutionDetail = () => {
         console.log('OOOOO' ,res.data )
       })
       .catch(console.error);
+      errorHandler(err);
   };
 
   useEffect(() => {

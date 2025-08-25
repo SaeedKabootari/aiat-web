@@ -105,7 +105,9 @@ const FunctionsHistory = () => {
       .then((res) => {
         setMessages(res.data.results);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        errorHandler(err);
+      });
   };
 
   const selectContradictionHandler = async (item) => {
@@ -134,6 +136,7 @@ const FunctionsHistory = () => {
         .catch((err) => {
           console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
           console.log(err);
+          errorHandler(err);
         });
     }
     if (item.second_section_id !== null) {
@@ -150,6 +153,7 @@ const FunctionsHistory = () => {
         .catch((err) => {
           console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
           console.log(err);
+          errorHandler(err);
         });
     }
     console.log(showObj);

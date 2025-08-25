@@ -5,6 +5,7 @@ import { getActionAx, postActionAx } from "../api";
 import { toast } from "react-toastify";
 import { formatText, toPersianTime, transformKeys } from "../utils/utils";
 import MultiSelect from "../components/MultiSelect";
+import useErrorHandler from "../hooks/useErrorHandler";
 
 // const testItems = Array.from({ length: 20 }, (_, index) => ({
 //   contradiction: false,
@@ -24,6 +25,8 @@ import MultiSelect from "../components/MultiSelect";
 // }));
 
 const DiscoveringContradiction = (props) => {
+    const errorHandler = useErrorHandler();
+
   const [tab, setTab] = useState("requestTab");
 
   const [discoveringObj, setDiscoveringObj] = useState({
@@ -76,6 +79,7 @@ const DiscoveringContradiction = (props) => {
         .catch((err) => {
           console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
           console.log(err);
+          errorHandler(err);
         });
     };
 
@@ -135,7 +139,7 @@ const DiscoveringContradiction = (props) => {
             }
           }
         })
-        .catch((err) => {});
+        .catch((err) => {errorHandler(err);});
     };
 
     console.log("++++");
@@ -168,6 +172,7 @@ const DiscoveringContradiction = (props) => {
         })
         .catch((err) => {
           console.log(err);
+          errorHandler(err);
         });
     } else if (!newRule && compareWithAll) {
       toast.info("کشف تناقض شروع شد.");
@@ -181,6 +186,7 @@ const DiscoveringContradiction = (props) => {
         })
         .catch((err) => {
           console.log(err);
+          errorHandler(err);
         });
     } else if (newRule && !compareWithAll) {
       toast.info("کشف تناقض شروع شد.");
@@ -195,6 +201,7 @@ const DiscoveringContradiction = (props) => {
         })
         .catch((err) => {
           console.log(err);
+          errorHandler(err);
         });
     } else if (newRule && compareWithAll) {
       toast.info("کشف تناقض شروع شد.");
@@ -210,6 +217,7 @@ const DiscoveringContradiction = (props) => {
         })
         .catch((err) => {
           console.log(err);
+          errorHandler(err);
         });
     }
   };
@@ -240,6 +248,7 @@ const DiscoveringContradiction = (props) => {
         .catch((err) => {
           console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
           console.log(err);
+          errorHandler(err);
         });
     }
     if (item.second_section_id !== null) {
@@ -256,6 +265,7 @@ const DiscoveringContradiction = (props) => {
         .catch((err) => {
           console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
           console.log(err);
+          errorHandler(err);
         });
     }
     console.log(showObj);
@@ -454,9 +464,9 @@ const DiscoveringContradiction = (props) => {
               </button>
             </div>
           </div> */}
-{/* forth */}
+          {/* forth */}
 
-<div className="absolute bottom-0 w-full py-3 px-3  bg-[#8d8da8] rounded-sm ring-2 ring-[#242752]">
+          <div className="absolute bottom-0 w-full py-3 px-3  bg-[#8d8da8] rounded-sm ring-2 ring-[#242752]">
             <div className="flex justify-end">
               <button
                 onClick={discoveringContradictionHandler}
@@ -466,7 +476,6 @@ const DiscoveringContradiction = (props) => {
               </button>
             </div>
           </div>
-
 
           {/* fifth */}
           {/* <div className="fixed left-1/2 transform -translate-x-1/2 w- bottom-2 w-[50%] py-3 px-3  bg-[#8d8da8] rounded-sm ring-2 ring-[#242752] ">

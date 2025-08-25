@@ -6,8 +6,11 @@ import { postActionAx } from "../api";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import { todoActions } from "../shop/todoSlice";
+import useErrorHandler from "../hooks/useErrorHandler";
 
 const Login = () => {
+    const errorHandler = useErrorHandler();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
@@ -36,6 +39,7 @@ const Login = () => {
       })
       .catch((err) => {
         console.log(err);
+        errorHandler(err);
       });
   };
 

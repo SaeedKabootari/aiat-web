@@ -3,8 +3,11 @@ import { getActionAx, postActionAx } from "../api";
 import { transformKeys } from "../utils/utils";
 import MultiSelect from "../components/MultiSelect";
 import { useNavigate } from "react-router-dom";
+import useErrorHandler from "../hooks/useErrorHandler";
 
 const ResolutionsList = (props) => {
+    const errorHandler = useErrorHandler();
+
   const navigate = useNavigate()
   const [resolutions, setResolutions] = useState(null);
 
@@ -28,6 +31,7 @@ const ResolutionsList = (props) => {
         .catch((err) => {
           console.log("ZZZZZZZZZZZZZZZZZZZZ", err);
           console.log(err);
+          errorHandler(err);
         });
     };
 
@@ -83,6 +87,7 @@ const ResolutionsList = (props) => {
       })
       .catch((err) => {
         console.log(err);
+        errorHandler(err);
       });
   };
 

@@ -596,8 +596,11 @@ import { useState, useRef, useEffect } from "react";
 import { postActionAx, postActionSignalAx } from "../api";  // Assuming this supports abort signals
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import useErrorHandler from "../hooks/useErrorHandler";
 
 const ChatPage = () => {
+    const errorHandler = useErrorHandler();
+
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef(null);
@@ -620,6 +623,7 @@ const ChatPage = () => {
       await postActionAx(`/api/chat_reset`, {});  
     } catch (err) {
       console.log(err);
+      errorHandler(err)
     }
   };
 
@@ -668,6 +672,8 @@ const ChatPage = () => {
     } catch (err) {
       if (err.name !== 'AbortError') {  // Only log if it's not an abort
         console.log(err);
+        errorHandler(err);
+
       }
       // If aborted, do nothing – the message won't be added
     }
