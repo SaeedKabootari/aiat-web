@@ -26,6 +26,11 @@ const LayoutMenu = (props) => {
     navigate("/");
   };
 
+  const toggleLanguage = () => {
+    const newLang = i18n.language === "en" ? "fa" : "en";
+    i18n.changeLanguage(newLang);
+  };
+
   return (
     <>
       <div className={`flex flex-col h-[100vh] bg-gray-100 `}>
@@ -42,6 +47,17 @@ const LayoutMenu = (props) => {
           theme="light"
           transition={Bounce}
         />
+
+        <button
+          onClick={toggleLanguage}
+          className={`fixed top-[26px] bg-blue-500 text-white px-2 py-1 rounded shadow-md cursor-pointer ${
+            i18n.language === "fa" ? "left-22" : "right-22"
+          }`}
+          title={t("toggle_language")}
+        >
+          {i18n.language === "en" ? "FA" : "EN"}
+        </button>
+
         {/* Header (Full width) */}
         <header className="bg-[#242752] shadow-sm  py-6 px-6 flex justify-between items-center">
           <span className="text-3xl text-white font-semibold">

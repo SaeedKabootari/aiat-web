@@ -21,6 +21,11 @@ const Login = () => {
 
   const { connect } = useWebSocket();
 
+  const toggleLanguage = () => {
+    const newLang = i18n.language === "en" ? "fa" : "en";
+    i18n.changeLanguage(newLang);
+  };
+
   const loginHandler = async (event) => {
     event.preventDefault();
 
@@ -43,14 +48,14 @@ const Login = () => {
 
   return (
     <>
-      <AnimatedBackground 
+      <AnimatedBackground
         animationName="particleNetwork"
         interactive={true}
         interactionConfig={{
-          effect: 'attract',     // 'attract', 'repel', 'follow', 'burst'
-          strength: 0.8,         // 0-1
-          radius: 150,           // pixels
-          continuous: true       // keep effect after mouse leaves
+          effect: "attract", // 'attract', 'repel', 'follow', 'burst'
+          strength: 0.8, // 0-1
+          radius: 150, // pixels
+          continuous: true, // keep effect after mouse leaves
         }}
       />
       <div
@@ -59,10 +64,19 @@ const Login = () => {
       >
         <div className="w-full max-w-md p-8  rounded-lg shadow-lg border border-[#A0A0A0] mx-4 backdrop-blur-lg bg-white/20">
           <form className="space-y-6" onSubmit={loginHandler}>
-            <div className="flex justify-center">
+            <div className="flex justify-between">
               <h1 className="text-3xl text-[#fff]">{t("welcome_to_diar")}</h1>
+              <button
+                type="button"
+                onClick={toggleLanguage}
+                className={`bg-white text-[#242752] px-2 py-1 rounded shadow-md cursor-pointer ${
+                  i18n.language === "fa" ? "left-22" : "right-22"
+                }`}
+                title={t("toggle_language")}
+              >
+                {i18n.language === "en" ? "FA" : "EN"}
+              </button>
             </div>
-
             <div>
               <label
                 htmlFor="username"
@@ -97,6 +111,7 @@ const Login = () => {
                 required
               />
             </div>
+
             <div>
               <button
                 type="submit"

@@ -3,7 +3,6 @@ import {
   Navigate,
   Route,
   Routes,
-  useLocation,
 } from "react-router-dom";
 import { WebSocketProvider } from "./context/WebSocketContext";
 import Home from "./pages/Home";
@@ -80,25 +79,9 @@ i18n
   });
 
 function App() {
-  const [pathname, setPathname] = useState(window.location.pathname);
-  useEffect(() => {
-    const handleRouteChange = () => {
-      console.log('z')
-      const currentPath = window.location.pathname;
-      if (currentPath !== pathname) {
-        setPathname(currentPath);
-      }
-    };
-
-    // You can use setTimeout as a fallback to check periodically
-    const intervalId = setInterval(handleRouteChange, 300); // check every 300ms
-
-    return () => clearInterval(intervalId);
-  }, [pathname]);
-
   const { t, i18n } = useTranslation();
 
-  console.log(window.location.pathname);
+ 
 
   const loggedIn = useSelector((state) => state.todo.loggedIn);
 
@@ -108,10 +91,10 @@ function App() {
     document.documentElement.lang = i18n.language;
   }, [i18n.language]);
 
-  const toggleLanguage = () => {
-    const newLang = i18n.language === "en" ? "fa" : "en";
-    i18n.changeLanguage(newLang);
-  };
+  // const toggleLanguage = () => {
+  //   const newLang = i18n.language === "en" ? "fa" : "en";
+  //   i18n.changeLanguage(newLang);
+  // };
 
   return (
     <div
@@ -122,23 +105,12 @@ function App() {
       <WebSocketProvider enabled={false}>
         <BrowserRouter>
           <div className="">
-            {/* Language Toggle Button */}
-            {pathname !== "/" && (
-              <button
-                onClick={toggleLanguage}
-                className={`fixed top-[26px] bg-blue-500 text-white px-2 py-1 rounded shadow-md cursor-pointer ${
-                  i18n.language === "fa" ? "left-22" : "right-22"
-                }`}
-                title={t("toggle_language")}
-              >
-                {i18n.language === "en" ? "FA" : "EN"}
-              </button>
-            )}
             <Routes>
               <Route path="/" element={<SignIn />} />
               {/* Protected Routes - ONLY show when logged in */}
               {loggedIn ? (
                 <Route element={<LayoutMenu />}>
+                  
                   <Route path="/home" element={<Home />} />
                   <Route path="/test" element={<Test />} />
                   <Route
