@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { getActionAx, postActionAx } from "../api";
 import MultiSelect from "./MultiSelect";
 import { transformKeys } from "../utils/utils";
+import useErrorHandler from "../hooks/useErrorHandler";
 
 const SearchResolutionModal = (props) => {
-  
+  const errorHandler = useErrorHandler();
 
   const [resolutions, setResolutions] = useState(null);
 
@@ -22,7 +23,7 @@ const SearchResolutionModal = (props) => {
           setTopics(transformKeys(res.data));
         })
         .catch((err) => {
-          console.log(err);
+          errorHandler(err);
         });
     };
 
@@ -40,6 +41,7 @@ const SearchResolutionModal = (props) => {
         props.onClose();
       })
       .catch((err) => {
+        errorHandler(err);
       });
   };
 
@@ -55,7 +57,7 @@ const SearchResolutionModal = (props) => {
         setResolutions(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        errorHandler(err);
       });
   };
 
@@ -66,8 +68,9 @@ const SearchResolutionModal = (props) => {
       onClick={props.onClose}
     >
       {/* Modal container */}
-      <div className="bg-white p-4 rounded shadow-lg relative max-w-4xl w-full"
-      onClick={(e) => e.stopPropagation()}
+      <div
+        className="bg-white p-4 rounded shadow-lg relative max-w-4xl w-full"
+        onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}
         <button

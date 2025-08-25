@@ -2,8 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { getActionAx, postActionAx } from "../api";
 import MultiSelect from "./MultiSelect";
 import { transformKeys } from "../utils/utils";
+import useErrorHandler from "../hooks/useErrorHandler";
 
 const SendSearchResolutionModal = (props) => {
+  const errorHandler = useErrorHandler();
+
   const [resolutions, setResolutions] = useState(null);
 
   const [topics, setTopics] = useState([]);
@@ -20,7 +23,7 @@ const SendSearchResolutionModal = (props) => {
           setTopics(transformKeys(res.data));
         })
         .catch((err) => {
-          console.log(err);
+          errorHandler(err);
         });
     };
 
@@ -34,14 +37,12 @@ const SendSearchResolutionModal = (props) => {
     }));
     await getActionAx(`/api/laws/${parseInt(resolutionId, 10)}/sections`)
       .then((res) => {
-
         props.setSelectedResolution(res.data);
         props.onClose();
       })
       .catch((err) => {
-        console.log(err);
+        errorHandler(err);
       });
-
   };
 
   const searchTermRef = useRef(null);
@@ -56,7 +57,7 @@ const SendSearchResolutionModal = (props) => {
         setResolutions(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        errorHandler(err);
       });
   };
 
