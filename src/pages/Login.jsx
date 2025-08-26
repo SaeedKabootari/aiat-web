@@ -29,17 +29,16 @@ const Login = () => {
   const loginHandler = async (event) => {
     event.preventDefault();
 
-    await postActionAx("/api/login", {
-      username: username,
-      password: password,
-    })
+    await postActionAx("/api/login",
+      `username=${username}&password=${password}`
+   )
       .then((res) => {
         dispatch(todoActions.changeloggedInState(true));
         localStorage.setItem("loggedIn", true);
 
         connect();
 
-        navigate("/discovering-contradiction");
+        navigate("/chat");
       })
       .catch((err) => {
         errorHandler(err);
