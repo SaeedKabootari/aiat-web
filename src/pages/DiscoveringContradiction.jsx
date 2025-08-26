@@ -21,7 +21,6 @@ const DiscoveringContradiction = (props) => {
   const [newRule, setnNewRule] = useState(true);
   const [newRuleValue, setnNewRuleValue] = useState(null);
 
-
   const [taskId, setTaskId] = useState(null);
   const [messages, setMessages] = useState([]);
 
@@ -54,7 +53,6 @@ const DiscoveringContradiction = (props) => {
 
     getTopics();
   }, []);
-
 
   const sinceRef = useRef(null); // Add this ref
 
@@ -121,9 +119,18 @@ const DiscoveringContradiction = (props) => {
   }, [taskId, fetchAgain]);
 
   const discoveringContradictionHandler = async () => {
-    setLoading(true);
-    setTab("resultTab");
     if (!newRule && !compareWithAll) {
+      const hasNullProperty = Object.values(discoveringObj).some(
+        (value) => value === null
+      );
+      if (hasNullProperty) {
+        toast.error("!لطفا فیلد های خالی رو پر کنید");
+        return;
+      }
+
+      setLoading(true);
+      setTab("resultTab");
+
       toast.info("کشف تناقض شروع شد.");
       await postActionAx(`/api/analyze_rules`, discoveringObj)
         .then((res) => {
@@ -133,6 +140,17 @@ const DiscoveringContradiction = (props) => {
           errorHandler(err);
         });
     } else if (!newRule && compareWithAll) {
+      if (
+        discoveringObj.law_id === null ||
+        discoveringObj.section_no === null
+      ) {
+        toast.error("!لطفا فیلد های خالی رو پر کنید");
+        return;
+      }
+
+      setLoading(true);
+      setTab("resultTab");
+
       toast.info("کشف تناقض شروع شد.");
       await postActionAx(`/api/analyze_rules`, {
         ...discoveringObj,
@@ -146,6 +164,19 @@ const DiscoveringContradiction = (props) => {
           errorHandler(err);
         });
     } else if (newRule && !compareWithAll) {
+      if (
+        discoveringObj.check_law_id === null ||
+        newRuleValue === null ||
+        newRuleValue.trim() === "" ||
+        titlePromptRef.current.value.trim() === ""
+      ) {
+        toast.error("!لطفا فیلد های خالی رو پر کنید");
+        return;
+      }
+
+      setLoading(true);
+      setTab("resultTab");
+
       toast.info("کشف تناقض شروع شد.");
       await postActionAx(`/api/analyze`, {
         prompt: newRuleValue,
@@ -159,6 +190,16 @@ const DiscoveringContradiction = (props) => {
           errorHandler(err);
         });
     } else if (newRule && compareWithAll) {
+      if (
+        newRuleValue === null ||
+        newRuleValue.trim() === "" ||
+        titlePromptRef.current.value.trim() === ""
+      ) {
+        toast.error("!لطفا فیلد های خالی رو پر کنید");
+        return;
+      }
+      setLoading(true);
+      setTab("resultTab");
       toast.info("کشف تناقض شروع شد.");
       await postActionAx(`/api/analyze`, {
         prompt: newRuleValue,
