@@ -2,8 +2,11 @@ import { useRef, useState } from "react";
 import { postActionAx } from "../api";
 import useErrorHandler from "../hooks/useErrorHandler";
 import Modal from "../components/Modal";
+import useWindowDimensions from "../hooks/useWindowDimensions";
 
 const Test = (props) => {
+  const windowWidth = useWindowDimensions().width;
+  console.log(windowWidth);
   const [open, setOpen] = useState(false);
   const errorHandler = useErrorHandler();
   const searchTermRef = useRef(null);
@@ -25,14 +28,19 @@ const Test = (props) => {
 
   return (
     <>
-        <Modal
+      <Modal
         isOpen={open}
-        onClose={()=>setOpen(false)}
+        onClose={() => setOpen(false)}
         // title="Simple Modal"
       >
         <p>This is some dynamic content. You can put anything here!</p>
       </Modal>
-      <button className='bg-violet-400 text-white cursor-pointer p-4'onClick={() => setOpen(true)}>open modal</button>
+      <button
+        className="bg-violet-400 text-white cursor-pointer p-4"
+        onClick={() => setOpen(true)}
+      >
+        open modal
+      </button>
 
       <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
     </>

@@ -200,6 +200,7 @@ const DiscoveringContradiction = (props) => {
       }
       setLoading(true);
       setTab("resultTab");
+
       toast.info("کشف تناقض شروع شد.");
       await postActionAx(`/api/analyze`, {
         prompt: newRuleValue,
