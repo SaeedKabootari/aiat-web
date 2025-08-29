@@ -58,6 +58,7 @@ const LayoutMenu = (props) => {
             <li>
               <NavLink
                 to="/chat"
+                onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
                   `flex gap-1 items-center py-2 text-gray-600 hover:bg-gray-100 rounded transition ${
                     isActive
@@ -86,6 +87,7 @@ const LayoutMenu = (props) => {
             <li>
               <NavLink
                 to="/discovering-contradiction"
+                onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
                   `flex gap-1 items-center py-2 text-gray-600 hover:bg-gray-100 rounded transition ${
                     isActive
@@ -125,6 +127,7 @@ const LayoutMenu = (props) => {
             <li>
               <NavLink
                 to="/functions-history"
+                onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
                   `flex gap-1 items-center py-2 text-gray-600 hover:bg-gray-100 rounded transition ${
                     isActive
@@ -153,6 +156,7 @@ const LayoutMenu = (props) => {
             <li>
               <NavLink
                 to="/resolutions-list"
+                onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
                   `flex gap-1 items-center py-2 text-gray-600 hover:bg-gray-100 rounded transition ${
                     isActive
