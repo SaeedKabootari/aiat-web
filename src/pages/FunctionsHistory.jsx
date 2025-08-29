@@ -13,7 +13,7 @@ const FunctionsHistory = () => {
 
   const [selectedContradiction, setSelectedContradiction] = useState(null);
 
-  const [haveContradiction, setHaveContradiction] = useState(false);
+  const [haveContradiction, setHaveContradiction] = useState(null);
 
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
@@ -25,6 +25,7 @@ const FunctionsHistory = () => {
     await getActionAx(getUrl)
       .then((res) => {
         setTasks(res.data);
+        console.log('tasks=>' , res.data)
       })
       .catch((err) => {
         errorHandler(err);
@@ -54,6 +55,7 @@ const FunctionsHistory = () => {
     await getActionAx(getUrl)
       .then((res) => {
         setMessages(res.data.results);
+        console.log('selectedTask=>' , res.data.results)
       })
       .catch((err) => {
         errorHandler(err);
@@ -284,191 +286,199 @@ const FunctionsHistory = () => {
             {messages.length === 0 ? (
               <div className="">نتیجه ای موجود نیست.</div>
             ) : (
-              <div className="grid grid-cols-12 gap-3">
-                <div className="col-span-8">
-                  <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
-                    <div
-                      className="overflow-auto max-h-[40vh]"
-                      // style={{ maxHeight: "270px" }}
-                    >
-                      <table className="min-w-full">
-                        {/* Fixed Header */}
-                        <thead className="sticky top-0 z-10">
-                          <tr className="bg-[#242752] text-white">
-                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              ردیف
-                            </th>
-                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              تناقض
-                            </th>
-                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              زمان پایان
-                            </th>
-                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              قانون اول
-                            </th>
-                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              ماده
-                            </th>
-                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              قانون دوم
-                            </th>
-                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              ماده
-                            </th>
-                            <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
-                              پاسخ
-                            </th>
-                          </tr>
-                        </thead>
-                        {/* Scrollable Body */}
-                        <tbody className="bg-white divide-y divide-gray-200">
-                          {messages.map((item, index) => (
-                            <tr
-                              key={index}
-                              className="hover:bg-gray-50 cursor-pointer"
-                              onClick={() => selectContradictionHandler(item)}
-                            >
-                              <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
-                                {index + 1}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
-                                {item?.contradiction ? "دارد" : "ندارد"}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-[10%]">
-                                {toPersianTime(item?.finish_time)}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
-                                {formatText(item?.first_law_caption)}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
-                                {formatText(item?.first_section_caption)}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
-                                {formatText(item?.second_law_caption)}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
-                                {formatText(item?.second_section_section)}
-                              </td>
-                              <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[40%]">
-                                {formatText(item?.response)}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                  <PDFExport
-                    tableJSX={
-                      <>
-                        <ContradictionTablePdf data={messages} />
-                      </>
-                    }
-                  />
+              <div>
+                <h3 className="mb-2 text-white p-2">مقایسه:</h3>
+
+                <div className="pr-1">
+                  {selectedContradiction?.second_law_caption}
                 </div>
-                <div className="col-span-4">
-                  {selectedContradiction !== null && (
+
+                <div className="grid grid-cols-12 gap-3">
+                  <div className="col-span-8">
                     <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
                       <div
-                        className="overflow-auto max-h-[40vh] bg-white"
+                        className="overflow-auto max-h-[40vh]"
                         // style={{ maxHeight: "270px" }}
                       >
-                        {/* Left content goes here */}
-                        <div className="p-4 space-y-4">
-                          {/* Add more items as needed */}
-                          {/* RESPONSE */}
-                          <div className="text-black">
-                            <div className="font-bold">نتیجه:</div>
-                            <div className="pr-1">
-                              {selectedContradiction?.response}
+                        <table className="min-w-full">
+                          {/* Fixed Header */}
+                          <thead className="sticky top-0 z-10">
+                            <tr className="bg-[#242752] text-white">
+                              <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                ردیف
+                              </th>
+                              <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                تناقض
+                              </th>
+                              <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                زمان پایان
+                              </th>
+                              <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                قانون اول
+                              </th>
+                              <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                ماده
+                              </th>
+                              <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                قانون دوم
+                              </th>
+                              <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                ماده
+                              </th>
+                              <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                پاسخ
+                              </th>
+                            </tr>
+                          </thead>
+                          {/* Scrollable Body */}
+                          <tbody className="bg-white divide-y divide-gray-200">
+                            {messages.map((item, index) => (
+                              <tr
+                                key={index}
+                                className="hover:bg-gray-50 cursor-pointer"
+                                onClick={() => selectContradictionHandler(item)}
+                              >
+                                <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                                  {index + 1}
+                                </td>
+                                <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[5%]">
+                                  {item?.contradiction ? "دارد" : "ندارد"}
+                                </td>
+                                <td className="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900 w-[10%]">
+                                  {toPersianTime(item?.finish_time)}
+                                </td>
+                                <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
+                                  {formatText(item?.first_law_caption)}
+                                </td>
+                                <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
+                                  {formatText(item?.first_section_caption)}
+                                </td>
+                                <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
+                                  {formatText(item?.second_law_caption)}
+                                </td>
+                                <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
+                                  {formatText(item?.second_section_section)}
+                                </td>
+                                <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[40%]">
+                                  {formatText(item?.response)}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    <PDFExport
+                      tableJSX={
+                        <>
+                          <ContradictionTablePdf data={messages} />
+                        </>
+                      }
+                    />
+                  </div>
+                  <div className="col-span-4">
+                    {selectedContradiction !== null && (
+                      <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
+                        <div
+                          className="overflow-auto max-h-[40vh] bg-white"
+                          // style={{ maxHeight: "270px" }}
+                        >
+                          {/* Left content goes here */}
+                          <div className="p-4 space-y-4">
+                            {/* Add more items as needed */}
+                            {/* RESPONSE */}
+                            <div className="text-black">
+                              <div className="font-bold">نتیجه:</div>
+                              <div className="pr-1">
+                                {selectedContradiction?.response}
+                              </div>
                             </div>
-                          </div>
-                          {/*  LAW 1 */}
-                          <div className="text-black">
-                            <div className="font-bold">قانون اول:</div>
-                            <div className="pr-1">
-                              {selectedContradiction?.first_law_caption}
+                            {/*  LAW 1 */}
+                            <div className="text-black">
+                              <div className="font-bold">قانون:</div>
+                              <div className="pr-1">
+                                {selectedContradiction?.first_law_caption}
+                              </div>
                             </div>
-                          </div>
-                          <div className="text-black">
-                            <div className="font-bold">عنوان ماده</div>
-                            <div className="pr-1">
-                              {selectedContradiction?.first_section_caption}
+                            <div className="text-black">
+                              <div className="font-bold">عنوان ماده</div>
+                              <div className="pr-1">
+                                {selectedContradiction?.first_section_caption}
+                              </div>
                             </div>
-                          </div>
-                          <div className="text-black">
-                            <div className="font-bold">وضعیت ماده:</div>
-                            <div className="pr-1">
-                              {
-                                selectedContradiction?.first_section_status_caption
-                              }
+                            <div className="text-black">
+                              <div className="font-bold">وضعیت ماده:</div>
+                              <div className="pr-1">
+                                {
+                                  selectedContradiction?.first_section_status_caption
+                                }
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="text-black">
-                            <div className="font-bold">موضوعات ماده:</div>
-                            {selectedContradiction?.first_section_topics?.map(
-                              (item, index) => {
-                                return <div className="pr-1">{item}</div>;
-                              }
-                            )}
-                          </div>
-
-                          <div className="text-black">
-                            <div className="font-bold">محتوای ماده:</div>
-                            <div className="pr-1">
-                              {selectedContradiction?.first_section_text}
+                            <div className="text-black">
+                              <div className="font-bold">موضوعات ماده:</div>
+                              {selectedContradiction?.first_section_topics?.map(
+                                (item, index) => {
+                                  return <div className="pr-1">{item}</div>;
+                                }
+                              )}
                             </div>
-                          </div>
 
-                          {/* {newRuleValue !== null && (
+                            <div className="text-black">
+                              <div className="font-bold">محتوای ماده:</div>
+                              <div className="pr-1">
+                                {selectedContradiction?.first_section_text}
+                              </div>
+                            </div>
+
+                            {/* {newRuleValue !== null && (
                             <div className="text-black">
                               <div className="font-bold">قانون جدید:</div>
                               <div className="pr-1">{newRuleValue}</div>
                             </div>
                           )} */}
-                          {/*  LAW 2 */}
-                          <div className="text-black">
-                            <div className="font-bold">قانون دوم:</div>
-                            <div className="pr-1">
-                              {selectedContradiction?.second_law_caption}
+                            {/*  LAW 2 */}
+                            {/* <div className="text-black">
+                              <div className="font-bold">قانون دوم:</div>
+                              <div className="pr-1">
+                                {selectedContradiction?.second_law_caption}
+                              </div>
                             </div>
-                          </div>
-                          <div className="text-black">
-                            <div className="font-bold">عنوان ماده:</div>
-                            <div className="pr-1">
-                              {selectedContradiction?.second_section_caption}
+                            <div className="text-black">
+                              <div className="font-bold">عنوان ماده:</div>
+                              <div className="pr-1">
+                                {selectedContradiction?.second_section_caption}
+                              </div>
                             </div>
-                          </div>
-                          <div className="text-black">
-                            <div className="font-bold">وضعیت ماده:</div>
-                            <div className="pr-1">
-                              {
-                                selectedContradiction?.second_section_status_caption
-                              }
+                            <div className="text-black">
+                              <div className="font-bold">وضعیت ماده:</div>
+                              <div className="pr-1">
+                                {
+                                  selectedContradiction?.second_section_status_caption
+                                }
+                              </div>
                             </div>
-                          </div>
 
-                          <div className="text-black">
-                            <div className="font-bold">موضوعات ماده:</div>
-                            {selectedContradiction?.second_section_topics?.map(
-                              (item, index) => {
-                                return <div className="pr-1">{item}</div>;
-                              }
-                            )}
-                          </div>
-
-                          <div className="text-black">
-                            <div className="font-bold">محتوای ماده:</div>
-                            <div className="pr-1">
-                              {selectedContradiction?.second_section_text}
+                            <div className="text-black">
+                              <div className="font-bold">موضوعات ماده:</div>
+                              {selectedContradiction?.second_section_topics?.map(
+                                (item, index) => {
+                                  return <div className="pr-1">{item}</div>;
+                                }
+                              )}
                             </div>
+
+                            <div className="text-black">
+                              <div className="font-bold">محتوای ماده:</div>
+                              <div className="pr-1">
+                                {selectedContradiction?.second_section_text}
+                              </div>
+                            </div> */}
                           </div>
                         </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
             )}
