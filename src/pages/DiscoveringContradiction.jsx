@@ -479,7 +479,20 @@ const DiscoveringContradiction = (props) => {
                 {messages.length > 0 && (
                   <div className="">
                     <div className="">
+
+<h3 className="mb-2 text-white p-2">مقایسه:</h3>
+
+                <div className="pr-1">
+                  {selectedContradiction?.second_law_caption}
+                </div>
+
                       <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
+
+
+
+
+
+
                         <div
                           className="overflow-auto max-h-[40vh]"
                           // style={{ maxHeight: "270px" }}
@@ -582,7 +595,7 @@ const DiscoveringContradiction = (props) => {
                               </div>
                               {/*  LAW 1 */}
                               <div className="text-black">
-                                <div className="font-bold">قانون اول:</div>
+                                <div className="font-bold">قانون:</div>
                                 <div className="pr-1">
                                   {selectedContradiction?.first_law_caption}
                                 </div>
@@ -619,7 +632,7 @@ const DiscoveringContradiction = (props) => {
                               </div>
 
                               {/*  LAW 2 */}
-                              <div className="text-black">
+                              {/* <div className="text-black">
                                 <div className="font-bold">قانون دوم:</div>
                                 <div className="pr-1">
                                   {selectedContradiction?.second_law_caption}
@@ -655,7 +668,7 @@ const DiscoveringContradiction = (props) => {
                                 <div className="pr-1">
                                   {selectedContradiction?.second_section_text}
                                 </div>
-                              </div>
+                              </div> */}
                             </div>
                           </div>
                         </div>
