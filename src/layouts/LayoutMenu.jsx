@@ -5,6 +5,7 @@ import { Bounce, ToastContainer } from "react-toastify";
 import Header from "./Header";
 import { useState } from "react";
 import useWindowDimensions from "../hooks/useWindowDimensions";
+import SidebarLinks from "./SidebarLinks";
 
 const LayoutMenu = (props) => {
   const windowWidth = useWindowDimensions().width;
@@ -20,6 +21,96 @@ const LayoutMenu = (props) => {
   //     navigate("/");
   //   }
   // }, [navigate]);
+  
+ const sidebarLinks = [
+    {
+      path: "/chat",
+      icon: (
+        <svg
+          className="w-5 h-5 mr-3"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"
+          />
+        </svg>
+      ),
+      label: "چت", // You can use t("Chat") if you want to translate it
+    },
+    {
+      path: "/discovering-contradiction",
+      icon: (
+        <svg
+          className="w-5 h-5 mr-3"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            cx="11"
+            cy="11"
+            r="8"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+          />
+          <line
+            x1="21"
+            y1="21"
+            x2="16.65"
+            y2="16.65"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+          />
+        </svg>
+      ),
+      label: t("Discovering a contradiction"),
+    },
+    {
+      path: "/functions-history",
+      icon: (
+        <svg
+          className="w-5 h-5 mr-3"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 8v4l3 3m9 0a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+      ),
+      label: "تاریخچه کارکردها",
+    },
+    {
+      path: "/resolutions-list",
+      icon: (
+        <svg
+          className="w-5 h-5 mr-3"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"
+          />
+        </svg>
+      ),
+      label: t("List of resolutions"),
+    },
+  ];
 
   return (
     <>
@@ -54,133 +145,7 @@ const LayoutMenu = (props) => {
                 </svg>
               </button>
             </li>
-
-            <li>
-              <NavLink
-                to="/chat"
-                onClick={() => setSidebarOpen(false)}
-                className={({ isActive }) =>
-                  `flex gap-1 items-center py-2 text-gray-600 hover:bg-gray-100 rounded transition ${
-                    isActive
-                      ? "bg-blue-100 text-blue-600"
-                      : "text-gray-600 hover:bg-gray-100"
-                  }`
-                }
-              >
-                <svg
-                  className="w-5 h-5 mr-3"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"
-                  />
-                </svg>
-                چت
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink
-                to="/discovering-contradiction"
-                onClick={() => setSidebarOpen(false)}
-                className={({ isActive }) =>
-                  `flex gap-1 items-center py-2 text-gray-600 hover:bg-gray-100 rounded transition ${
-                    isActive
-                      ? "bg-blue-100 text-blue-600"
-                      : "text-gray-600 hover:bg-gray-100"
-                  }`
-                }
-              >
-                <svg
-                  className="w-5 h-5 mr-3"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    cx="11"
-                    cy="11"
-                    r="8"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                  />
-                  <line
-                    x1="21"
-                    y1="21"
-                    x2="16.65"
-                    y2="16.65"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                  />
-                </svg>
-                {t("Discovering a contradiction")}
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink
-                to="/functions-history"
-                onClick={() => setSidebarOpen(false)}
-                className={({ isActive }) =>
-                  `flex gap-1 items-center py-2 text-gray-600 hover:bg-gray-100 rounded transition ${
-                    isActive
-                      ? "bg-blue-100 text-blue-600"
-                      : "text-gray-600 hover:bg-gray-100"
-                  }`
-                }
-              >
-                <svg
-                  className="w-5 h-5 mr-3"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8v4l3 3m9 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-                تاریخچه کارکردها
-              </NavLink>
-            </li>
-
-            <li>
-              <NavLink
-                to="/resolutions-list"
-                onClick={() => setSidebarOpen(false)}
-                className={({ isActive }) =>
-                  `flex gap-1 items-center py-2 text-gray-600 hover:bg-gray-100 rounded transition ${
-                    isActive
-                      ? "bg-blue-100 text-blue-600"
-                      : "text-gray-600 hover:bg-gray-100"
-                  }`
-                }
-              >
-                <svg
-                  className="w-5 h-5 mr-3"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"
-                  />
-                </svg>
-                {t("List of resolutions")}
-              </NavLink>
-            </li>
+           <SidebarLinks links={sidebarLinks} onLinkClick={() => setSidebarOpen(false)} />
           </ul>
         </nav>
       </aside>
@@ -212,132 +177,7 @@ const LayoutMenu = (props) => {
           {/* desktop sidebar */}
           {windowWidth > 1024 && (
             <aside className="w-64 bg-white border-l border-gray-200 p-4 overflow-y-auto">
-              <nav>
-                <ul className="space-y-2">
-                  <li>
-                    <NavLink
-                      to="/chat"
-                      className={({ isActive }) =>
-                        `flex gap-1 items-center py-2 text-gray-600 hover:bg-gray-100 rounded transition ${
-                          isActive
-                            ? "bg-blue-100 text-blue-600"
-                            : "text-gray-600 hover:bg-gray-100"
-                        }`
-                      }
-                    >
-                      <svg
-                        className="w-5 h-5 mr-3"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"
-                        />
-                      </svg>
-                      چت
-                    </NavLink>
-                  </li>
-
-                  <li>
-                    <NavLink
-                      to="/discovering-contradiction"
-                      className={({ isActive }) =>
-                        `flex gap-1 items-center py-2 text-gray-600 hover:bg-gray-100 rounded transition ${
-                          isActive
-                            ? "bg-blue-100 text-blue-600"
-                            : "text-gray-600 hover:bg-gray-100"
-                        }`
-                      }
-                    >
-                      <svg
-                        className="w-5 h-5 mr-3"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          cx="11"
-                          cy="11"
-                          r="8"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                        />
-                        <line
-                          x1="21"
-                          y1="21"
-                          x2="16.65"
-                          y2="16.65"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                        />
-                      </svg>
-                      {t("Discovering a contradiction")}
-                    </NavLink>
-                  </li>
-
-                  <li>
-                    <NavLink
-                      to="/functions-history"
-                      className={({ isActive }) =>
-                        `flex gap-1 items-center py-2 text-gray-600 hover:bg-gray-100 rounded transition ${
-                          isActive
-                            ? "bg-blue-100 text-blue-600"
-                            : "text-gray-600 hover:bg-gray-100"
-                        }`
-                      }
-                    >
-                      <svg
-                        className="w-5 h-5 mr-3"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 8v4l3 3m9 0a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                      تاریخچه کارکردها
-                    </NavLink>
-                  </li>
-
-                  <li>
-                    <NavLink
-                      to="/resolutions-list"
-                      className={({ isActive }) =>
-                        `flex gap-1 items-center py-2 text-gray-600 hover:bg-gray-100 rounded transition ${
-                          isActive
-                            ? "bg-blue-100 text-blue-600"
-                            : "text-gray-600 hover:bg-gray-100"
-                        }`
-                      }
-                    >
-                      <svg
-                        className="w-5 h-5 mr-3"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"
-                        />
-                      </svg>
-                      {t("List of resolutions")}
-                    </NavLink>
-                  </li>
-                </ul>
-              </nav>
+              <SidebarLinks links={sidebarLinks} />
             </aside>
           )}
           {/* Main Content (Left) */}
