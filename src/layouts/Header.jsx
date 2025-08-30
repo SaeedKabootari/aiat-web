@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { todoActions } from "../shop/todoSlice";
 import useWindowDimensions from "../hooks/useWindowDimensions";
+import { postActionAx } from "../api";
 
 const Header = (props) => {
   const windowWidth = useWindowDimensions().width;
@@ -10,10 +11,16 @@ const Header = (props) => {
   const { i18n, t } = useTranslation();
   const dispatch = useDispatch();
 
-  const logoutHandler = () => {
-    localStorage.removeItem("loggedIn");
-    dispatch(todoActions.changeloggedInState(false));
-    navigate("/");
+  const logoutHandler = async () => {
+    await postActionAx("/api/logout", {})
+      .then((res) => {
+        localStorage.removeItem("loggedIn");
+        dispatch(todoActions.changeloggedInState(false));
+        navigate("/");
+      })
+      .catch((err) => {
+        errorHandler(err);
+      });
   };
 
   const toggleLanguage = () => {
