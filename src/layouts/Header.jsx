@@ -4,8 +4,10 @@ import { useDispatch } from "react-redux";
 import { todoActions } from "../shop/todoSlice";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import { postActionAx } from "../api";
+import useErrorHandler from "../hooks/useErrorHandler";
 
 const Header = (props) => {
+  const errorHandler = useErrorHandler();
   const windowWidth = useWindowDimensions().width;
   const navigate = useNavigate();
   const { i18n, t } = useTranslation();
@@ -19,7 +21,7 @@ const Header = (props) => {
         navigate("/");
       })
       .catch((err) => {
-        errorHandler(err);
+        // errorHandler(err);
       });
   };
 

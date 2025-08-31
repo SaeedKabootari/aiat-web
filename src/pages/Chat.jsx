@@ -3,8 +3,39 @@ import { postActionAx, postActionSignalAx } from "../api"; // Assuming this supp
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import useErrorHandler from "../hooks/useErrorHandler";
+import { useWebSocket } from "../context/WebSocketContext";
 
 const ChatPage = () => {
+  // WebSocket:
+  const { sendMessage, lastMessage, isConnected } = useWebSocket();
+
+  const [pm, setPm] = useState([]);
+  const testRef = useRef(null);
+  useEffect(() => {
+    console.log(lastMessage);
+  }, [lastMessage]);
+  const clickHandler = () => {
+    if (isConnected) {
+      console.log(testRef.current.value);
+      sendMessage({
+        prompt: "helloooooo",
+        prompt_title: "h",
+        check_law_id: "*",
+        topic_ids: [],
+      });
+    } else {
+      console.log("disconnect");
+    }
+  };
+  useEffect(() => {
+    // Check if lastMessage is not null
+    console.log(pm);
+    if (lastMessage) {
+      // Add the last message to the messages state
+      setPm((prevMessages) => [...prevMessages, lastMessage]);
+    }
+  }, [lastMessage]); // Dependency on lastMessage
+
   const errorHandler = useErrorHandler();
 
   const [messages, setMessages] = useState([]);
@@ -89,6 +120,16 @@ const ChatPage = () => {
 
   return (
     <div className="flex flex-col h-[85vh] bg-[#1a1c3f] rounded-xl overflow-hidden">
+      {/* WebSocket: */}
+      <input type="text" ref={testRef} className="bg-red-200 w-200" />
+      <button onClick={clickHandler} className="bg-green-500 w-200">
+        send message
+      </button>
+      <div>
+        {pm.map((item) => (
+          <div className="text-white">{item.timestamp}</div>
+        ))}
+      </div>
       {/* Header */}
       <header className="bg-[#242752] p-4 text-white shadow-md flex justify-between items-center">
         <div className="flex items-center gap-1">

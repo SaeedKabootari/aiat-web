@@ -68,13 +68,10 @@
 // export const useWebSocket = () => useContext(WebSocketContext);
 
 import { createContext, useContext, useEffect, useRef, useState } from "react";
-import { WEB_SOCKET_URL } from "../api";
-
 const WebSocketContext = createContext(null);
 
 export const WebSocketProvider = ({
   children,
-  url = WEB_SOCKET_URL,
   autoReconnect = true,
   reconnectInterval = 600000,
   enabled = true,
@@ -86,14 +83,14 @@ export const WebSocketProvider = ({
   const messageQueue = useRef([]);
   const reconnectAttemptRef = useRef(null);
 
-  const connect = () => {
+  const connect = (wsURL) => {
     if (!enabled) return;
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
       return;
     }
 
     setConnectionStatus("connecting");
-    socketRef.current = new WebSocket(url);
+    socketRef.current = new WebSocket(wsURL);
 
     socketRef.current.onopen = () => {
       setIsConnected(true);
@@ -133,6 +130,7 @@ export const WebSocketProvider = ({
           raw: event.data,
           timestamp: new Date().toISOString(),
         });
+        console.log('onmessage log=>',event)
       } catch (error) {
         // If not JSON, treat as plain text
         setLastMessage({

@@ -19,7 +19,6 @@ const Login = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
-  const { connect } = useWebSocket();
 
   const toggleLanguage = () => {
     const newLang = i18n.language === "en" ? "fa" : "en";
@@ -33,15 +32,17 @@ const Login = () => {
       username: username,
       password: password,
     })
-    // await postActionAx(
-    //   "/api/login",
-    //   `username=${username}&password=${password}`
-    // )
+      // await postActionAx(
+      //   "/api/login",
+      //   `username=${username}&password=${password}`
+      // )
       .then((res) => {
         dispatch(todoActions.changeloggedInState(true));
         localStorage.setItem("loggedIn", true);
 
-        connect();
+        // WebSocket:
+        localStorage.setItem("token", res.data.access_token);
+
 
         navigate("/chat");
       })

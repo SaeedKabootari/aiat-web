@@ -3,9 +3,10 @@ import { Outlet, NavLink, useNavigate } from "react-router-dom";
 
 import { Bounce, ToastContainer } from "react-toastify";
 import Header from "./Header";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import SidebarLinks from "./SidebarLinks";
+import { useWebSocket } from "../context/WebSocketContext";
 
 const LayoutMenu = (props) => {
   const windowWidth = useWindowDimensions().width;
@@ -21,8 +22,16 @@ const LayoutMenu = (props) => {
   //     navigate("/");
   //   }
   // }, [navigate]);
-  
- const sidebarLinks = [
+
+  // WebSocket:
+  const { connect } = useWebSocket();
+  useEffect(() => {
+    connect(
+      `wss://192.168.2.211:8000/ws?token=${localStorage.getItem("token")}`
+    );
+  }, []);
+
+  const sidebarLinks = [
     {
       path: "/chat",
       icon: (
@@ -145,7 +154,10 @@ const LayoutMenu = (props) => {
                 </svg>
               </button>
             </li>
-           <SidebarLinks links={sidebarLinks} onLinkClick={() => setSidebarOpen(false)} />
+            <SidebarLinks
+              links={sidebarLinks}
+              onLinkClick={() => setSidebarOpen(false)}
+            />
           </ul>
         </nav>
       </aside>
