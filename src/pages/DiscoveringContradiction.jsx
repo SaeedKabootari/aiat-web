@@ -132,7 +132,10 @@ const DiscoveringContradiction = (props) => {
       setTab("resultTab");
 
       toast.info("کشف تناقض شروع شد.");
-      await postActionAx(`/api/analyze_rules`, discoveringObj)
+      await postActionAx(`/api/analyze_rules`, {
+        ...discoveringObj,
+        check_law_id: String(discoveringObj.check_law_id),
+      })
         .then((res) => {
           setTaskId(res.data.task_id);
         })
@@ -181,7 +184,7 @@ const DiscoveringContradiction = (props) => {
       await postActionAx(`/api/analyze`, {
         prompt: newRuleValue,
         prompt_title: titlePromptRef.current.value,
-        check_law_id: discoveringObj.check_law_id,
+        check_law_id: String(discoveringObj.check_law_id),
       })
         .then((res) => {
           setTaskId(res.data.task_id);
