@@ -203,7 +203,7 @@ const FunctionsHistory = () => {
           {/* first row */}
           <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
             <div
-              className="overflow-auto max-h-[40vh]"
+              className="overflow-auto max-h-[70vh]"
               // style={{ maxHeight: "380px" }}
             >
               <table className="min-w-full">
@@ -336,9 +336,9 @@ const FunctionsHistory = () => {
       )}
       {/* detailTaskTab: */}
       {tab === "detailTaskTab" && (
-        <div>
+        <div className="">
           {/* secondrow */}
-          <div className="bg-[#8d8da8] mt-2 text-white h-[50%]">
+          <div className="bg-[#8d8da8] mt-2 text-white">
             <h3 className="mb-2 bg-[#242752] text-white p-2">نمایش نتایج:</h3>
 
             <div className="overflow-hidden">
@@ -377,12 +377,12 @@ const FunctionsHistory = () => {
                                   <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                                     ماده
                                   </th>
-                                  <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
+                                  {/* <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                                     قانون دوم
                                   </th>
                                   <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                                     ماده
-                                  </th>
+                                  </th> */}
                                   <th className="px-3 py-3 text text-sm font-semibold uppercase tracking-wider border-b border-[#242752]">
                                     پاسخ
                                   </th>
@@ -413,12 +413,12 @@ const FunctionsHistory = () => {
                                     <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
                                       {formatText(item?.first_section_caption)}
                                     </td>
-                                    <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
+                                    {/* <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
                                       {formatText(item?.second_law_caption)}
                                     </td>
                                     <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[10%]">
                                       {formatText(item?.second_section_section)}
-                                    </td>
+                                    </td> */}
                                     <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-500 w-[40%]">
                                       {formatText(item?.response)}
                                     </td>
