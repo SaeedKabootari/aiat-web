@@ -3,10 +3,11 @@ import { Outlet, NavLink, useNavigate } from "react-router-dom";
 
 import { Bounce, ToastContainer } from "react-toastify";
 import Header from "./Header";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import useWindowDimensions from "../hooks/useWindowDimensions";
 import SidebarLinks from "./SidebarLinks";
 import { useWebSocket } from "../context/WebSocketContext";
+import { WEB_SOCKET_URL } from "../api";
 
 const LayoutMenu = (props) => {
   const windowWidth = useWindowDimensions().width;
@@ -24,11 +25,38 @@ const LayoutMenu = (props) => {
   // }, [navigate]);
 
   // WebSocket:
-  const { connect } = useWebSocket();
+  const wsRef = useRef(null);
   useEffect(() => {
-    connect(
-      `wss://192.168.2.211:8000/ws?token=${localStorage.getItem("token")}`
-    );
+    let socketObj = null;
+    if (WEB_SOCKET_URL) {
+      socketObj = new WebSocket(
+        WEB_SOCKET_URL + "?token=" + localStorage.getItem("token")
+      );
+      wsRef.current = socketObj;
+    } else {
+      let orginalURL = "ws" + window.location.origin.substring(4);
+      socketObj = new WebSocket(
+        orginalURL + "?token=" + localStorage.getItem("token")
+      );
+      wsRef.current = socketObj;
+    }
+    socketObj.addEventListener("open", () => {
+      console.log("WebSocket connection established");
+    });
+    socketObj.addEventListener("close", (event) => {
+      console.log("WebSocket connection closed");
+    });
+    socketObj.addEventListener("message", (event) => {
+      const data = JSON.parse(event.data);
+      console.log(data);
+      console.log("EVENT Socket", event);
+    });
+
+    return () => {
+      console.log("Closing WebSocket connection");
+      wsRef.current.close();
+      socketObj.close();
+    };
   }, []);
 
   const sidebarLinks = [

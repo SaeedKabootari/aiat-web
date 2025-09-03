@@ -102,7 +102,7 @@ function App() {
         i18n.language === "fa" ? "text-right" : "text-left"
       }`}
     >
-      <WebSocketProvider enabled={true}>
+      {/* <WebSocketProvider enabled={true}> */}
         <BrowserRouter>
           <div className="">
             <Routes>
@@ -138,7 +138,7 @@ function App() {
             </Routes>
           </div>
         </BrowserRouter>
-      </WebSocketProvider>
+      {/* </WebSocketProvider> */}
     </div>
   );
 }
