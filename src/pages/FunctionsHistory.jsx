@@ -40,17 +40,15 @@ const FunctionsHistory = () => {
   }, []);
 
   const deleteTaskHandler = async () => {
-    let url = `/api/task/${deleteTaskRef.current.task_id}`
+    let url = `/api/task/${deleteTaskRef.current.task_id}`;
     await delActionAx(url)
-      .then((res) => {
-
-      })
+      .then((res) => {})
       .catch((err) => {
         errorHandler(err);
       });
 
+    getTasks();
     setDeleteModalOpen(false);
-    await getTasks();
   };
 
   const selectTaskHandler = async (task) => {
@@ -75,7 +73,7 @@ const FunctionsHistory = () => {
           setComparisonWithHeading(res.data.data.prompt);
         } else {
           comparisonWith = "law_id";
-          lawId =res.data.data.law_id
+          lawId = res.data.data.law_id;
         }
       })
       .catch((err) => {
@@ -83,7 +81,7 @@ const FunctionsHistory = () => {
       });
 
     if ((comparisonWith = "law_id")) {
-      await getActionAx(`/api/laws/${parseInt(lawId,10)}`)
+      await getActionAx(`/api/laws/${parseInt(lawId, 10)}`)
         .then((res) => {
           setComparisonWithHeading(res.data.caption);
         })

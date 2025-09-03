@@ -36,6 +36,8 @@ const DiscoveringContradiction = (props) => {
 
   const [loading, setLoading] = useState(false);
 
+  const [comparisonWithHeading, setComparisonWithHeading] = useState({});
+
   const selectionIdsHandler = (selectedArray) => {
     setSelectedTopicsId(selectedArray);
   };
@@ -127,7 +129,7 @@ const DiscoveringContradiction = (props) => {
         toast.error("!لطفا فیلد های خالی رو پر کنید");
         return;
       }
-
+      // setComparisonWithHeading(newRuleValue)
       setLoading(true);
       setTab("resultTab");
 
@@ -150,7 +152,7 @@ const DiscoveringContradiction = (props) => {
         toast.error("!لطفا فیلد های خالی رو پر کنید");
         return;
       }
-
+      // setComparisonWithHeading(newRuleValue)
       setLoading(true);
       setTab("resultTab");
 
@@ -176,7 +178,7 @@ const DiscoveringContradiction = (props) => {
         toast.error("!لطفا فیلد های خالی رو پر کنید");
         return;
       }
-
+      setComparisonWithHeading({ prompt: newRuleValue });
       setLoading(true);
       setTab("resultTab");
 
@@ -201,6 +203,8 @@ const DiscoveringContradiction = (props) => {
         toast.error("!لطفا فیلد های خالی رو پر کنید");
         return;
       }
+      setComparisonWithHeading({ prompt: newRuleValue });
+
       setLoading(true);
       setTab("resultTab");
 
@@ -351,7 +355,10 @@ const DiscoveringContradiction = (props) => {
               </div>
 
               {!newRule ? (
-                <SearchResolution setDiscoveringObj={setDiscoveringObj} />
+                <SearchResolution
+                  setDiscoveringObj={setDiscoveringObj}
+                  setComparisonWithHeading={setComparisonWithHeading}
+                />
               ) : (
                 <div>
                   <h1 className="text-[#242752]">عنوان:</h1>
@@ -482,20 +489,25 @@ const DiscoveringContradiction = (props) => {
                 {messages.length > 0 && (
                   <div className="">
                     <div className="">
+                      <h3 className="mb-1 text-white p-2">مقایسه:</h3>
 
-<h3 className="mb-2 text-white p-2">مقایسه:</h3>
-
-                <div className="pr-1">
-                  {selectedContradiction?.second_law_caption}
-                </div>
+                      {comparisonWithHeading.hasOwnProperty("prompt") && (
+                        <div className="pr-2 mb-2">
+                          {comparisonWithHeading?.prompt}
+                        </div>
+                      )}
+                      {comparisonWithHeading.hasOwnProperty("caption") && (
+                        <div>
+                          <div className="pr-2 mb-2">
+                            {comparisonWithHeading?.caption}
+                          </div>
+                          <div className="pr-2 mb-2">
+                            {comparisonWithHeading?.section}
+                          </div>
+                        </div>
+                      )}
 
                       <div className="relative rounded-lg overflow-hidden border border-gray-200 shadow-sm">
-
-
-
-
-
-
                         <div
                           className="overflow-auto max-h-[40vh]"
                           // style={{ maxHeight: "270px" }}

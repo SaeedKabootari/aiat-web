@@ -35,6 +35,9 @@ const SearchResolution = (props) => {
                       : "bg-[#ccc] text-black"
                   } text-sm `}
                   onClick={() => {
+                    console.log('zzzzzzzzz')
+                    props.setComparisonWithHeading({caption:selectedResolution?.law?.caption ,section:item?.text})
+                    console.log('zzzzzzzzz')
                     setSelectedSection(item);
                     props.setDiscoveringObj((prevState) => ({
                       ...prevState,
