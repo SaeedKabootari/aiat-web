@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { getActionAx } from "../api";
+import { delActionAx, getActionAx } from "../api";
 import { formatText, toPersianTime } from "../utils/utils";
 import PDFExport from "../components/PDFExport";
 import ContradictionTablePdf from "../components/ContradictionTablePdf";
@@ -40,9 +40,17 @@ const FunctionsHistory = () => {
   }, []);
 
   const deleteTaskHandler = async () => {
-    //write api for it
+    let url = `/api/task/${deleteTaskRef.current.task_id}`
+    await delActionAx(url)
+      .then((res) => {
+
+      })
+      .catch((err) => {
+        errorHandler(err);
+      });
+
     setDeleteModalOpen(false);
-    // getTasks();
+    await getTasks();
   };
 
   const selectTaskHandler = async (task) => {
@@ -132,7 +140,7 @@ const FunctionsHistory = () => {
         // title="Simple Modal"
       >
         <div className="w-full">
-          <div>ایا مطمعنید میخواهید این کارکرد را حذف کنید؟ </div>
+          <div>آیا مطمئنید که می‌خواهید این کارکرد را حذف کنید؟</div>
           <div className="text-sm mt-2">
             {deleteTaskRef && deleteTaskRef?.current?.title}
           </div>
