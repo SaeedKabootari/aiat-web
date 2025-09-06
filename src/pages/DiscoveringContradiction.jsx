@@ -6,8 +6,15 @@ import { toast } from "react-toastify";
 import { formatText, toPersianTime, transformKeys } from "../utils/utils";
 import MultiSelect from "../components/MultiSelect";
 import useErrorHandler from "../hooks/useErrorHandler";
+import { useSelector } from "react-redux";
 
 const DiscoveringContradiction = (props) => {
+  const wsMessages = useSelector((state) => state.webSocket.messages);
+
+  useEffect(() => {
+    console.log("<<<<<<<<<<wsMessages<<<<<<<<<<", wsMessages);
+  }, [wsMessages]);
+
   const errorHandler = useErrorHandler();
 
   const [tab, setTab] = useState("requestTab");
@@ -57,6 +64,10 @@ const DiscoveringContradiction = (props) => {
   }, []);
 
   const sinceRef = useRef(null); // Add this ref
+
+  useEffect(() => {
+    console.log("MESSAGES +++>", messages);
+  }, [messages]);
 
   useEffect(() => {
     const getMessages = async () => {

@@ -8,11 +8,15 @@ import useWindowDimensions from "../hooks/useWindowDimensions";
 import SidebarLinks from "./SidebarLinks";
 import { useWebSocket } from "../context/WebSocketContext";
 import { WEB_SOCKET_URL } from "../api";
+import { useDispatch } from "react-redux";
+import { webSocketActions } from "../shop/webSocketSlice";
 
 const LayoutMenu = (props) => {
   const windowWidth = useWindowDimensions().width;
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { i18n, t } = useTranslation();
+
+  const dispatch =useDispatch()
 
   // useEffect(() => {
   //   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -50,6 +54,7 @@ const LayoutMenu = (props) => {
       const data = JSON.parse(event.data);
       console.log(data);
       console.log("EVENT Socket", event);
+      dispatch(webSocketActions.addMessage(data))
     });
 
     return () => {

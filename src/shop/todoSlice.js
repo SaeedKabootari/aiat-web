@@ -5,6 +5,7 @@ const todoSlice = createSlice({
   initialState: {
     toggle: true,
     loggedIn: localStorage.getItem("loggedIn"),
+    // messages: []
   },
   reducers: {
     changeToggleState(state, action) {
@@ -13,6 +14,12 @@ const todoSlice = createSlice({
     changeloggedInState(state, action) {
       state.loggedIn = action.payload;
     },
+    // addMessage(state , action ){
+    //   state.messages.push(action.payload)
+    // },
+    // clearMessages(state){
+    //   state.messages =[]
+    // }
   },
 });
 
