@@ -4,9 +4,16 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import useErrorHandler from "../hooks/useErrorHandler";
 import { useWebSocket } from "../context/WebSocketContext";
+import ChatSidebar from "../components/Chat/ChatSidebar";
+
 
 const ChatPage = () => {
-  console.log(JSON.parse("{\"type\":\"log\",\"message\":\"Analysis task 18 completed successfully!\",\"timestamp\":\"2025-09-02T11:31:15.876541Z\"}"))
+  
+  console.log(
+    JSON.parse(
+      '{"type":"log","message":"Analysis task 18 completed successfully!","timestamp":"2025-09-02T11:31:15.876541Z"}'
+    )
+  );
   // WebSocket:
   // const { sendMessage, lastMessage, isConnected } = useWebSocket();
 
@@ -45,22 +52,22 @@ const ChatPage = () => {
   const [loading, setLoading] = useState(false);
   const abortControllerRef = useRef(null); // Ref to store AbortController
 
-  const resetChatHandler = async () => {
-    // Abort any ongoing request
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort(); // This cancels the fetch
-      abortControllerRef.current = null; // Reset the ref
-    }
-    setInputValue("");
-    setMessages([]); // Clear messages immediately
-    try {
-      await postActionAx(`/api/chat_reset`, {});
-    } catch (err) {
-      errorHandler(err);
-    }
-  };
+  // const resetChatHandler = async () => {
+  //   // Abort any ongoing request
+  //   if (abortControllerRef.current) {
+  //     abortControllerRef.current.abort(); // This cancels the fetch
+  //     abortControllerRef.current = null; // Reset the ref
+  //   }
+  //   setInputValue("");
+  //   setMessages([]); // Clear messages immediately
+  //   try {
+  //     await postActionAx(`/api/chat/reset`, {});
+  //   } catch (err) {
+  //     errorHandler(err);
+  //   }
+  // };
 
-  const newChatHandler = () => {
+  const newChatHandler = async () => {
     // Abort any ongoing request
     if (abortControllerRef.current) {
       abortControllerRef.current.abort(); // This cancels the fetch
@@ -68,6 +75,14 @@ const ChatPage = () => {
     }
     setInputValue("");
     setMessages([]); // Clear messages immediately
+
+    await postActionAx(`/api/chat/reset`, {})
+      .then((res) => {
+       
+      })
+      .catch((err) => {
+        errorHandler(err);
+      });
   };
 
   const handleSend = async (e) => {
@@ -90,7 +105,7 @@ const ChatPage = () => {
 
     try {
       const res = await postActionSignalAx(
-        `/api/chat`,
+        `/api/chat/message`,
         { msg: inputValue },
         { signal: abortController.signal }
       ); // Corrected call
@@ -99,7 +114,7 @@ const ChatPage = () => {
         ...prev,
         {
           id: prev.length + 1,
-          text: res.data.message,
+          text: res.data.response,
           sender: "other",
         },
       ]);
@@ -145,15 +160,15 @@ const ChatPage = () => {
           >
             گفتگو جدید{" "}
           </button>
-          <button
+          {/* <button
             onClick={resetChatHandler}
             className="px-4 py-1 text-sm font-medium rounded-md focus:outline-none cursor-pointer text-white bg-[#4f46e5]"
           >
             پاک کردن گفتگو
-          </button>
+          </button> */}
         </div>
       </header>
-
+      <ChatSidebar />
       {/* Chat Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message) => (
