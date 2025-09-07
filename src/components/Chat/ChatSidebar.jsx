@@ -22,6 +22,22 @@ const ChatSidebar = (props) => {
     getChats();
   }, []);
 
+  const chatItemClickHandler = async (item) => {
+    console.log("zzzzzzzzzz", item);
+    setActiveChat(item.id);
+    let getUrl = `/api/chat/sessions/${item.id}`;
+    console.log(getUrl);
+
+     getActionAx(getUrl)
+      .then((res) => {
+        console.log("chat detail", res.data.messages);
+        props.setMessages(res.data.messages)
+      })
+      .catch((err) => {
+        errorHandler(err);
+      });
+  };
+
   return (
     <>
       <aside
@@ -29,11 +45,10 @@ const ChatSidebar = (props) => {
       >
         <nav>
           <ul>
-
             {chats.map((item, index) => (
               <li
                 key={item.id}
-                onClick={()=>setActiveChat(item.id)}
+                onClick={() => chatItemClickHandler(item)}
                 className={`p-2 cursor-pointer rounded-md mb-2 
                 ${
                   activeChat === item.id

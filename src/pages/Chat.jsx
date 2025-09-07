@@ -436,6 +436,14 @@ const ChatPage = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+
+
+   useEffect(() => {
+    console.log('first time')
+    //reset chat fetch
+  }, []);
+
+
   return (
     <div className="flex flex-col h-[85vh] bg-[#1a1c3f] rounded-xl overflow-hidden">
       {/* Header */}
@@ -459,7 +467,7 @@ const ChatPage = () => {
       <div className="flex flex-1 overflow-hidden">
         {/* Chat Sidebar on the right */}
         <div className=" border-l border-[#2f346b]">
-          <ChatSidebar />
+          <ChatSidebar  setMessages={setMessages}/>
         </div>
 
         {/* Chat Messages */}
@@ -469,20 +477,20 @@ const ChatPage = () => {
               <div
                 key={message.id}
                 className={`flex ${
-                  message.sender === "other" ? "justify-end" : "justify-start"
+                  message.is_user === false ? "justify-end" : "justify-start"
                 }`}
               >
                 <div
                   className={`px-4 py-2 rounded-2xl ${
-                    message.sender === "other"
+                    message.is_user === false
                       ? "bg-[#2f346b] text-white rounded-tl-none w-full"
                       : "bg-[#4f46e5] text-white rounded-tr-none max-w-[90%]"
                   }`}
                   dir="auto"
                 >
-                  {message.sender === "me" ? (
+                  {message.is_user === true ? (
                     <div dir="rtl" className="whitespace-pre-wrap break-words">
-                      {message.text}
+                      {message.content}
                     </div>
                   ) : (
                     <div className="prose prose-invert max-w-none">
@@ -580,7 +588,7 @@ const ChatPage = () => {
                           ),
                         }}
                       >
-                        {message.text}
+                        {message.content}
                       </ReactMarkdown>
                     </div>
                   )}
