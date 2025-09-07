@@ -375,7 +375,10 @@ const ChatPage = () => {
   const [loading, setLoading] = useState(false);
   const abortControllerRef = useRef(null);
 
+  const [sessionId, setSessionId] = useState(0);
+
   const newChatHandler = async () => {
+    setSessionId(0);
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
@@ -398,8 +401,8 @@ const ChatPage = () => {
 
     const newMessage = {
       id: messages.length + 1,
-      text: inputValue,
-      sender: "me",
+      content: inputValue,
+      is_user: true,
     };
 
     setMessages([...messages, newMessage]);
@@ -411,17 +414,20 @@ const ChatPage = () => {
     try {
       const res = await postActionSignalAx(
         `/api/chat/message`,
-        { msg: inputValue },
+        { msg: inputValue, session_id: sessionId },
         { signal: abortController.signal }
-      );
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: prev.length + 1,
-          text: res.data.response,
-          sender: "other",
-        },
-      ]);
+      ).then((res) => {
+        console.log("send message res ===>", res);
+
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: prev.length + 1,
+            content: res.data.response,
+            is_user: false,
+          },
+        ]);
+      });
     } catch (err) {
       if (err.name !== "AbortError") {
         errorHandler(err);
@@ -436,13 +442,24 @@ const ChatPage = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  useEffect(() => {
+    console.log("first time");
 
+    // if need setSessionId(0)
+    const resetChat = async () => {
+  
+      try {
+        
+        const res = await postActionAx(`/api/chat/reset`, {});
+       
+        console.log("reset response:", res);
+      } catch (err) {
+        errorHandler(err);
+      }
+    };
 
-   useEffect(() => {
-    console.log('first time')
-    //reset chat fetch
+    resetChat(); 
   }, []);
-
 
   return (
     <div className="flex flex-col h-[85vh] bg-[#1a1c3f] rounded-xl overflow-hidden">
@@ -467,7 +484,7 @@ const ChatPage = () => {
       <div className="flex flex-1 overflow-hidden">
         {/* Chat Sidebar on the right */}
         <div className=" border-l border-[#2f346b]">
-          <ChatSidebar  setMessages={setMessages}/>
+          <ChatSidebar setMessages={setMessages} setSessionId={setSessionId} />
         </div>
 
         {/* Chat Messages */}

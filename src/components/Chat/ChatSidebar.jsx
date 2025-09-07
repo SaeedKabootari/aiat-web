@@ -25,6 +25,7 @@ const ChatSidebar = (props) => {
   const chatItemClickHandler = async (item) => {
     console.log("zzzzzzzzzz", item);
     setActiveChat(item.id);
+    props.setSessionId(item.id)
     let getUrl = `/api/chat/sessions/${item.id}`;
     console.log(getUrl);
 
