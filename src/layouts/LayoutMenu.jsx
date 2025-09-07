@@ -16,7 +16,7 @@ const LayoutMenu = (props) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { i18n, t } = useTranslation();
 
-  const dispatch =useDispatch()
+  const dispatch = useDispatch();
 
   // useEffect(() => {
   //   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
@@ -54,7 +54,7 @@ const LayoutMenu = (props) => {
       const data = JSON.parse(event.data);
       console.log(data);
       console.log("EVENT Socket", event);
-      dispatch(webSocketActions.addMessage(data))
+      dispatch(webSocketActions.addMessage(data));
     });
 
     return () => {
@@ -151,6 +151,40 @@ const LayoutMenu = (props) => {
         </svg>
       ),
       label: t("List of resolutions"),
+    },
+    {
+      path: "/graph-chat",
+      icon: (
+        <svg
+          className="w-5 h-5 mr-3"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          {/* Y-axis */}
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M3 20V4" // Draws Y-axis from (3, 20) to (3, 4)
+          />
+          {/* X-axis */}
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M3 20h18" // Draws X-axis from (3, 20) to (21, 20)
+          />
+          {/* Descending Line Graph */}
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M3 17l4-4 3 3 4-4 5-5" // Descending line graph
+          />
+        </svg>
+      ),
+      label: "گراف چت", // You can use t("Chat") if you want to translate it
     },
   ];
 

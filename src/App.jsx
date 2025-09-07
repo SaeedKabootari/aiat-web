@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import FunctionsHistory from "./pages/FunctionsHistory";
 import Chat from "./pages/Chat";
 import ResolutionDetail from "./pages/ResolutionDetail";
+import GraphChat from "./pages/GraphChat";
 
 // Translation resources
 const resources = {
@@ -122,6 +123,7 @@ function App() {
                     element={<FunctionsHistory />}
                   />
                   <Route path="/chat" element={<Chat />} />
+                  <Route path="/graph-chat" element={<GraphChat />} />
                   <Route
                     path="/resolutions-list"
                     element={<ResolutionsList />}
