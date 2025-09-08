@@ -1,9 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { delActionAx, getActionAx } from "../../api";
 import useErrorHandler from "../../hooks/useErrorHandler";
 import PortalModal from "../PortalModal";
+import useClickOutside from "../../hooks/useClickOutside";
 
 const ChatSidebar = (props) => {
+ const sidebarRef = useRef(null);
+
+  useClickOutside(sidebarRef, () => {
+    setClickedModify(null);
+  });
+
+
   const [chats, setChats] = useState([]);
   const [activeChat, setActiveChat] = useState();
   const [hoveredChatId, setHoveredChatId] = useState(null);
@@ -119,6 +127,7 @@ const ChatSidebar = (props) => {
       </PortalModal>
 
       <aside
+       ref={sidebarRef}
         onScroll={() => setClickedModify(null)}
         className={`w-[250px] bg-white border-l border-gray-200 p-4 overflow-y-auto  h-full`}
       >
