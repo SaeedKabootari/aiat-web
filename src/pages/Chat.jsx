@@ -366,8 +366,47 @@ import remarkGfm from "remark-gfm";
 import useErrorHandler from "../hooks/useErrorHandler";
 import { useWebSocket } from "../context/WebSocketContext";
 import ChatSidebar from "../components/Chat/ChatSidebar";
+import { useSelector } from "react-redux";
 
 const ChatPage = () => {
+  const webSocketMessages = useSelector((state) => state.webSocket.messages);
+  console.log("CHATwebSocketMessages", webSocketMessages);
+
+  // Watch for changes in webSocketMessages
+  useEffect(() => {
+    // if (webSocketMessages && webSocketMessages.length > 0) {
+    //   // Get the latest message from WebSocket
+    //   const latestMessage = webSocketMessages[webSocketMessages.length - 1];
+
+    //   // Check if this message is already in local state to avoid duplicates
+    //   const messageExists = messages.some(msg =>
+    //     msg.id === latestMessage.id ||
+    //     msg.content === latestMessage.content
+    //   );
+
+    //   if (!messageExists) {
+    //     setMessages((prev) => [
+    //       ...prev,
+    //       {
+    //         id: prev.length + 1,
+    //         content: latestMessage.content, // Use the actual message content
+    //         is_user: false,
+    //       },
+    //     ]);
+    //   }
+    // }
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: prev.length + 1,
+        content: webSocketMessages,
+        is_user: false,
+      },
+    ]);
+    setLoading(false)
+  }, [webSocketMessages]); // This effect runs when webSocketMessages changes
+
   const errorHandler = useErrorHandler();
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -376,6 +415,15 @@ const ChatPage = () => {
   const abortControllerRef = useRef(null);
 
   const [sessionId, setSessionId] = useState(0);
+
+  const [command, setCommand] = useState({ has: false, selectedCommand: null });
+
+  console.log(command);
+  console.log(
+    "inputValue",
+    inputValue.replace("/آمایش", "").trim(),
+    inputValue
+  );
 
   const newChatHandler = async () => {
     setSessionId(0);
@@ -404,6 +452,33 @@ const ChatPage = () => {
       content: inputValue,
       is_user: true,
     };
+
+    if (command.selectedCommand) {
+      const commandObj = {
+        question: inputValue.replace("/آمایش", "").trim(),
+        title: command.selectedCommand,
+        session_id: sessionId,
+      };
+setCommand({ has: false, selectedCommand: null })
+      const newMessage = {
+        id: messages.length + 1,
+        content: inputValue.replace("/آمایش", "").trim(),
+        is_user: true,
+      };
+
+      setMessages([...messages, newMessage]);
+      setInputValue("");
+
+      await postActionAx(`/api/rag/query`, commandObj)
+        .then((res) => {
+          console.log("resCommand", res);
+        })
+        .catch((err) => {
+          errorHandler(err);
+        });
+
+      return;
+    }
 
     setMessages([...messages, newMessage]);
     setInputValue("");
@@ -447,18 +522,16 @@ const ChatPage = () => {
 
     // if need setSessionId(0)
     const resetChat = async () => {
-  
       try {
-        
         const res = await postActionAx(`/api/chat/reset`, {});
-       
+
         console.log("reset response:", res);
       } catch (err) {
         errorHandler(err);
       }
     };
 
-    resetChat(); 
+    resetChat();
   }, []);
 
   return (
@@ -642,11 +715,45 @@ const ChatPage = () => {
 
           {/* Input Area */}
           <footer className="bg-[#242752] p-4">
+            {command.has && (
+              <div
+                onClick={() => {
+                  setCommand({
+                    ...command,
+                    selectedCommand: "آمایش",
+                    has: false,
+                  });
+
+                  setInputValue("/آمایش");
+                }}
+                className="text-white bg-blue-300 p-2 cursoor-pointer"
+              >
+                /آمایش
+              </div>
+            )}
             <form onSubmit={handleSend} className="flex gap-2">
               <input
                 type="text"
                 value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+                onChange={(e) => {
+                  setInputValue(e.target.value);
+                  if (
+                    e.target.value.length === 1 &&
+                    e.target.value.startsWith("/")
+                  ) {
+                    setCommand({
+                      ...command,
+
+                      has: true,
+                    });
+                  } else {
+                    setCommand({
+                      ...command,
+
+                      has: false,
+                    });
+                  }
+                }}
                 placeholder="پیام بنویسید..."
                 className="flex-1 bg-[#2f346b] text-white rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#4f46e5]"
                 dir="rtl"

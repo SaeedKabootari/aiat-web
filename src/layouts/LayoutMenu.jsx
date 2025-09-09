@@ -10,6 +10,7 @@ import { useWebSocket } from "../context/WebSocketContext";
 import { WEB_SOCKET_URL } from "../api";
 import { useDispatch } from "react-redux";
 import { webSocketActions } from "../shop/webSocketSlice";
+import { toast } from "react-toastify";
 
 const LayoutMenu = (props) => {
   const windowWidth = useWindowDimensions().width;
@@ -28,41 +29,202 @@ const LayoutMenu = (props) => {
   //   }
   // }, [navigate]);
 
-  // WebSocket:
+  const reconnectTimeoutRef = useRef(null);
+  const reconnectAttemptsRef = useRef(0);
+  const MAX_RECONNECT_ATTEMPTS = 5;
+  const RECONNECT_INTERVAL = 3000; // 3 seconds
   const wsRef = useRef(null);
-  useEffect(() => {
-    let socketObj = null;
+
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> NEW WS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+  const connectWebSocket = () => {
+    try {
+      // let socketObj = null;
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.warn("No token found, skipping WebSocket connection");
+        return;
+      }
+
+      // if (WEB_SOCKET_URL) {
+      //   socketObj = new WebSocket(WEB_SOCKET_URL + "?token=" + token);
+      // } else {
+      //   const originalURL = "ws" + window.location.origin.substring(4);
+      //   socketObj = new WebSocket(originalURL + "?token=" + token);
+      // }
+
+// new for firefox
+let socketUrl;
     if (WEB_SOCKET_URL) {
-      socketObj = new WebSocket(
-        WEB_SOCKET_URL + "?token=" + localStorage.getItem("token")
-      );
-      wsRef.current = socketObj;
+      socketUrl = new URL(WEB_SOCKET_URL);
+      socketUrl.searchParams.append('token', token);
     } else {
-      let orginalURL = "ws" + window.location.origin.substring(4);
-      socketObj = new WebSocket(
-        orginalURL + "?token=" + localStorage.getItem("token")
-      );
-      wsRef.current = socketObj;
+      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+      const host = window.location.host;
+      socketUrl = new URL(`${protocol}//${host}/ws`);
+      socketUrl.searchParams.append('token', token);
     }
-    socketObj.addEventListener("open", () => {
-      console.log("WebSocket connection established");
-    });
-    socketObj.addEventListener("close", (event) => {
-      console.log("WebSocket connection closed");
-    });
-    socketObj.addEventListener("message", (event) => {
-      const data = JSON.parse(event.data);
-      console.log(data);
-      console.log("EVENT Socket", event);
-      dispatch(webSocketActions.addMessage(data));
-    });
+
+    const socketObj = new WebSocket(socketUrl.toString());
+// new for firefox
+
+
+
+      socketObj.addEventListener("open", () => {
+        console.log("WebSocket connection established");
+        reconnectAttemptsRef.current = 0; // Reset reconnect attempts on successful connection
+        toast.success("Connected to server");
+      });
+
+      socketObj.addEventListener("close", (event) => {
+        console.log("WebSocket connection closed", event.code, event.reason);
+
+        // Clean up current connection
+        if (wsRef.current) {
+          wsRef.current.removeEventListener("message", handleMessage);
+          wsRef.current = null;
+        }
+
+        // Attempt reconnect if not a normal closure
+        if (event.code !== 1000) {
+          attemptReconnect();
+        }
+      });
+
+      socketObj.addEventListener("error", (error) => {
+        console.error("WebSocket error:", error);
+        toast.error("Connection error");
+      });
+
+      const handleMessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          console.log("wsData", data);
+
+          if (data?.type === "ping") {
+            console.log("Ping received");
+            // Optionally send pong response
+            if (socketObj.readyState === WebSocket.OPEN) {
+              socketObj.send(JSON.stringify({ type: "pong" }));
+            }
+          } else if (data?.type === "chatlog") {
+            // chat ws:
+            if (data.state === "notif") {
+              toast.info(data.message);
+            } else if (data.state === "warnning") {
+              toast.warning(data.message);
+            } else if (data.state === "error") {
+              toast.error(data.message);
+            } else if (data.state === "Success") {
+              console.log("SuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccess")
+              toast.success(data.message);
+              dispatch(webSocketActions.addMessage(data.data) )
+            }
+          }
+
+        } catch (error) {
+          console.error("Error parsing WebSocket message:", error, event.data);
+        }
+      };
+
+      socketObj.addEventListener("message", handleMessage);
+      wsRef.current = socketObj;
+    } catch (error) {
+      console.error("WebSocket connection failed:", error);
+      attemptReconnect();
+    }
+  };
+
+  // Reconnect function with exponential backoff
+  const attemptReconnect = () => {
+    // if (reconnectAttemptsRef.current >= MAX_RECONNECT_ATTEMPTS) {
+    //   console.warn("Max reconnection attempts reached");
+    //   toast.error("Failed to connect to server");
+    //   return;
+    // }
+
+    const delay =
+      RECONNECT_INTERVAL * Math.pow(2, reconnectAttemptsRef.current);
+    reconnectAttemptsRef.current++;
+
+    console.log(
+      `Attempting reconnect in ${delay}ms (attempt ${reconnectAttemptsRef.current})`
+    );
+
+    reconnectTimeoutRef.current = setTimeout(() => {
+      connectWebSocket();
+    }, delay);
+  };
+
+  // Cleanup function
+  const cleanupWebSocket = () => {
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+    }
+
+    if (wsRef.current) {
+      try {
+        wsRef.current.close(1000, "Component unmounting");
+      } catch (error) {
+        console.error("Error closing WebSocket:", error);
+      }
+      wsRef.current = null;
+    }
+  };
+
+  // WebSocket effect
+  useEffect(() => {
+    connectWebSocket();
 
     return () => {
-      console.log("Closing WebSocket connection");
-      wsRef.current.close();
-      socketObj.close();
+      cleanupWebSocket();
     };
   }, []);
+  // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> NEW WS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+  // WebSocket:
+  // const wsRef = useRef(null);
+  // useEffect(() => {
+  //   let socketObj = null;
+  //   if (WEB_SOCKET_URL) {
+  //     socketObj = new WebSocket(
+  //       WEB_SOCKET_URL + "?token=" + localStorage.getItem("token")
+  //     );
+  //     wsRef.current = socketObj;
+  //   } else {
+  //     let orginalURL = "ws" + window.location.origin.substring(4);
+  //     socketObj = new WebSocket(
+  //       orginalURL + "?token=" + localStorage.getItem("token")
+  //     );
+  //     wsRef.current = socketObj;
+  //   }
+  //   socketObj.addEventListener("open", () => {
+  //     console.log("WebSocket connection established");
+  //   });
+  //   socketObj.addEventListener("close", (event) => {
+  //     console.log("WebSocket connection closed");
+  //   });
+  //   socketObj.addEventListener("message", (event) => {
+
+  //     toast.error('asasa');
+  //     const data = JSON.parse(event.data);
+  //     console.log('wsData',data);
+  //      if(data?.type && data?.type === 'ping'){
+  //       console.log('LOG','chatlog')
+  //     }
+  //     if(data?.type && data?.type === 'chatlog'){
+  //       console.log('chatlog جواب')
+  //     }
+  //     console.log("EVENT Socket", event);
+  //     dispatch(webSocketActions.addMessage(data));
+  //   });
+
+  //   return () => {
+  //     console.log("Closing WebSocket connection");
+  //     wsRef.current.close();
+  //     socketObj.close();
+  //   };
+  // }, []);
 
   const sidebarLinks = [
     {

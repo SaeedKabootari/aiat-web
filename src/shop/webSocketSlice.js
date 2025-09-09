@@ -3,11 +3,12 @@ import { createSlice } from "@reduxjs/toolkit";
 const webSocketSlice = createSlice({
   name: "webSocket",
   initialState: {
-    messages: [],
+    messages: '',
   },
   reducers: {
     addMessage(state, action) {
-      state.messages.push(action.payload);
+      // state.messages.push(action.payload);
+      state.messages = action.payload
     },
     clearMessages(state) {
       state.messages = [];
