@@ -156,6 +156,7 @@ const ChatSidebar = (props) => {
           <ul>
             {chats.map((item, index) => (
               <li
+                title={item.title}
                 key={item.id}
                 onClick={() => chatItemClickHandler(item)}
                 onMouseEnter={() => setHoveredChatId(item.id)}
