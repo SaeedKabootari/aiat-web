@@ -407,14 +407,6 @@ const ChatPage = () => {
   //   setLoading(false)
   // }, [webSocketMessages]); // This effect runs when webSocketMessages changes
 
-
-
-
-
-
-
-
-
   const errorHandler = useErrorHandler();
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -426,10 +418,12 @@ const ChatPage = () => {
 
   const [command, setCommand] = useState({ has: false, selectedCommand: null });
 
+
+  const inputRef = useRef(null);
+
   console.log(command);
 
-
-  console.log('NY' ,messages)
+  console.log("NY", messages);
   console.log(
     "inputValue",
     inputValue.replace("/آمایش", "").trim(),
@@ -470,7 +464,7 @@ const ChatPage = () => {
         title: command.selectedCommand,
         session_id: sessionId,
       };
-setCommand({ has: false, selectedCommand: null })
+      setCommand({ has: false, selectedCommand: null });
       const newMessage = {
         id: messages.length + 1,
         content: inputValue.replace("/آمایش", "").trim(),
@@ -545,58 +539,54 @@ setCommand({ has: false, selectedCommand: null })
     resetChat();
   }, []);
 
+  // useEffect(() => {
+  //   // Only add messages if webSocketMessages has actual content
+  //   // and isn't just an empty array or initial state
+  //   if (webSocketMessages && webSocketMessages.length > 0) {
+  //     // Check if this is a new message (not already in our state)
+  //     const lastWebSocketMessage =
+  //       webSocketMessages[webSocketMessages.length - 1];
 
+  //     // Prevent adding duplicate messages
+  //     const messageAlreadyExists = messages.some(
+  //       (msg) =>
+  //         msg.content === lastWebSocketMessage ||
+  //         (typeof lastWebSocketMessage === "object" &&
+  //           msg.content === lastWebSocketMessage.content)
+  //     );
 
-
-
-
-
-
+  //     if (!messageAlreadyExists) {
+  //       setMessages((prev) => [
+  //         ...prev,
+  //         {
+  //           id: prev.length + 1,
+  //           content: lastWebSocketMessage,
+  //           is_user: false,
+  //         },
+  //       ]);
+  //       setLoading(false);
+  //     }
+  //   }
+  // }, [webSocketMessages, messages]); // Add messages to dependencies
 
 
 
 
 useEffect(() => {
-  // Only add messages if webSocketMessages has actual content
-  // and isn't just an empty array or initial state
-  if (webSocketMessages && webSocketMessages.length > 0) {
-    // Check if this is a new message (not already in our state)
-    const lastWebSocketMessage = webSocketMessages[webSocketMessages.length - 1];
-    
-    // Prevent adding duplicate messages
-    const messageAlreadyExists = messages.some(msg => 
-      msg.content === lastWebSocketMessage || 
-      (typeof lastWebSocketMessage === 'object' && msg.content === lastWebSocketMessage.content)
-    );
-    
-    if (!messageAlreadyExists) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: prev.length + 1,
-          content: lastWebSocketMessage,
-          is_user: false,
-        },
-      ]);
-      setLoading(false);
-    }
+  // Only add a message if webSocketMessages is not empty
+  if (webSocketMessages && webSocketMessages !== '') { 
+  
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: prev.length + 1,
+        content: webSocketMessages,
+        is_user: false,
+      },
+    ]);
+    setLoading(false)
   }
-}, [webSocketMessages, messages]); // Add messages to dependencies
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}, [webSocketMessages]); 
 
 
 
@@ -790,7 +780,8 @@ useEffect(() => {
                     has: false,
                   });
 
-                  setInputValue("/آمایش");
+                  setInputValue("/آمایش ");
+                  inputRef.current.focus()
                 }}
                 className="text-white bg-blue-300 p-2 cursoor-pointer"
               >
@@ -800,6 +791,7 @@ useEffect(() => {
             <form onSubmit={handleSend} className="flex gap-2">
               <input
                 type="text"
+                ref={inputRef}
                 value={inputValue}
                 onChange={(e) => {
                   setInputValue(e.target.value);
