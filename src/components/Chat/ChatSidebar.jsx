@@ -1,16 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { delActionAx, getActionAx } from "../../api";
+import { delActionAx, getActionAx, postActionAx } from "../../api";
 import useErrorHandler from "../../hooks/useErrorHandler";
 import PortalModal from "../PortalModal";
 import useClickOutside from "../../hooks/useClickOutside";
 
 const ChatSidebar = (props) => {
- const sidebarRef = useRef(null);
+  const sidebarRef = useRef(null);
 
   useClickOutside(sidebarRef, () => {
     setClickedModify(null);
   });
-
 
   const [chats, setChats] = useState([]);
   const [activeChat, setActiveChat] = useState();
@@ -22,6 +21,9 @@ const ChatSidebar = (props) => {
     type: null,
     chatItem: null,
   });
+
+  const [editChatTitle, setEditChatTitle] = useState("");
+
   const errorHandler = useErrorHandler();
 
   console.log("zzzzz", modalConfig);
@@ -69,6 +71,17 @@ const ChatSidebar = (props) => {
     setModalConfig({ isOpen: false, type: null, chatItem: null });
   };
 
+  const editChatTitleHandler = async () => {
+    let url = `/api/chat/sessions/${modalConfig.chatItem.id}/title`;
+    await postActionAx(url, { title: editChatTitle })
+      .then((res) => {})
+      .catch((err) => {
+        errorHandler(err);
+      });
+    getChats();
+    setModalConfig({ isOpen: false, type: null, chatItem: null });
+  };
+
   return (
     <>
       <PortalModal
@@ -80,13 +93,21 @@ const ChatSidebar = (props) => {
       >
         {modalConfig.type === "edit" && (
           <div className="w-full">
-            <div>آیا مطمئنید که می‌خواهید این چت را ادیت کنید؟</div>
-            <div className="text-sm mt-2">{modalConfig.chatItem.title}</div>
+            {/* <div className="text-sm mt-2">{modalConfig.chatItem.title}</div> */}
+            <input
+              type="text"
+              value={editChatTitle}
+              onChange={(event) => setEditChatTitle(event.target.value)}
+              className="w-full px-4 py-2 border border-[#E0E0E0] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder-[#fff]"
+            />
+            <div className="my-2">
+              آیا مطمئنید که می‌خواهید عنوان این چت را تغییر دهید؟
+            </div>
 
             <div className="w-full flex flex-row-reverse gap-2">
               <button
                 className="bg-[#242752] text-white py-2 px-4 rounded hover:bg-[#1f1f43] transition duration-300 w-[200px] cursor-pointer"
-                // onClick={() => deleteTaskHandler()}
+                onClick={() => editChatTitleHandler()}
               >
                 بله
               </button>
@@ -127,7 +148,7 @@ const ChatSidebar = (props) => {
       </PortalModal>
 
       <aside
-       ref={sidebarRef}
+        ref={sidebarRef}
         onScroll={() => setClickedModify(null)}
         className={`w-[250px] bg-white border-l border-gray-200 p-4 overflow-y-auto  h-full`}
       >
@@ -166,6 +187,9 @@ const ChatSidebar = (props) => {
                         <div>
                           <button
                             onClick={() => {
+                              // set input edit value:
+                              setEditChatTitle(item.title);
+
                               console.log("edit");
                               setModalConfig({
                                 ...modalConfig,
