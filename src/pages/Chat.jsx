@@ -372,40 +372,48 @@ const ChatPage = () => {
   const webSocketMessages = useSelector((state) => state.webSocket.messages);
   console.log("CHATwebSocketMessages", webSocketMessages);
 
-  // Watch for changes in webSocketMessages
-  useEffect(() => {
-    // if (webSocketMessages && webSocketMessages.length > 0) {
-    //   // Get the latest message from WebSocket
-    //   const latestMessage = webSocketMessages[webSocketMessages.length - 1];
+  // // Watch for changes in webSocketMessages
+  // useEffect(() => {
+  //   // if (webSocketMessages && webSocketMessages.length > 0) {
+  //   //   // Get the latest message from WebSocket
+  //   //   const latestMessage = webSocketMessages[webSocketMessages.length - 1];
 
-    //   // Check if this message is already in local state to avoid duplicates
-    //   const messageExists = messages.some(msg =>
-    //     msg.id === latestMessage.id ||
-    //     msg.content === latestMessage.content
-    //   );
+  //   //   // Check if this message is already in local state to avoid duplicates
+  //   //   const messageExists = messages.some(msg =>
+  //   //     msg.id === latestMessage.id ||
+  //   //     msg.content === latestMessage.content
+  //   //   );
 
-    //   if (!messageExists) {
-    //     setMessages((prev) => [
-    //       ...prev,
-    //       {
-    //         id: prev.length + 1,
-    //         content: latestMessage.content, // Use the actual message content
-    //         is_user: false,
-    //       },
-    //     ]);
-    //   }
-    // }
+  //   //   if (!messageExists) {
+  //   //     setMessages((prev) => [
+  //   //       ...prev,
+  //   //       {
+  //   //         id: prev.length + 1,
+  //   //         content: latestMessage.content, // Use the actual message content
+  //   //         is_user: false,
+  //   //       },
+  //   //     ]);
+  //   //   }
+  //   // }
 
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: prev.length + 1,
-        content: webSocketMessages,
-        is_user: false,
-      },
-    ]);
-    setLoading(false)
-  }, [webSocketMessages]); // This effect runs when webSocketMessages changes
+  //   setMessages((prev) => [
+  //     ...prev,
+  //     {
+  //       id: prev.length + 1,
+  //       content: webSocketMessages,
+  //       is_user: false,
+  //     },
+  //   ]);
+  //   setLoading(false)
+  // }, [webSocketMessages]); // This effect runs when webSocketMessages changes
+
+
+
+
+
+
+
+
 
   const errorHandler = useErrorHandler();
   const [messages, setMessages] = useState([]);
@@ -419,6 +427,9 @@ const ChatPage = () => {
   const [command, setCommand] = useState({ has: false, selectedCommand: null });
 
   console.log(command);
+
+
+  console.log('NY' ,messages)
   console.log(
     "inputValue",
     inputValue.replace("/آمایش", "").trim(),
@@ -533,6 +544,61 @@ setCommand({ has: false, selectedCommand: null })
 
     resetChat();
   }, []);
+
+
+
+
+
+
+
+
+
+
+
+
+useEffect(() => {
+  // Only add messages if webSocketMessages has actual content
+  // and isn't just an empty array or initial state
+  if (webSocketMessages && webSocketMessages.length > 0) {
+    // Check if this is a new message (not already in our state)
+    const lastWebSocketMessage = webSocketMessages[webSocketMessages.length - 1];
+    
+    // Prevent adding duplicate messages
+    const messageAlreadyExists = messages.some(msg => 
+      msg.content === lastWebSocketMessage || 
+      (typeof lastWebSocketMessage === 'object' && msg.content === lastWebSocketMessage.content)
+    );
+    
+    if (!messageAlreadyExists) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: prev.length + 1,
+          content: lastWebSocketMessage,
+          is_user: false,
+        },
+      ]);
+      setLoading(false);
+    }
+  }
+}, [webSocketMessages, messages]); // Add messages to dependencies
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <div className="flex flex-col h-[85vh] bg-[#1a1c3f] rounded-xl overflow-hidden">
