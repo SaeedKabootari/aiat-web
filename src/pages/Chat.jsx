@@ -367,8 +367,59 @@ import useErrorHandler from "../hooks/useErrorHandler";
 import { useWebSocket } from "../context/WebSocketContext";
 import ChatSidebar from "../components/Chat/ChatSidebar";
 import { useSelector } from "react-redux";
+import GeoJSONMap from "../components/Map/GeoJSONMap";
 
 const ChatPage = () => {
+  const geojsonData = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        properties: {
+          name: "Coors Field",
+          type: "Baseball Stadium",
+          description: "This is where the Rockies play!",
+        },
+        geometry: {
+          type: "Point",
+          coordinates: [-104.99404, 39.75621],
+        },
+      },
+      {
+        type: "Feature",
+        properties: {
+          name: "Central Park",
+          type: "Park",
+          description: "Beautiful urban park",
+        },
+        geometry: {
+          type: "Point",
+          coordinates: [-73.9688, 40.7812],
+        },
+      },
+      {
+        type: "Feature",
+        properties: {
+          name: "Downtown Area",
+          type: "Polygon",
+          description: "City center area",
+        },
+        geometry: {
+          type: "Polygon",
+          coordinates: [
+            [
+              [-104.995, 39.755],
+              [-104.99, 39.755],
+              [-104.99, 39.76],
+              [-104.995, 39.76],
+              [-104.995, 39.755],
+            ],
+          ],
+        },
+      },
+    ],
+  };
+
   const webSocketMessages = useSelector((state) => state.webSocket.messages);
   console.log("CHATwebSocketMessages", webSocketMessages);
 
@@ -417,7 +468,6 @@ const ChatPage = () => {
   const [sessionId, setSessionId] = useState(0);
 
   const [command, setCommand] = useState({ has: false, selectedCommand: null });
-
 
   const inputRef = useRef(null);
 
@@ -569,26 +619,20 @@ const ChatPage = () => {
   //   }
   // }, [webSocketMessages, messages]); // Add messages to dependencies
 
-
-
-
-useEffect(() => {
-  // Only add a message if webSocketMessages is not empty
-  if (webSocketMessages && webSocketMessages !== '') { 
-  
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: prev.length + 1,
-        content: webSocketMessages,
-        is_user: false,
-      },
-    ]);
-    setLoading(false)
-  }
-}, [webSocketMessages]); 
-
-
+  useEffect(() => {
+    // Only add a message if webSocketMessages is not empty
+    if (webSocketMessages && webSocketMessages !== "") {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: prev.length + 1,
+          content: webSocketMessages,
+          is_user: false,
+        },
+      ]);
+      setLoading(false);
+    }
+  }, [webSocketMessages]);
 
   return (
     <div className="flex flex-col h-[85vh] bg-[#1a1c3f] rounded-xl overflow-hidden">
@@ -736,6 +780,10 @@ useEffect(() => {
                       >
                         {message.content}
                       </ReactMarkdown>
+                      {/* map */}
+                      {/* <div style={{ height: "50vh", width: "100%" }}>
+                        <GeoJSONMap geojsonData={geojsonData} />
+                      </div> */}
                     </div>
                   )}
                 </div>
@@ -781,7 +829,7 @@ useEffect(() => {
                   });
 
                   setInputValue("/آمایش ");
-                  inputRef.current.focus()
+                  inputRef.current.focus();
                 }}
                 className="text-white bg-blue-300 p-2 cursoor-pointer"
               >
