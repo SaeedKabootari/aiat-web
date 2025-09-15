@@ -1,83 +1,36 @@
-import { GeoJSON } from 'react-leaflet';
-import L from 'leaflet';
+import { MapContainer, TileLayer } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import { GeoJSON } from "react-leaflet";
+import L from "leaflet";
 
-const GeoJSONMap = () => {
-  // Sample GeoJSON data with multiple features
-  const geojsonData = {
-    type: "FeatureCollection",
-    features: [
-      {
-        type: "Feature",
-        properties: {
-          name: "Coors Field",
-          type: "Baseball Stadium",
-          description: "This is where the Rockies play!"
-        },
-        geometry: {
-          type: "Point",
-          coordinates: [-104.99404, 39.75621]
-        }
-      },
-      {
-        type: "Feature",
-        properties: {
-          name: "Central Park",
-          type: "Park",
-          description: "Beautiful urban park"
-        },
-        geometry: {
-          type: "Point",
-          coordinates: [-73.9688, 40.7812]
-        }
-      },
-      {
-        type: "Feature",
-        properties: {
-          name: "Downtown Area",
-          type: "Polygon",
-          description: "City center area"
-        },
-        geometry: {
-          type: "Polygon",
-          coordinates: [[
-            [-104.995, 39.755],
-            [-104.990, 39.755],
-            [-104.990, 39.760],
-            [-104.995, 39.760],
-            [-104.995, 39.755]
-          ]]
-        }
-      }
-    ]
-  };
-
+const GeoJSONMap = (props) => {
   // Different styles for different geometry types
   const style = (feature) => {
     switch (feature.geometry.type) {
-      case 'Point':
+      case "Point":
         return {
-          color: '#ff7800',
+          color: "#ff7800",
           weight: 2,
           opacity: 0.8,
-          fillColor: '#ff7800',
+          fillColor: "#ff7800",
           fillOpacity: 0.4,
-          radius: 6
+          radius: 6,
         };
-      case 'Polygon':
+      case "Polygon":
         return {
-          color: '#3388ff',
+          color: "#3388ff",
           weight: 2,
           opacity: 0.8,
-          fillColor: '#3388ff',
-          fillOpacity: 0.4
+          fillColor: "#3388ff",
+          fillOpacity: 0.4,
         };
       default:
         return {
-          color: '#3388ff',
+          color: "#3388ff",
           weight: 2,
           opacity: 0.8,
-          fillColor: '#3388ff',
-          fillOpacity: 0.4
+          fillColor: "#3388ff",
+          fillOpacity: 0.4,
         };
     }
   };
@@ -98,19 +51,29 @@ const GeoJSONMap = () => {
 
   // Convert Point features to circle markers
   const pointToLayer = (feature, latlng) => {
-    if (feature.geometry.type === 'Point') {
+    if (feature.geometry.type === "Point") {
       return L.circleMarker(latlng, style(feature));
     }
     return L.marker(latlng);
   };
 
   return (
-    <GeoJSON
-      data={geojsonData}
-      style={style}
-      onEachFeature={onEachFeature}
-      pointToLayer={pointToLayer}
-    />
+    <MapContainer
+      center={[39.75621, -104.99404]}
+      zoom={13}
+      style={{ height: "100%", width: "100%" }}
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      <GeoJSON
+        data={props.geojsonData}
+        style={style}
+        onEachFeature={onEachFeature}
+        pointToLayer={pointToLayer}
+      />
+    </MapContainer>
   );
 };
 
