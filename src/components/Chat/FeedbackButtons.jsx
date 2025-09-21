@@ -1,22 +1,33 @@
-import { useState, useEffect } from "react";
-import { getActionAx, postActionAx } from "../../api";
+import { useEffect, useState } from "react";
+import { postActionAx } from "../../api";
+import useErrorHandler from "../../hooks/useErrorHandler";
 
-const FeedbackButtons = ({ messageId }) => {
-  const [rating, setRating] = useState(null);
+const FeedbackButtons = (props) => {
+      const errorHandler = useErrorHandler();
+  
+  const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+
+ useEffect(() => {
+  console.log('PROPS' ,props)
+    if (props.feedback?.rating !== 0) {
+      setRating(props.feedback.rating);
+    }
+  }, [props.feedback?.rating]);
+
 
   const buttonClickHandler = async (clickedButton) => {
     if (isLoading) return;
 
-    const newRating = rating === clickedButton ? null : clickedButton;
+    const newRating = rating === clickedButton ? 0 : clickedButton;
     setRating(newRating);
     setIsLoading(true);
 
     const postFeedback = async () => {
       let feedbackObj = {
-        message_id: 18,
+        message_id: props.messageId,
         rating: newRating,
-        feedback_text: "very nice!!",
+        feedback_text: props.feedback.feedbackText,
       };
       await postActionAx("/api/chat/feedback", feedbackObj)
         .then((res) => {
@@ -24,23 +35,22 @@ const FeedbackButtons = ({ messageId }) => {
         })
         .catch((err) => {
           setRating(rating);
-          // errorHandler(err);
+          errorHandler(err);
         })
         .finally(() => {
           setIsLoading(false);
         });
     };
-
     postFeedback();
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-white ">
       {/* dislike */}
       <button
-        onClick={() => buttonClickHandler(0)}
-        className={` hover:bg-gray-100 p-1 rounded transition ${
-          rating === 0 ? "bg-red-100" : ""
+        onClick={() => buttonClickHandler(1)}
+        className={`cursor-pointer hover:bg-blue-100 p-1 rounded transition ${
+          rating === 1 ? "bg-blue-100" : ""
         }`}
       >
         <svg
@@ -59,9 +69,9 @@ const FeedbackButtons = ({ messageId }) => {
       </button>
       {/* like */}
       <button
-        onClick={() => buttonClickHandler(1)}
-        className={` hover:bg-gray-100 p-1 rounded transition ${
-          rating === 1 ? "bg-red-100" : ""
+        onClick={() => buttonClickHandler(10)}
+        className={`cursor-pointer hover:bg-blue-100 p-1 rounded transition ${
+          rating === 10 ? "bg-blue-100" : ""
         }`}
       >
         <svg

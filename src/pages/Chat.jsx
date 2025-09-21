@@ -368,6 +368,7 @@ import { useWebSocket } from "../context/WebSocketContext";
 import ChatSidebar from "../components/Chat/ChatSidebar";
 import { useSelector } from "react-redux";
 import GeoJSONMap from "../components/Map/GeoJSONMap";
+import MessageFeedback from "../components/Chat/MessageFeedback";
 
 const ChatPage = () => {
   const geojsonData = {
@@ -662,7 +663,10 @@ const ChatPage = () => {
 
         {/* Chat Messages */}
         <div className="flex-1 flex flex-col">
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div
+            className="flex-1 overflow-y-auto p-4 space-y-4"
+            id="chat-container"
+          >
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -780,10 +784,18 @@ const ChatPage = () => {
                       >
                         {message.content}
                       </ReactMarkdown>
+
                       {/* map */}
                       {/* <div style={{ height: "50vh", width: "100%" }}>
                         <GeoJSONMap geojsonData={geojsonData} />
                       </div> */}
+                    </div>
+                  )}
+
+                  {message.is_user === false && (
+                    <div dir="ltr">
+                      <div className="flex flex-row-reverse"><MessageFeedback messageId={message.id}/></div>
+                      
                     </div>
                   )}
                 </div>

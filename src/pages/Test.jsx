@@ -1,5 +1,41 @@
+import { useEffect } from "react";
+import { getActionAx, postActionAx } from "../api";
 import GeoJSONMap from "../components/Map/GeoJSONMap";
+import MessageFeedback from "../components/Chat/MessageFeedback";
+import FeedbackButtons from "../components/Chat/FeedbackButtons";
 const Test = (props) => {
+  // useEffect(() => {
+  //   const getFeedback = async () => {
+  //     let messageId = 18;
+  //     await getActionAx(`/api/chat/feedback/${messageId}`)
+  //       .then((res) => {
+  //         console.log("get feedBack", res.data);
+  //       })
+  //       .catch((err) => {
+  //         // errorHandler(err);
+  //       });
+  //   };
+
+  //   getFeedback();
+
+  //   const postFeedback = async () => {
+  //     let feedbackObj = {
+  //       message_id: 18,
+  //       rating: true,
+  //       feedback_text: "very nice!!",
+  //     };
+  //     await postActionAx("/api/chat/feedback", feedbackObj)
+  //       .then((res) => {
+  //         console.log(res.data);
+  //       })
+  //       .catch((err) => {
+  //         // errorHandler(err);
+  //       });
+  //   };
+
+  //   postFeedback();
+  // }, []);
+
   const geojsonData = {
     type: "FeatureCollection",
     features: [
@@ -52,9 +88,11 @@ const Test = (props) => {
 
   return (
     <>
-      <div style={{ height: "100vh", width: "100%" }}>
+      {/* map */}
+      {/* <div style={{ height: "50vh", width: "100%" }}>
         <GeoJSONMap geojsonData={geojsonData} />
-      </div>
+      </div> */}
+      <MessageFeedback/>      
     </>
   );
 };
