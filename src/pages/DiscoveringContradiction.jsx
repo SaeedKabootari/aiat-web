@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import SendResolution from "../components/SendResolution";
-import SearchResolution from "../components/SearchResolution";
+import SendResolution from "../components/DiscoveringContradiction/SendResolution";
+import SearchResolution from "../components/DiscoveringContradiction/SearchResolution";
 import { getActionAx, postActionAx } from "../api";
 import { toast } from "react-toastify";
 import { formatText, toPersianTime, transformKeys } from "../utils/utils";
-import MultiSelect from "../components/MultiSelect";
+import MultiSelect from "../components/UI/MultiSelect";
 import useErrorHandler from "../hooks/useErrorHandler";
 import { useSelector } from "react-redux";
 

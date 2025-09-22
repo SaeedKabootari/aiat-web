@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { delActionAx, getActionAx, postActionAx } from "../../api";
 import useErrorHandler from "../../hooks/useErrorHandler";
-import PortalModal from "../PortalModal";
+import PortalModal from "../UI/PortalModal";
 import useClickOutside from "../../hooks/useClickOutside";
 
 const ChatSidebar = (props) => {

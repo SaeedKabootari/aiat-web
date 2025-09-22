@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { getActionAx, postActionAx } from "../api";
 import { transformKeys } from "../utils/utils";
-import MultiSelect from "../components/MultiSelect";
+import MultiSelect from "../components/UI/MultiSelect";
 import { useNavigate } from "react-router-dom";
 import useErrorHandler from "../hooks/useErrorHandler";
 

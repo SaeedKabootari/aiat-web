@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { delActionAx, getActionAx } from "../api";
 import { formatText, toPersianTime } from "../utils/utils";
-import PDFExport from "../components/PDFExport";
-import ContradictionTablePdf from "../components/ContradictionTablePdf";
+import PDFExport from "../components/UI/PDFExport";
+import ContradictionTablePdf from "../components/DiscoveringContradiction/ContradictionTablePdf";
 import useErrorHandler from "../hooks/useErrorHandler";
-import Modal from "../components/Modal";
+import Modal from "../components/UI/Modal";
 
 const FunctionsHistory = () => {
   const [tab, setTab] = useState("tasksTab");

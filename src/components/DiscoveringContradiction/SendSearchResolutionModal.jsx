@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { getActionAx, postActionAx } from "../api";
-import MultiSelect from "./MultiSelect";
-import { transformKeys } from "../utils/utils";
-import useErrorHandler from "../hooks/useErrorHandler";
+import { getActionAx, postActionAx } from "../../api";
+import MultiSelect from "../UI/MultiSelect";
+import { transformKeys } from "../../utils/utils";
+import useErrorHandler from "../../hooks/useErrorHandler";
 
 const SendSearchResolutionModal = (props) => {
   const errorHandler = useErrorHandler();
