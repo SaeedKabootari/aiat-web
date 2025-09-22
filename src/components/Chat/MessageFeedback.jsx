@@ -13,11 +13,7 @@ const MessageFeedback = (props) => {
   const getFeedback = async () => {
     await getActionAx(`/api/chat/feedback/${props.messageId}`)
       .then((res) => {
-        console.log("get feedBack", res.data);
-
         const feedbackData = res.data?.feedback || {};
-        console.log("ZZZfeedback", feedbackData);
-
         setFeedback({
           rating: feedbackData.rating || 0,
           feedbackText: feedbackData.feedback_text || "",
@@ -32,10 +28,6 @@ const MessageFeedback = (props) => {
   useEffect(() => {
     getFeedback();
   }, []);
-
-  useEffect(() => {
-    console.log("FFFFFFFFFFFFFFFFFFFFFFFFFFFF", feedback);
-  }, [feedback]);
 
   return (
     <div className="bg-white rounded overflow-hidden w-fit">

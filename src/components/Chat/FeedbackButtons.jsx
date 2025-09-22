@@ -3,26 +3,22 @@ import { postActionAx } from "../../api";
 import useErrorHandler from "../../hooks/useErrorHandler";
 
 const FeedbackButtons = (props) => {
-      const errorHandler = useErrorHandler();
-  
+  const errorHandler = useErrorHandler();
+
   const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
- useEffect(() => {
-  console.log('PROPS' ,props)
+  useEffect(() => {
     if (props.feedback?.rating !== 0) {
       setRating(props.feedback.rating);
     }
   }, [props.feedback?.rating]);
 
-
   const buttonClickHandler = async (clickedButton) => {
     if (isLoading) return;
-
     const newRating = rating === clickedButton ? 0 : clickedButton;
     setRating(newRating);
     setIsLoading(true);
-
     const postFeedback = async () => {
       let feedbackObj = {
         message_id: props.messageId,

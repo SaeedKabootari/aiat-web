@@ -7,64 +7,52 @@ import { createPortal } from "react-dom";
 const CommentButton = (props) => {
   const errorHandler = useErrorHandler();
 
-  const [modalOpen, setModalOpen] = useState(false);
-  const [viewModalOpen, setViewModalOpen] = useState(false); // New state for viewing submitted comment
-
+  const [leaveCmModal, setLeaveCmModal] = useState(false);
+  const [viewCmModal, setViewCmModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [comment, setComment] = useState("");
   const [submittedComment, setSubmittedComment] = useState("");
-  const modalRef = useRef(null);
+  const leaveCmModalRef = useRef(null);
   const buttonRef = useRef(null);
-  const viewModalRef = useRef(null); // New ref for view modal
-  const spanRef = useRef(null); // New ref for the span
+  const viewCmModalRef = useRef(null); 
+  const submittedCommentRef = useRef(null); 
 
-  useClickOutside(modalRef, () => setModalOpen(false));
-  useClickOutside(viewModalRef, () => setViewModalOpen(false)); // New click outside for view modal
+  useClickOutside(leaveCmModalRef, () => setLeaveCmModal(false));
+  useClickOutside(viewCmModalRef, () => setViewCmModal(false));
 
-  // ✅ Close modal on scroll
+  // close modal on scroll
   useEffect(() => {
-    if (!modalOpen) return;
-
+    if (!leaveCmModal) return;
     const handleScroll = () => {
-      setModalOpen(false);
+      setLeaveCmModal(false);
     };
-
-    // Find the chat messages container more specifically
     const chatContainer = document.querySelector("#chat-container");
-    console.log("chatContainer", chatContainer);
-
     if (chatContainer) {
       chatContainer.addEventListener("scroll", handleScroll, { passive: true });
     }
-
-    // Cleanup
     return () => {
       if (chatContainer) {
         chatContainer.removeEventListener("scroll", handleScroll);
       }
     };
-  }, [modalOpen]);
+  }, [leaveCmModal]);
 
-  // ✅ Close view modal on scroll (similar to input modal)
+  // close modal on scroll
   useEffect(() => {
-    if (!viewModalOpen) return;
-
+    if (!viewCmModal) return;
     const handleScroll = () => {
-      setViewModalOpen(false);
+      setViewCmModal(false);
     };
-
     const chatContainer = document.querySelector("#chat-container");
-
     if (chatContainer) {
       chatContainer.addEventListener("scroll", handleScroll, { passive: true });
     }
-
     return () => {
       if (chatContainer) {
         chatContainer.removeEventListener("scroll", handleScroll);
       }
     };
-  }, [viewModalOpen]);
+  }, [viewCmModal]);
 
   useEffect(() => {
     if (props.feedback?.feedbackText) {
@@ -74,9 +62,7 @@ const CommentButton = (props) => {
 
   const sendCommentHandler = async () => {
     if (isLoading) return;
-
     setIsLoading(true);
-
     const postFeedback = async () => {
       let feedbackObj = {
         message_id: props.messageId,
@@ -85,7 +71,6 @@ const CommentButton = (props) => {
       };
       await postActionAx("/api/chat/feedback", feedbackObj)
         .then((res) => {
-          console.log(res.data);
           setSubmittedComment(comment.trim());
         })
         .catch((err) => {
@@ -93,7 +78,7 @@ const CommentButton = (props) => {
         })
         .finally(() => {
           setIsLoading(false);
-          setModalOpen(false);
+          setLeaveCmModal(false);
           setComment("");
         });
     };
@@ -103,28 +88,22 @@ const CommentButton = (props) => {
   return (
     <div>
       <div className="flex p-1">
-        {/* {submittedComment !== "" && (
-          <span title={submittedComment} className="bg-[#242752] text-white text-xs rounded flex items-center justify-center p-1 truncate max-w-[60vw]">
-            {submittedComment}
-          </span>
-        )} */}
-
+        {/* submittedComment */}
         {submittedComment !== "" && (
           <span
-            onClick={() => setViewModalOpen(true)}
+            onClick={() => setViewCmModal(true)}
             title={submittedComment}
-            ref={spanRef}
-            // className="bg-[#242752] text-white text-xs rounded  p-1 w-[250px] truncate"
+            ref={submittedCommentRef}
             className="bg-[#242752] text-white text-xs rounded flex items-center p-1 w-[250px] truncate cursor-pointer"
             dir="rtl"
           >
             {submittedComment}
           </span>
         )}
-
+        {/* button */}
         <button
           ref={buttonRef}
-          onClick={() => setModalOpen(!modalOpen)}
+          onClick={() => setLeaveCmModal(!leaveCmModal)}
           className="hover:bg-gray-100 p-1 rounded transition flex items-center gap-2 relative"
         >
           <svg
@@ -145,12 +124,12 @@ const CommentButton = (props) => {
           )}
         </button>
       </div>
-
-      {modalOpen &&
+      {/* leaveCmModal */}
+      {leaveCmModal &&
         createPortal(
           <div className="fixed inset-0 z-50 pointer-events-none">
             <div
-              ref={modalRef}
+              ref={leaveCmModalRef}
               className="absolute pointer-events-auto"
               style={{
                 top:
@@ -187,21 +166,20 @@ const CommentButton = (props) => {
           </div>,
           document.body
         )}
-
-      {/* View Modal for Submitted Comment */}
-      {viewModalOpen &&
+      {/* viewCmModal */}
+      {viewCmModal &&
         createPortal(
           <div className="fixed inset-0 z-50 pointer-events-none">
             <div
-              ref={viewModalRef}
+              ref={viewCmModalRef}
               className="absolute pointer-events-auto"
               style={{
                 top:
-                  spanRef.current?.getBoundingClientRect().bottom +
+                  submittedCommentRef.current?.getBoundingClientRect().bottom +
                   window.scrollY +
                   5,
                 left:
-                  spanRef.current?.getBoundingClientRect().left +
+                  submittedCommentRef.current?.getBoundingClientRect().left +
                   window.scrollX,
                 width: "250px",
               }}
@@ -212,8 +190,8 @@ const CommentButton = (props) => {
                 </p>
                 <div className="flex justify-end mt-2">
                   <button
-                    onClick={() => setViewModalOpen(false)}
-                    className="bg-[#242752] text-white py-1 px-2 rounded hover:bg-[#1f1f43] transition duration-300"
+                    onClick={() => setViewCmModal(false)}
+                    className="bg-[#242752] text-white py-1 px-2 rounded hover:bg-[#1f1f43] transition duration-300 cursor-pointer"
                   >
                     بستن
                   </button>

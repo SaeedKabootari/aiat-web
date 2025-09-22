@@ -26,14 +26,11 @@ const ChatSidebar = (props) => {
 
   const errorHandler = useErrorHandler();
 
-  console.log("zzzzz", modalConfig);
-
   const getChats = async () => {
     let getUrl = "/api/chat/sessions";
     await getActionAx(getUrl)
       .then((res) => {
         setChats([...res.data.sessions]);
-        console.log("Chats===>", res);
       })
       .catch((err) => {
         errorHandler(err);
@@ -44,15 +41,12 @@ const ChatSidebar = (props) => {
   }, []);
 
   const chatItemClickHandler = async (item) => {
-    console.log("zzzzzzzzzz", item);
     setActiveChat(item.id);
     props.setSessionId(item.id);
     let getUrl = `/api/chat/sessions/${item.id}`;
-    console.log(getUrl);
 
     getActionAx(getUrl)
       .then((res) => {
-        console.log("chat detail", res.data.messages);
         props.setMessages(res.data.messages);
       })
       .catch((err) => {
@@ -174,7 +168,6 @@ const ChatSidebar = (props) => {
                     onClick={(event) => {
                       event.stopPropagation();
                       setClickedModify(item);
-                      console.log(item.id);
                     }}
                     className="cursor-pointer"
                   >
@@ -190,8 +183,6 @@ const ChatSidebar = (props) => {
                             onClick={() => {
                               // set input edit value:
                               setEditChatTitle(item.title);
-
-                              console.log("edit");
                               setModalConfig({
                                 ...modalConfig,
                                 isOpen: true,
@@ -222,7 +213,6 @@ const ChatSidebar = (props) => {
 
                           <button
                             onClick={() => {
-                              console.log("delete");
                               setModalConfig({
                                 ...modalConfig,
                                 isOpen: true,
