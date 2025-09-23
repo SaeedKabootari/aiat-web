@@ -3,7 +3,11 @@ import { getActionAx, postActionAx } from "../api";
 import GeoJSONMap from "../components/Map/GeoJSONMap";
 import MessageFeedback from "../components/Chat/MessageFeedback";
 import FeedbackButtons from "../components/Chat/FeedbackButtons";
+import { useSelector } from "react-redux";
 const Test = (props) => {
+  const set = useSelector((state)=> state.contradiction.messages)
+
+  console.log(set)
   // useEffect(() => {
   //   const getFeedback = async () => {
   //     let messageId = 18;
@@ -92,7 +96,7 @@ const Test = (props) => {
       {/* <div style={{ height: "50vh", width: "100%" }}>
         <GeoJSONMap geojsonData={geojsonData} />
       </div> */}
-      <MessageFeedback/>      
+    
     </>
   );
 };

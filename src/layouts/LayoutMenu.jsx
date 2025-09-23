@@ -11,6 +11,7 @@ import { WEB_SOCKET_URL } from "../api";
 import { useDispatch } from "react-redux";
 import { webSocketActions } from "../shop/webSocketSlice";
 import { toast } from "react-toastify";
+import { contradictionActions } from "../shop/contradictionSlice";
 
 const LayoutMenu = (props) => {
   const windowWidth = useWindowDimensions().width;
@@ -116,10 +117,24 @@ let socketUrl;
             } else if (data.state === "error") {
               toast.error(data.message);
             } else if (data.state === "Success") {
-              console.log("SuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccess")
+              console.log("chat SuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccess")
               toast.success(data.message);
               dispatch(webSocketActions.addMessage(data.data) )
             }
+          }else if(data?.type === "log"){
+            // contradiction ws:
+            if (data.state === "notif") {
+              toast.info(data.message);
+            } else if (data.state === "warnning") {
+              toast.warning(data.message);
+            } else if (data.state === "error") {
+              toast.error(data.message);
+            } else if (data.state === "Success") {
+              console.log("contradiction SuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccess")
+              toast.success(data.message);
+              dispatch(contradictionActions.addMessage(data.data) )
+            }
+
           }
 
         } catch (error) {
