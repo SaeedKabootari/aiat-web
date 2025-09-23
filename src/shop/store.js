@@ -1,12 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import todoSlice from "./todoSlice";
-import webSocketSlice from "./webSocketSlice";
+import chatSlice from "./chatSlice";
 import contradictionSlice from "./contradictionSlice";
 
 const store = configureStore({
   reducer: {
     todo: todoSlice.reducer,
-    webSocket: webSocketSlice.reducer,
+    chat: chatSlice.reducer,
     contradiction: contradictionSlice.reducer,
   },
 });

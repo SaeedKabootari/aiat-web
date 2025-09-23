@@ -9,7 +9,7 @@ import SidebarLinks from "./SidebarLinks";
 import { useWebSocket } from "../context/WebSocketContext";
 import { WEB_SOCKET_URL } from "../api";
 import { useDispatch } from "react-redux";
-import { webSocketActions } from "../shop/webSocketSlice";
+import { chatActions } from "../shop/chatSlice";
 import { toast } from "react-toastify";
 import { contradictionActions } from "../shop/contradictionSlice";
 
@@ -119,7 +119,7 @@ let socketUrl;
             } else if (data.state === "Success") {
               console.log("chat SuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccess")
               toast.success(data.message);
-              dispatch(webSocketActions.addMessage(data.data) )
+              dispatch(chatActions.addMessage(data.data) )
             }
           }else if(data?.type === "log"){
             // contradiction ws:

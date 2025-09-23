@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const webSocketSlice = createSlice({
-  name: "webSocket",
+const chatSlice = createSlice({
+  name: "chat",
   initialState: {
     messages: '',
   },
@@ -16,5 +16,5 @@ const webSocketSlice = createSlice({
   },
 });
 
-export const webSocketActions = webSocketSlice.actions;
-export default webSocketSlice;
+export const chatActions = chatSlice.actions;
+export default chatSlice;

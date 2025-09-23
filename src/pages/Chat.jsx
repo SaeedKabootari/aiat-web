@@ -421,8 +421,8 @@ const ChatPage = () => {
     ],
   };
 
-  const webSocketMessages = useSelector((state) => state.webSocket.messages);
-  console.log("CHATwebSocketMessages", webSocketMessages);
+  const chatMessages = useSelector((state) => state.chat.messages);
+  console.log("CHATwebSocketMessages", chatMessages);
 
   // // Watch for changes in webSocketMessages
   // useEffect(() => {
@@ -622,18 +622,18 @@ const ChatPage = () => {
 
   useEffect(() => {
     // Only add a message if webSocketMessages is not empty
-    if (webSocketMessages && webSocketMessages !== "") {
+    if (chatMessages && chatMessages !== "") {
       setMessages((prev) => [
         ...prev,
         {
           id: prev.length + 1,
-          content: webSocketMessages,
+          content: chatMessages,
           is_user: false,
         },
       ]);
       setLoading(false);
     }
-  }, [webSocketMessages]);
+  }, [chatMessages]);
 
   return (
     <div className="flex flex-col h-[85vh] bg-[#1a1c3f] rounded-xl overflow-hidden">
