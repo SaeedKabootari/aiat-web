@@ -1,9 +1,4 @@
-import {
-  BrowserRouter,
-  Navigate,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { WebSocketProvider } from "./context/WebSocketContext";
 import Home from "./pages/Home";
 import SignIn from "./pages/Login";
@@ -20,6 +15,7 @@ import FunctionsHistory from "./pages/FunctionsHistory";
 import Chat from "./pages/Chat";
 import ResolutionDetail from "./pages/ResolutionDetail";
 import GraphChat from "./pages/GraphChat";
+import GIS from "./pages/GIS";
 
 // Translation resources
 const resources = {
@@ -82,8 +78,6 @@ i18n
 function App() {
   const { t, i18n } = useTranslation();
 
- 
-
   const loggedIn = useSelector((state) => state.todo.loggedIn);
 
   // Set document direction and language
@@ -104,42 +98,35 @@ function App() {
       }`}
     >
       {/* <WebSocketProvider enabled={true}> */}
-        <BrowserRouter>
-          <div className="">
-            <Routes>
-              <Route path="/" element={<SignIn />} />
-              {/* Protected Routes - ONLY show when logged in */}
-              {loggedIn ? (
-                <Route element={<LayoutMenu />}>
-                  
-                  <Route path="/home" element={<Home />} />
-                  <Route path="/test" element={<Test />} />
-                  <Route
-                    path="/discovering-contradiction"
-                    element={<DiscoveringContradiction />}
-                  />
-                  <Route
-                    path="/functions-history"
-                    element={<FunctionsHistory />}
-                  />
-                  <Route path="/chat" element={<Chat />} />
-                  <Route path="/graph-chat" element={<GraphChat />} />
-                  <Route
-                    path="/resolutions-list"
-                    element={<ResolutionsList />}
-                  />
-
-                  <Route
-                    path="/resolution/:id"
-                    element={<ResolutionDetail />}
-                  />
-                </Route>
-              ) : (
-                <Route path="*" element={<Navigate to="/" replace />} />
-              )}
-            </Routes>
-          </div>
-        </BrowserRouter>
+      <BrowserRouter>
+        <div className="">
+          <Routes>
+            <Route path="/" element={<SignIn />} />
+            {/* Protected Routes - ONLY show when logged in */}
+            {loggedIn ? (
+              <Route element={<LayoutMenu />}>
+                <Route path="/home" element={<Home />} />
+                <Route path="/test" element={<Test />} />
+                <Route
+                  path="/discovering-contradiction"
+                  element={<DiscoveringContradiction />}
+                />
+                <Route
+                  path="/functions-history"
+                  element={<FunctionsHistory />}
+                />
+                <Route path="/chat" element={<Chat />} />
+                <Route path="/graph-chat" element={<GraphChat />} />
+                <Route path="/resolutions-list" element={<ResolutionsList />} />
+                <Route path="/resolution/:id" element={<ResolutionDetail />} />
+                <Route path="/gis" element={<GIS />} />
+              </Route>
+            ) : (
+              <Route path="*" element={<Navigate to="/" replace />} />
+            )}
+          </Routes>
+        </div>
+      </BrowserRouter>
       {/* </WebSocketProvider> */}
     </div>
   );

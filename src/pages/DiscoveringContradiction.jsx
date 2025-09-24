@@ -9,7 +9,7 @@ import useErrorHandler from "../hooks/useErrorHandler";
 import { useSelector } from "react-redux";
 
 const DiscoveringContradiction = (props) => {
-  const wsMessages = useSelector((state) => state.webSocket.messages);
+  const wsMessages = useSelector((state) => state.webSocket?.messages);
 
   useEffect(() => {
     console.log("<<<<<<<<<<wsMessages<<<<<<<<<<", wsMessages);
