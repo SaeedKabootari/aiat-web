@@ -7,8 +7,10 @@ import { UniversalTransition } from 'echarts/features';
 import { CanvasRenderer } from 'echarts/renderers';
 import usaJson from '../../../src/assets/USA.json'; // Adjust path based on your project structure
 
+import { VisualMapComponent } from 'echarts/components';
+
 // Register ECharts components
-echarts.use([GridComponent, BarChart, MapChart, CanvasRenderer, UniversalTransition]);
+echarts.use([GridComponent, BarChart, MapChart, CanvasRenderer, UniversalTransition,VisualMapComponent]);
 
 // Population data
 const populationData = [
