@@ -285,7 +285,7 @@
 import React, { useState } from 'react';
 import { FILTER_OPTIONS, MAIN_CATEGORIES } from '../../data/populationData'; // Adjust path based on your project structure
 
-const CategoryAccordion = () => {
+const CategoryAccordion = (props) => {
   const [openCategory, setOpenCategory] = useState(null);
   const [openGroup, setOpenGroup] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState(null);
@@ -306,6 +306,7 @@ const CategoryAccordion = () => {
   const handleFilterClick = (filterId) => {
     setSelectedFilter(selectedFilter === filterId ? null : filterId);
     console.log('filterId ==>', filterId);
+    props.onMetricChange(filterId)
   };
 
   return (

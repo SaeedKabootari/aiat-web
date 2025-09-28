@@ -6,6 +6,7 @@ export const FILTER_OPTIONS = {
       label: "مهدهای کودک و مراکز بازی",
       filters: [
         { id: "kindergarten_count", label: "تعداد مهدهای کودک" },
+        { id: "total_number_of_dedicated_mountaineering_environments", label: "تعداد مهدهای کودک" },
         { id: "kindergarten_area", label: "مساحت مهدهای کودک" },
         {
           id: "sports_kindergarten_count",

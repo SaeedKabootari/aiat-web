@@ -78,34 +78,40 @@ const getBarOption = (data) => ({
   ],
 });
 
-const IRANPopulationChart = (props) => {
+const IRANPopulationChart = ({ populationData }) => {
   // Population data
-  const populationData = props.populationData.sort((a, b) => a.value - b.value);
+  const sortedData = [...populationData].sort((a, b) => a.value - b.value);
 
   const [currentOption, setCurrentOption] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isMapView, setIsMapView] = useState(true); // State to track current view
 
-  // Register map and initialize chart
+// Initialize map and update chart when populationData changes
   useEffect(() => {
     try {
-      console.log("iranJson:", iranJson); // Debug GeoJSON import
+      // Register Iran map
+      console.log("Registering Iran map with GeoJSON:", iranJson);
       echarts.registerMap("Iran", iranJson);
-      setCurrentOption(getMapOption(populationData));
+
+      // Only set options if populationData is non-empty
+      if (populationData.length > 0) {
+        console.log("Updating chart with populationData:", populationData);
+        setCurrentOption(isMapView ? getMapOption(populationData) : getBarOption(sortedData));
+      }
       setLoading(false);
     } catch (err) {
-      console.error("Error registering map:", err);
+      console.error("Error registering map or setting options:", err);
       setError("Failed to load map data");
       setLoading(false);
     }
-  }, []);
+  }, [populationData, isMapView]); // Add populationData and isMapView to dependencies
 
   // Toggle between map and bar chart on button click
   const handleToggleChart = () => {
     setIsMapView((prev) => {
       const newOption = prev
-        ? getBarOption(populationData)
+        ? getBarOption(sortedData)
         : getMapOption(populationData);
       setCurrentOption(newOption);
       return !prev;
@@ -170,7 +176,7 @@ const IRANPopulationChart = (props) => {
             onClick={handleToggleChart}
             className="absolute top-2 right-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition text-sm cursor-pointer z-10"
           >
-            {isMapView ? "Show Bar Chart" : "Show Map Chart"}
+            {isMapView ? "نمایش نمودار میله ای" : "نمایش نمودار نقشه ای"}
           </button>
         </div>
       )}
