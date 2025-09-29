@@ -46,3 +46,28 @@ export const cleanMessageText = (text) => {
 
   return cleaned;
 };
+
+
+
+export const parseMetricName = (fullName) => {
+  // List of valid aggregation types
+  const validAggregations = ['count', 'sum', 'avg', 'max', 'min'];
+
+  // Split the name by the last underscore
+  const lastUnderscoreIndex = fullName.lastIndexOf('_');
+  if (lastUnderscoreIndex === -1) {
+    // No underscore found, return fullName as name and null aggregation
+    return { name: fullName, aggregation: null };
+  }
+
+  const name = fullName.substring(0, lastUnderscoreIndex);
+  const aggregation = fullName.substring(lastUnderscoreIndex + 1);
+
+  // Validate aggregation type
+  if (!validAggregations.includes(aggregation)) {
+    // Invalid aggregation, return fullName as name and null aggregation
+    return { name: fullName, aggregation: null };
+  }
+
+  return { name, aggregation };
+};
