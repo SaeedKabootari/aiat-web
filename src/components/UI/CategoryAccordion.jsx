@@ -280,6 +280,10 @@
 // export default CategoryAccordion;
 
 
+// true version work with filter.id:
+
+
+// modify version work with filter.label because data has items with equal id:
 
 
 import React, { useState } from 'react';
@@ -303,9 +307,14 @@ const CategoryAccordion = (props) => {
     console.log('groupId ==>', groupId);
   };
 
-  const handleFilterClick = (filterId) => {
-    setSelectedFilter(selectedFilter === filterId ? null : filterId);
+  const handleFilterClick = (filterId ,filterName) => {
+    // setSelectedFilter(selectedFilter === filterId ? null : filterId);
+    setSelectedFilter(selectedFilter === filterName ? null : filterName);
+
+
+
     console.log('filterId ==>', filterId);
+    console.log('filterName ==>', filterName);
     props.onMetricChange(filterId)
   };
 
@@ -367,10 +376,11 @@ const CategoryAccordion = (props) => {
                       <ul className="space-y-1">
                         {group.filters.map((filter) => (
                           <li
-                            key={filter.id}
-                            onClick={() => handleFilterClick(filter.id)}
+                            // key={filter.id}
+                            key={filter.label}
+                            onClick={() => handleFilterClick(filter.id ,filter.label)}
                             className={`cursor-pointer text-gray-600 hover:text-blue-600 transition-colors duration-200 p-1 rounded text-sm ${
-                              selectedFilter === filter.id ? 'text-blue-600 bg-blue-100' : ''
+                              selectedFilter === filter.label ? 'text-blue-600 bg-blue-100' : ''
                             }`}
                           >
                             - {filter.label}
