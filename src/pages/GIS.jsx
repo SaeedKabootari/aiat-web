@@ -4,6 +4,7 @@ import IRANPopulationChart from "../components/Map/IRANPopulationChart";
 import CategoryAccordion from "../components/UI/CategoryAccordion";
 import { getActionAx } from "../api";
 import useErrorHandler from "../hooks/useErrorHandler";
+import { parseMetricName } from "../utils/utils";
 
 const GIS = () => {
   const [populationData, setPopulationData] = useState([]);
@@ -47,8 +48,10 @@ const [selectedMetric ,setSelectedMetric] = useState('number_of_kindergartens')
 //   ]
 
   const getPopulation = async (metric) => {
+
+    const{name , aggregation} =parseMetricName(metric)
     await getActionAx(
-      `/api/amayesh/map/provinces/${metric}?aggregation=sum`
+      `/api/amayesh/map/provinces/${name}?aggregation=${aggregation}`
     )
       .then((res) => {
         console.log(res.data.data);
