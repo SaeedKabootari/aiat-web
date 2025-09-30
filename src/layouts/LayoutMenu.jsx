@@ -54,22 +54,20 @@ const LayoutMenu = (props) => {
       //   socketObj = new WebSocket(originalURL + "?token=" + token);
       // }
 
-// new for firefox
-let socketUrl;
-    if (WEB_SOCKET_URL) {
-      socketUrl = new URL(WEB_SOCKET_URL);
-      socketUrl.searchParams.append('token', token);
-    } else {
-      const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const host = window.location.host;
-      socketUrl = new URL(`${protocol}//${host}/ws`);
-      socketUrl.searchParams.append('token', token);
-    }
+      // new for firefox
+      let socketUrl;
+      if (WEB_SOCKET_URL) {
+        socketUrl = new URL(WEB_SOCKET_URL);
+        socketUrl.searchParams.append("token", token);
+      } else {
+        const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+        const host = window.location.host;
+        socketUrl = new URL(`${protocol}//${host}/ws`);
+        socketUrl.searchParams.append("token", token);
+      }
 
-    const socketObj = new WebSocket(socketUrl.toString());
-// new for firefox
-
-
+      const socketObj = new WebSocket(socketUrl.toString());
+      // new for firefox
 
       socketObj.addEventListener("open", () => {
         console.log("WebSocket connection established");
@@ -117,11 +115,13 @@ let socketUrl;
             } else if (data.state === "error") {
               toast.error(data.message);
             } else if (data.state === "Success") {
-              console.log("chat SuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccess")
+              console.log(
+                "chat SuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccess"
+              );
               toast.success(data.message);
-              dispatch(chatActions.addMessage(data.data) )
+              dispatch(chatActions.addMessage(data.data));
             }
-          }else if(data?.type === "log"){
+          } else if (data?.type === "log") {
             // contradiction ws:
             if (data.state === "notif") {
               toast.info(data.message);
@@ -130,13 +130,13 @@ let socketUrl;
             } else if (data.state === "error") {
               toast.error(data.message);
             } else if (data.state === "Success") {
-              console.log("contradiction SuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccess")
+              console.log(
+                "contradiction SuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccessSuccess"
+              );
               toast.success(data.message);
-              dispatch(contradictionActions.addMessage(data.data) )
+              dispatch(contradictionActions.addMessage(data.data));
             }
-
           }
-
         } catch (error) {
           console.error("Error parsing WebSocket message:", error, event.data);
         }
@@ -364,9 +364,7 @@ let socketUrl;
       label: "گراف چت", // You can use t("Chat") if you want to translate it
     },
 
-
-
-,
+    ,
     {
       path: "/gis",
       icon: (
@@ -375,20 +373,20 @@ let socketUrl;
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
         >
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={2}
-            d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"
+            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
           />
+
+          <circle cx="12" cy="9" r="2" strokeWidth={2} />
         </svg>
       ),
-      label:"آمایش سرزمین",
+      label: "آمایش سرزمین",
     },
-
-
-
   ];
 
   return (
