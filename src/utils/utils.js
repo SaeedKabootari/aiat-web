@@ -47,14 +47,12 @@ export const cleanMessageText = (text) => {
   return cleaned;
 };
 
-
-
 export const parseMetricName = (fullName) => {
   // List of valid aggregation types
-  const validAggregations = ['count', 'sum', 'avg', 'max', 'min'];
+  const validAggregations = ["count", "sum", "avg", "max", "min"];
 
   // Split the name by the last underscore
-  const lastUnderscoreIndex = fullName.lastIndexOf('_');
+  const lastUnderscoreIndex = fullName.lastIndexOf("_");
   if (lastUnderscoreIndex === -1) {
     // No underscore found, return fullName as name and null aggregation
     return { name: fullName, aggregation: null };
@@ -70,4 +68,11 @@ export const parseMetricName = (fullName) => {
   }
 
   return { name, aggregation };
+};
+
+export const findMaxByValue = (data) => {
+  const sortedData = [...data].sort((a, b) => a.value - b.value);
+  console.log("sortedData", sortedData);
+  const maxItem = sortedData[sortedData.length - 1];
+  return maxItem.value;
 };

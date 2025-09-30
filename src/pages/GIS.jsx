@@ -54,7 +54,7 @@ const [selectedMetric ,setSelectedMetric] = useState('number_of_kindergartens')
       `/api/amayesh/map/provinces/${name}?aggregation=${aggregation}`
     )
       .then((res) => {
-        console.log(res.data.data);
+        console.log('GIS' ,res.data.data);
         setPopulationData(res.data.data);
       })
       .catch((err) => {

@@ -198,6 +198,7 @@ import { BarChart, MapChart } from "echarts/charts";
 import { UniversalTransition } from "echarts/features";
 import { CanvasRenderer } from "echarts/renderers";
 import iranJson from "../../../src/assets/iran.json"; // Adjust path based on your project structure
+import { findMaxByValue } from "../../utils/utils";
 
 // Register ECharts components
 echarts.use([
@@ -254,7 +255,7 @@ const getMapOption = (data) => ({
   visualMap: {
     left: "right",
     min: 0,
-    max: 3000, // Adjusted for Iranian data range
+    max: findMaxByValue(data), // Adjusted for Iranian data range
     inRange: {
       color: [
         "#313695",
