@@ -359,6 +359,9 @@
 
 // export default ChatPage;
 
+
+// last 2
+
 import { useState, useRef, useEffect } from "react";
 import { postActionAx, postActionSignalAx } from "../api";
 import ReactMarkdown from "react-markdown";
@@ -635,10 +638,298 @@ const ChatPage = () => {
     }
   }, [chatMessages]);
 
-  return (
-    <div className="flex flex-col h-[85vh] bg-[#1a1c3f] rounded-xl overflow-hidden">
+
+
+
+
+
+
+
+
+
+
+
+
+  // return (
+  //   <div className="flex flex-col h-[85vh] bg-[#1a1c3f] rounded-xl overflow-hidden">
+  //     {/* Header */}
+  //     <header className="bg-[#242752] p-4 text-white shadow-md flex justify-between items-center">
+  //       <div className="flex items-center gap-1">
+  //         <div className="w-3 h-3 bg-green-400 rounded-full mr-2"></div>
+  //         <h1 className="text-xl font-semibold">چت</h1>
+  //       </div>
+
+  //       <div className="flex gap-2">
+  //         <button
+  //           onClick={newChatHandler}
+  //           className="px-4 py-1 text-sm font-medium rounded-md focus:outline-none cursor-pointer text-white bg-[#2b20ff]"
+  //         >
+  //           گفتگو جدید{" "}
+  //         </button>
+  //       </div>
+  //     </header>
+
+  //     {/* Main Content Area - Chat and Sidebar */}
+  //     <div className="flex flex-1 overflow-hidden">
+  //       {/* Chat Sidebar on the right */}
+  //       <div className=" border-l border-[#2f346b]">
+  //         <ChatSidebar setMessages={setMessages} setSessionId={setSessionId} />
+  //       </div>
+
+  //       {/* Chat Messages */}
+  //       <div className="flex-1 flex flex-col">
+  //         <div
+  //           className="flex-1 overflow-y-auto p-4 space-y-4"
+  //           id="chat-container"
+  //         >
+  //           {messages.map((message) => (
+  //             <div
+  //               key={message.id}
+  //               className={`flex ${
+  //                 message.is_user === false ? "justify-end" : "justify-start"
+  //               }`}
+  //             >
+  //               <div
+  //                 className={`px-4 py-2 rounded-2xl ${
+  //                   message.is_user === false
+  //                     ? "bg-[#2f346b] text-white rounded-tl-none w-full"
+  //                     : "bg-[#4f46e5] text-white rounded-tr-none max-w-[90%]"
+  //                 }`}
+  //                 dir="auto"
+  //               >
+  //                 {message.is_user === true ? (
+  //                   <div dir="rtl" className="whitespace-pre-wrap break-words">
+  //                     {message.content}
+  //                   </div>
+  //                 ) : (
+  //                   <div className="prose prose-invert max-w-none">
+  //                     <ReactMarkdown
+  //                       remarkPlugins={[remarkGfm]}
+  //                       components={{
+  //                         p: ({ node, ...props }) => (
+  //                           <p
+  //                             dir="rtl"
+  //                             className="my-4 text-justify leading-relaxed"
+  //                             {...props}
+  //                           />
+  //                         ),
+  //                         li: ({ node, ...props }) => (
+  //                           <li
+  //                             dir="rtl"
+  //                             className="text-right my-2 mr-6 leading-relaxed"
+  //                             {...props}
+  //                           />
+  //                         ),
+  //                         ul: ({ node, ...props }) => (
+  //                           <ul
+  //                             dir="rtl"
+  //                             className="list-disc pr-6 space-y-2"
+  //                             {...props}
+  //                           />
+  //                         ),
+  //                         ol: ({ node, ...props }) => (
+  //                           <ol
+  //                             dir="rtl"
+  //                             className="list-decimal pr-6 space-y-2"
+  //                             {...props}
+  //                           />
+  //                         ),
+  //                         h1: ({ node, ...props }) => (
+  //                           <h1
+  //                             dir="rtl"
+  //                             className="text-2xl font-bold my-4 text-right"
+  //                             {...props}
+  //                           />
+  //                         ),
+  //                         h2: ({ node, ...props }) => (
+  //                           <h2
+  //                             dir="rtl"
+  //                             className="text-xl font-bold my-3 text-right"
+  //                             {...props}
+  //                           />
+  //                         ),
+  //                         h3: ({ node, ...props }) => (
+  //                           <h3
+  //                             dir="rtl"
+  //                             className="text-lg font-bold my-2 text-right"
+  //                             {...props}
+  //                           />
+  //                         ),
+  //                         blockquote: ({ node, ...props }) => (
+  //                           <blockquote
+  //                             dir="rtl"
+  //                             className="border-r-4 border-gray-400 pr-4 my-4 text-gray-300"
+  //                             {...props}
+  //                           />
+  //                         ),
+  //                         hr: ({ node, ...props }) => (
+  //                           <hr className="my-6 border-gray-600" {...props} />
+  //                         ),
+  //                         table: ({ node, ...props }) => (
+  //                           <div className="overflow-x-auto">
+  //                             <table
+  //                               dir="rtl"
+  //                               className="w-full my-4 border-collapse border border-gray-600"
+  //                               {...props}
+  //                             />
+  //                           </div>
+  //                         ),
+  //                         th: ({ node, ...props }) => (
+  //                           <th
+  //                             className="px-4 py-2 border border-gray-600 bg-gray-700 text-right"
+  //                             {...props}
+  //                           />
+  //                         ),
+  //                         td: ({ node, ...props }) => (
+  //                           <td
+  //                             className="px-4 py-2 border border-gray-600 text-right"
+  //                             {...props}
+  //                           />
+  //                         ),
+  //                         strong: ({ node, ...props }) => (
+  //                           <strong className="font-bold" {...props} />
+  //                         ),
+  //                         em: ({ node, ...props }) => (
+  //                           <em className="italic" {...props} />
+  //                         ),
+  //                         br: ({ node, ...props }) => (
+  //                           <br className="my-2" {...props} />
+  //                         ),
+  //                       }}
+  //                     >
+  //                       {message.content}
+  //                     </ReactMarkdown>
+
+  //                     {/* map */}
+  //                     {/* <div style={{ height: "50vh", width: "100%" }}>
+  //                       <GeoJSONMap geojsonData={geojsonData} />
+  //                     </div> */}
+  //                   </div>
+  //                 )}
+
+  //                 {message.is_user === false && (
+  //                   <div dir="ltr">
+  //                     <div className="flex flex-row-reverse"><MessageFeedback messageId={message.id}/></div>
+                      
+  //                   </div>
+  //                 )}
+  //               </div>
+  //             </div>
+  //           ))}
+
+  //           {/* Loading Indicator */}
+  //           {loading && (
+  //             <div className="flex justify-end">
+  //               <div className="bg-[#2f346b] text-white rounded-2xl rounded-tl-none px-4 py-2">
+  //                 <div className="flex items-center justify-end space-x-2 rtl:space-x-reverse">
+  //                   <div className="flex space-x-1 py-2">
+  //                     <div
+  //                       className="w-2 h-2 bg-white rounded-full animate-bounce"
+  //                       style={{ animationDelay: "0ms" }}
+  //                     ></div>
+  //                     <div
+  //                       className="w-2 h-2 bg-white rounded-full animate-bounce"
+  //                       style={{ animationDelay: "150ms" }}
+  //                     ></div>
+  //                     <div
+  //                       className="w-2 h-2 bg-white rounded-full animate-bounce"
+  //                       style={{ animationDelay: "300ms" }}
+  //                     ></div>
+  //                   </div>
+  //                 </div>
+  //               </div>
+  //             </div>
+  //           )}
+
+  //           <div ref={messagesEndRef} />
+  //         </div>
+
+  //         {/* Input Area */}
+  //         <footer className="bg-[#242752] p-4">
+  //           {command.has && (
+  //             <div
+  //               onClick={() => {
+  //                 setCommand({
+  //                   ...command,
+  //                   selectedCommand: "آمایش",
+  //                   has: false,
+  //                 });
+
+  //                 setInputValue("/آمایش ");
+  //                 inputRef.current.focus();
+  //               }}
+  //               className="text-white bg-blue-300 p-2 cursoor-pointer"
+  //             >
+  //               /آمایش
+  //             </div>
+  //           )}
+  //           <form onSubmit={handleSend} className="flex gap-2">
+  //             <input
+  //               type="text"
+  //               ref={inputRef}
+  //               value={inputValue}
+  //               onChange={(e) => {
+  //                 setInputValue(e.target.value);
+  //                 if (
+  //                   e.target.value.length === 1 &&
+  //                   e.target.value.startsWith("/")
+  //                 ) {
+  //                   setCommand({
+  //                     ...command,
+
+  //                     has: true,
+  //                   });
+  //                 } else {
+  //                   setCommand({
+  //                     ...command,
+
+  //                     has: false,
+  //                   });
+  //                 }
+  //               }}
+  //               placeholder="پیام بنویسید..."
+  //               className="flex-1 bg-[#2f346b] text-white rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#4f46e5]"
+  //               dir="rtl"
+  //             />
+  //             <button
+  //               type="submit"
+  //               className="bg-[#4f46e5] text-white rounded-xl w-12 h-12 flex items-center justify-center hover:bg-[#4338ca] transition-colors"
+  //             >
+  //               <svg
+  //                 xmlns="http://www.w3.org/2000/svg"
+  //                 className="h-6 w-6 rotate-270"
+  //                 fill="none"
+  //                 viewBox="0 0 24 24"
+  //                 stroke="currentColor"
+  //               >
+  //                 <path
+  //                   strokeLinecap="round"
+  //                   strokeLinejoin="round"
+  //                   strokeWidth={2}
+  //                   d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+  //                 />
+  //               </svg>
+  //             </button>
+  //           </form>
+  //         </footer>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
+
+
+
+
+
+
+
+
+
+// light
+return (
+    <div className="flex flex-col h-[85vh] bg-white rounded-xl overflow-hidden shadow-sm">
       {/* Header */}
-      <header className="bg-[#242752] p-4 text-white shadow-md flex justify-between items-center">
+      <header className="bg-[#DEE2F2] p-4 text-gray-900 shadow-sm flex justify-between items-center">
         <div className="flex items-center gap-1">
           <div className="w-3 h-3 bg-green-400 rounded-full mr-2"></div>
           <h1 className="text-xl font-semibold">چت</h1>
@@ -647,9 +938,9 @@ const ChatPage = () => {
         <div className="flex gap-2">
           <button
             onClick={newChatHandler}
-            className="px-4 py-1 text-sm font-medium rounded-md focus:outline-none cursor-pointer text-white bg-[#2b20ff]"
+            className="px-4 py-1 text-sm font-medium rounded-md focus:outline-none cursor-pointer text-white bg-[#818cf8] hover:bg-[#6366f1] transition-colors"
           >
-            گفتگو جدید{" "}
+            گفتگو جدید
           </button>
         </div>
       </header>
@@ -657,16 +948,13 @@ const ChatPage = () => {
       {/* Main Content Area - Chat and Sidebar */}
       <div className="flex flex-1 overflow-hidden">
         {/* Chat Sidebar on the right */}
-        <div className=" border-l border-[#2f346b]">
+        <div className="border-l border-gray-200">
           <ChatSidebar setMessages={setMessages} setSessionId={setSessionId} />
         </div>
 
         {/* Chat Messages */}
         <div className="flex-1 flex flex-col">
-          <div
-            className="flex-1 overflow-y-auto p-4 space-y-4"
-            id="chat-container"
-          >
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -677,8 +965,8 @@ const ChatPage = () => {
                 <div
                   className={`px-4 py-2 rounded-2xl ${
                     message.is_user === false
-                      ? "bg-[#2f346b] text-white rounded-tl-none w-full"
-                      : "bg-[#4f46e5] text-white rounded-tr-none max-w-[90%]"
+                      ? "bg-gray-200 text-gray-900 rounded-tl-none w-full"
+                      : "bg-[#818cf8] text-white rounded-tr-none max-w-[90%]"
                   }`}
                   dir="auto"
                 >
@@ -687,95 +975,95 @@ const ChatPage = () => {
                       {message.content}
                     </div>
                   ) : (
-                    <div className="prose prose-invert max-w-none">
+                    <div className="prose max-w-none">
                       <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         components={{
                           p: ({ node, ...props }) => (
                             <p
                               dir="rtl"
-                              className="my-4 text-justify leading-relaxed"
+                              className="my-4 text-justify leading-relaxed text-gray-900"
                               {...props}
                             />
                           ),
                           li: ({ node, ...props }) => (
                             <li
                               dir="rtl"
-                              className="text-right my-2 mr-6 leading-relaxed"
+                              className="text-right my-2 mr-6 leading-relaxed text-gray-900"
                               {...props}
                             />
                           ),
                           ul: ({ node, ...props }) => (
                             <ul
                               dir="rtl"
-                              className="list-disc pr-6 space-y-2"
+                              className="list-disc pr-6 space-y-2 text-gray-900"
                               {...props}
                             />
                           ),
                           ol: ({ node, ...props }) => (
                             <ol
                               dir="rtl"
-                              className="list-decimal pr-6 space-y-2"
+                              className="list-decimal pr-6 space-y-2 text-gray-900"
                               {...props}
                             />
                           ),
                           h1: ({ node, ...props }) => (
                             <h1
                               dir="rtl"
-                              className="text-2xl font-bold my-4 text-right"
+                              className="text-2xl font-bold my-4 text-right text-gray-900"
                               {...props}
                             />
                           ),
                           h2: ({ node, ...props }) => (
                             <h2
                               dir="rtl"
-                              className="text-xl font-bold my-3 text-right"
+                              className="text-xl font-bold my-3 text-right text-gray-900"
                               {...props}
                             />
                           ),
                           h3: ({ node, ...props }) => (
                             <h3
                               dir="rtl"
-                              className="text-lg font-bold my-2 text-right"
+                              className="text-lg font-bold my-2 text-right text-gray-900"
                               {...props}
                             />
                           ),
                           blockquote: ({ node, ...props }) => (
                             <blockquote
                               dir="rtl"
-                              className="border-r-4 border-gray-400 pr-4 my-4 text-gray-300"
+                              className="border-r-4 border-gray-300 pr-4 my-4 text-gray-600"
                               {...props}
                             />
                           ),
                           hr: ({ node, ...props }) => (
-                            <hr className="my-6 border-gray-600" {...props} />
+                            <hr className="my-6 border-gray-300" {...props} />
                           ),
                           table: ({ node, ...props }) => (
                             <div className="overflow-x-auto">
                               <table
                                 dir="rtl"
-                                className="w-full my-4 border-collapse border border-gray-600"
+                                className="w-full my-4 border-collapse border border-gray-300"
                                 {...props}
                               />
                             </div>
                           ),
                           th: ({ node, ...props }) => (
                             <th
-                              className="px-4 py-2 border border-gray-600 bg-gray-700 text-right"
+                              className="px-4 py-2 border border-gray-300 bg-gray-100 text-right text-gray-900"
                               {...props}
                             />
                           ),
                           td: ({ node, ...props }) => (
                             <td
-                              className="px-4 py-2 border border-gray-600 text-right"
+                              className="px-4 py-2 border border-gray-300 text-right text-gray-900"
                               {...props}
                             />
                           ),
                           strong: ({ node, ...props }) => (
-                            <strong className="font-bold" {...props} />
+                            <strong className="font-bold text-gray-900" {...props} />
                           ),
                           em: ({ node, ...props }) => (
-                            <em className="italic" {...props} />
+                            <em className="italic text-gray-900" {...props} />
                           ),
                           br: ({ node, ...props }) => (
                             <br className="my-2" {...props} />
@@ -784,18 +1072,14 @@ const ChatPage = () => {
                       >
                         {message.content}
                       </ReactMarkdown>
-
-                      {/* map */}
-                      {/* <div style={{ height: "50vh", width: "100%" }}>
-                        <GeoJSONMap geojsonData={geojsonData} />
-                      </div> */}
                     </div>
                   )}
 
                   {message.is_user === false && (
                     <div dir="ltr">
-                      <div className="flex flex-row-reverse"><MessageFeedback messageId={message.id}/></div>
-                      
+                      <div className="flex flex-row-reverse">
+                        <MessageFeedback messageId={message.id} />
+                      </div>
                     </div>
                   )}
                 </div>
@@ -805,19 +1089,19 @@ const ChatPage = () => {
             {/* Loading Indicator */}
             {loading && (
               <div className="flex justify-end">
-                <div className="bg-[#2f346b] text-white rounded-2xl rounded-tl-none px-4 py-2">
+                <div className="bg-gray-200 text-gray-900 rounded-2xl rounded-tl-none px-4 py-2">
                   <div className="flex items-center justify-end space-x-2 rtl:space-x-reverse">
                     <div className="flex space-x-1 py-2">
                       <div
-                        className="w-2 h-2 bg-white rounded-full animate-bounce"
+                        className="w-2 h-2 bg-gray-600 rounded-full animate-bounce"
                         style={{ animationDelay: "0ms" }}
                       ></div>
                       <div
-                        className="w-2 h-2 bg-white rounded-full animate-bounce"
+                        className="w-2 h-2 bg-gray-600 rounded-full animate-bounce"
                         style={{ animationDelay: "150ms" }}
                       ></div>
                       <div
-                        className="w-2 h-2 bg-white rounded-full animate-bounce"
+                        className="w-2 h-2 bg-gray-600 rounded-full animate-bounce"
                         style={{ animationDelay: "300ms" }}
                       ></div>
                     </div>
@@ -830,7 +1114,7 @@ const ChatPage = () => {
           </div>
 
           {/* Input Area */}
-          <footer className="bg-[#242752] p-4">
+          <footer className="bg-gray-100 p-4">
             {command.has && (
               <div
                 onClick={() => {
@@ -839,11 +1123,10 @@ const ChatPage = () => {
                     selectedCommand: "آمایش",
                     has: false,
                   });
-
                   setInputValue("/آمایش ");
                   inputRef.current.focus();
                 }}
-                className="text-white bg-blue-300 p-2 cursoor-pointer"
+                className="text-gray-900 bg-blue-200 p-2 cursor-pointer hover:bg-blue-300 transition-colors"
               >
                 /آمایش
               </div>
@@ -861,24 +1144,22 @@ const ChatPage = () => {
                   ) {
                     setCommand({
                       ...command,
-
                       has: true,
                     });
                   } else {
                     setCommand({
                       ...command,
-
                       has: false,
                     });
                   }
                 }}
                 placeholder="پیام بنویسید..."
-                className="flex-1 bg-[#2f346b] text-white rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#4f46e5]"
+                className="flex-1 bg-gray-200 text-gray-900 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[#818cf8]"
                 dir="rtl"
               />
               <button
                 type="submit"
-                className="bg-[#4f46e5] text-white rounded-xl w-12 h-12 flex items-center justify-center hover:bg-[#4338ca] transition-colors"
+                className="bg-[#818cf8] text-white rounded-xl w-12 h-12 flex items-center justify-center hover:bg-[#6366f1] transition-colors"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -901,6 +1182,31 @@ const ChatPage = () => {
       </div>
     </div>
   );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 };
 
 export default ChatPage;
